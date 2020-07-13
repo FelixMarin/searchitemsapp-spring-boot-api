@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,8 +48,7 @@ public class ApplicationController {
 				@RequestParam(value = "categoria", defaultValue = "101") String didCategoria,
 				@RequestParam(value = "ordenacion", defaultValue = "1") String ordenacion, 
 				@RequestParam(value = "producto") @Validated String producto, 
-				@RequestParam(value = "empresas") @Validated String empresas,
-				Model modelo) {
+				@RequestParam(value = "empresas") @Validated String empresas) {
 		
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
