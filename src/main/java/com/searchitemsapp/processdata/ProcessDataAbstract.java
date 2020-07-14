@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dto.CategoriaDTO;
@@ -54,6 +55,7 @@ import com.sun.istack.NotNull;
  * @author Felix Marin Ramirez
  *
  */
+@Component
 public abstract class ProcessDataAbstract {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataAbstract.class);   
@@ -729,7 +731,7 @@ public abstract class ProcessDataAbstract {
 			return StringUtils.EMPTY;
 		}
 		
-		StringBuilder stringBuilder = new StringBuilder(1);
+		StringBuilder stringBuilder = new StringBuilder(10);
 		
 		if (iTipo == 0) {
 			stringBuilder.append(strCadena);
