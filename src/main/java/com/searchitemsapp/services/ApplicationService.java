@@ -58,7 +58,6 @@ public class ApplicationService implements IFService<String,String> {
 		super();
 	}
 	
-	
 	/**
 	 * Método principal de servicio web.  Este método contiene 
 	 * toda la lógica de negocio del servicio. {@link ProcessDataModule}
@@ -83,13 +82,6 @@ public class ApplicationService implements IFService<String,String> {
 		String producto = params[3];
 		String empresas = params[4];
 		
-		StringBuilder sbParams = new StringBuilder(1);
-		sbParams.append("Pais: ").append(didPais);
-		sbParams.append(" Categoria: ").append(didCategoria);
-		sbParams.append(" Ordenacio: ").append(didPais);
-		sbParams.append(" Producto: ").append(producto);
-		sbParams.append(" Empresas: ").append(empresas);
-
 		List<IFProcessPrice> listResultDtoFinal = Lists.newArrayList();
 		int contador = 0;
 	
@@ -104,9 +96,14 @@ public class ApplicationService implements IFService<String,String> {
 			Collection<ProcessDataModule> colPDMcallables = Lists.newArrayList();
 		
 			lResultDtoUrlsTratado.forEach(elem -> {
-				ProcessDataModule processDataModule = applicationContext
-						.getBean(ProcessDataModule.class, elem, producto, ordenacion, 
-								mapEmpresas, listTodasMarcas, mapDynEmpresas);
+				ProcessDataModule processDataModule = applicationContext.getBean(ProcessDataModule.class);
+				
+				processDataModule.setListTodasMarcas(listTodasMarcas);
+				processDataModule.setMapDynEmpresas(mapDynEmpresas);
+				processDataModule.setMapEmpresas(mapEmpresas);
+				processDataModule.setOrdenacion(ordenacion);
+				processDataModule.setProducto(producto);
+				processDataModule.setUrlDto(elem);
 	
 				colPDMcallables.add(processDataModule);	
 			});
@@ -114,13 +111,7 @@ public class ApplicationService implements IFService<String,String> {
 			List<Future<List<IFProcessPrice>>> listFutureListResDto = executorService.invokeAll(colPDMcallables);
 			listResultDtoFinal = executeFuture(listFutureListResDto);
 
-            if(listResultDtoFinal.isEmpty()) {
-            	
-    			if(LOGGER.isErrorEnabled()) {
-    				LOGGER.error(Thread.currentThread().getStackTrace()[1].toString());
-    				LOGGER.error("Sin resultados para: ".concat(sbParams.toString()));
-    			}
-            	
+            if(listResultDtoFinal.isEmpty()) {            	            	
     			return ERROR_RESULT;
             }
 

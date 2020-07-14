@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,9 +42,6 @@ public class UrlParser implements IFParser<UrlDTO, TbSiaUrl> {
 	private static final String SCRAP_NO_PATTERN = "SCRAP_NO_PATTERN";
 	private static final String SCRAP_PATTERN = "SCRAP_PATTERN";
 	private static final String DID = "DID";
-	
-	@Resource(name="listUrlDto")
-	private List<UrlDTO> listUrlDto;
 	
 	@Autowired
 	private UrlDTO urlPDto;
@@ -208,9 +203,9 @@ public class UrlParser implements IFParser<UrlDTO, TbSiaUrl> {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
 		}
 		
+		List<UrlDTO> listUrlDto = Lists.newArrayList();
+		
 		if (!urlList.isEmpty()){ 
-			
-			listUrlDto = Lists.newArrayList();
 			
 			urlList.forEach(objects -> {
 				urlPDto = new UrlDTO();

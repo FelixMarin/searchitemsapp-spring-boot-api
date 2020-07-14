@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -35,6 +36,7 @@ import com.sun.istack.NotNull;
  * @author Felix Marin Ramirez
  *
  */
+@Component
 public class ProcessDataModule extends ProcessDataAbstract implements Callable<List<IFProcessPrice>> {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataModule.class);  
@@ -53,19 +55,9 @@ public class ProcessDataModule extends ProcessDataAbstract implements Callable<L
 	
 	@Autowired
 	private Environment env;
-	
-	public ProcessDataModule(@NotNull UrlDTO urlDto, 
-			@NotNull String producto, @NotNull String ordenacion, 
-			@NotNull Map<String,EmpresaDTO> mapEmpresas,
-			@NotNull List<MarcasDTO> listTodasMarcas,
-			@NotNull Map<Integer,Boolean> mapDynEmpresas) {
+
+	public ProcessDataModule() {
 		super();
-		this.urlDto = urlDto;
-		this.producto = producto;
-		this.ordenacion = ordenacion;
-		this.mapEmpresas = mapEmpresas;
-		this.listTodasMarcas = listTodasMarcas;
-		this.mapDynEmpresas = mapDynEmpresas;
 	}
 	
 	/**
@@ -196,4 +188,52 @@ public class ProcessDataModule extends ProcessDataAbstract implements Callable<L
 		return Objects.nonNull(elem.selectFirst(env.getProperty("flow.value.pagina.siguiente.carrefour"))) ||
 		Objects.nonNull(elem.selectFirst(env.getProperty("flow.value.pagina.acceso.popup.peso")));
 	}	
+	
+	public UrlDTO getUrlDto() {
+		return urlDto;
+	}
+
+	public void setUrlDto(UrlDTO urlDto) {
+		this.urlDto = urlDto;
+	}
+
+	public String getProducto() {
+		return producto;
+	}
+
+	public void setProducto(String producto) {
+		this.producto = producto;
+	}
+
+	public String getOrdenacion() {
+		return ordenacion;
+	}
+
+	public void setOrdenacion(String ordenacion) {
+		this.ordenacion = ordenacion;
+	}
+
+	public Map<String, EmpresaDTO> getMapEmpresas() {
+		return mapEmpresas;
+	}
+
+	public void setMapEmpresas(Map<String, EmpresaDTO> mapEmpresas) {
+		this.mapEmpresas = mapEmpresas;
+	}
+
+	public List<MarcasDTO> getListTodasMarcas() {
+		return listTodasMarcas;
+	}
+
+	public void setListTodasMarcas(List<MarcasDTO> listTodasMarcas) {
+		this.listTodasMarcas = listTodasMarcas;
+	}
+
+	public Map<Integer, Boolean> getMapDynEmpresas() {
+		return mapDynEmpresas;
+	}
+
+	public void setMapDynEmpresas(Map<Integer, Boolean> mapDynEmpresas) {
+		this.mapDynEmpresas = mapDynEmpresas;
+	}
 }
