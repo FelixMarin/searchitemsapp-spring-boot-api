@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dto.PaisDTO;
 import com.searchitemsapp.entities.TbSiaPais;
-import com.sun.istack.NotNull;
 
 import lombok.NoArgsConstructor;
 
@@ -26,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class PaisParser implements IFParser<PaisDTO, TbSiaPais> {
 
 	@Override
-	public PaisDTO toDTO(@NotNull final TbSiaPais tbSiaPPais) {	
+	public PaisDTO toDTO(final TbSiaPais tbSiaPPais) {	
 		
 		return new ModelMapper().map(tbSiaPPais, PaisDTO.class);
 		

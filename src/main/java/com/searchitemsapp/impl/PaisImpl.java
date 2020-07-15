@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component;
 import com.searchitemsapp.dao.repository.IFPaisRepository;
 import com.searchitemsapp.dto.CategoriaDTO;
 import com.searchitemsapp.dto.PaisDTO;
-import com.sun.istack.NotNull;
+
+
 
 /**
  * Implementación del dao.
@@ -44,7 +45,7 @@ public class PaisImpl implements IFImplementacion<PaisDTO, CategoriaDTO> {
 	 * @exception IOException
 	 */
 	@Override
-	public PaisDTO findByDid(@NotNull final PaisDTO paisDto) throws IOException {
+	public PaisDTO findByDid(final PaisDTO paisDto) throws IOException {
 		
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());

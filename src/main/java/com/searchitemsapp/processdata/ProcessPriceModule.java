@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.sun.istack.NotNull;
+
 
 /**
  * Objeto de Transferencia de Datos (DTO) 
@@ -161,7 +161,7 @@ public class ProcessPriceModule implements IFProcessPrice {
 	 * @param cadena
 	 * @return String
 	 */
-	private  String extraerDecimal(@NotNull final String cadena) {
+	private  String extraerDecimal(final String cadena) {
 		
 		if(COMMA_STRING.equals(cadena)) {
 			return DEFAULT_STR_PRICE;
@@ -204,7 +204,7 @@ public class ProcessPriceModule implements IFProcessPrice {
 	 * @param cadena
 	 * @return String
 	 */
-	private  String extraerEntero(@NotNull final String cadena) {
+	private  String extraerEntero(final String cadena) {
 		
 		String resultado = StringUtils.EMPTY;		
 		Matcher mEntero = Pattern.compile(REGEX_NUMERO_DECIMAL, Pattern.MULTILINE).matcher(cadena);
@@ -264,26 +264,24 @@ public class ProcessPriceModule implements IFProcessPrice {
 	 */
 	private  void estilizarPrecios(final IFProcessPrice a, final IFProcessPrice b) {
 		
-		if(!StringUtils.isAllEmpty(a.getPrecio()) &&
-				!StringUtils.isAllEmpty(a.getPrecio())) {
-		a.setPrecio(extraerDecimal(a.getPrecio())
-				.concat(EURO_SYMBOL)
-				.replace(DOT_STRING,COMMA_STRING));	
-		
-		b.setPrecio(extraerDecimal(b.getPrecio())
-				.concat(EURO_SYMBOL)
-				.replace(DOT_STRING,COMMA_STRING));
+		if(!StringUtils.isAllEmpty(a.getPrecio())) {
+			a.setPrecio(extraerDecimal(a.getPrecio())
+					.concat(EURO_SYMBOL)
+					.replace(DOT_STRING,COMMA_STRING));	
+			
+			b.setPrecio(extraerDecimal(b.getPrecio())
+					.concat(EURO_SYMBOL)
+					.replace(DOT_STRING,COMMA_STRING));
 		}
 		
-		if(!StringUtils.isAllEmpty(a.getPrecioKilo()) &&
-				!StringUtils.isAllEmpty(a.getPrecioKilo())) {
-				a.setPrecioKilo(extraerDecimal(a.getPrecioKilo())
-				.concat(BARRA_KILO_GRAM)
-				.replace(DOT_STRING,COMMA_STRING));	
-		
-				b.setPrecioKilo(extraerDecimal(b.getPrecioKilo())
-				.concat(BARRA_KILO_GRAM)
-				.replace(DOT_STRING,COMMA_STRING));	
+		if(!StringUtils.isAllEmpty(a.getPrecioKilo())) {
+			a.setPrecioKilo(extraerDecimal(a.getPrecioKilo())
+			.concat(BARRA_KILO_GRAM)
+			.replace(DOT_STRING,COMMA_STRING));	
+	
+			b.setPrecioKilo(extraerDecimal(b.getPrecioKilo())
+			.concat(BARRA_KILO_GRAM)
+			.replace(DOT_STRING,COMMA_STRING));	
 		}
 	}
 	

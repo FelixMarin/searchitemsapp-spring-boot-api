@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dto.UrlDTO;
 import com.searchitemsapp.entities.TbSiaUrl;
-import com.sun.istack.NotNull;
 
 import lombok.NoArgsConstructor;
+
 
 /**
  * Es un componente analizador de software que 
@@ -25,14 +25,14 @@ import lombok.NoArgsConstructor;
 public class UrlParser implements IFParser<UrlDTO, TbSiaUrl> {
 	
 	@Override
-	public UrlDTO toDTO(@NotNull final TbSiaUrl tbSiaPUrl) {	
+	public UrlDTO toDTO(final TbSiaUrl tbSiaPUrl) {	
 		
 		return new ModelMapper().map(tbSiaPUrl, UrlDTO.class);
 		
 	}
 	
 	@Override
-	public List<UrlDTO> toListDTO(@NotNull final List<TbSiaUrl> lsUrls) {
+	public List<UrlDTO> toListDTO(final List<TbSiaUrl> lsUrls) {
 		
 		List<UrlDTO> listDto = Lists.newArrayList(); 
 		
@@ -44,7 +44,7 @@ public class UrlParser implements IFParser<UrlDTO, TbSiaUrl> {
 	}
 	
 	@Override
-	public List<UrlDTO> toListODTO(@NotNull final List<Object[]> urlList) {
+	public List<UrlDTO> toListODTO(final List<Object[]> urlList) {
 		
 		List<UrlDTO> listUrlDto = Lists.newArrayList();
 		

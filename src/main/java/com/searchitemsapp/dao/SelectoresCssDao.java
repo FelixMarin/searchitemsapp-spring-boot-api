@@ -15,7 +15,7 @@ import com.searchitemsapp.dao.repository.IFSelectoresCssRepository;
 import com.searchitemsapp.dto.SelectoresCssDTO;
 import com.searchitemsapp.entities.TbSiaSelectoresCss;
 import com.searchitemsapp.parsers.IFParser;
-import com.sun.istack.NotNull;
+
 
 /**
  * Encapsula el acceso a la base de datos. Por lo que cuando la capa 
@@ -79,7 +79,7 @@ public class SelectoresCssDao extends AbstractDao implements IFSelectoresCssRepo
 	 * @exception IOException
 	 */
 	@Override
-	public SelectoresCssDTO findByDid(@NotNull final Integer did) throws IOException {
+	public SelectoresCssDTO findByDid(final Integer did) throws IOException {
 
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
@@ -106,7 +106,7 @@ public class SelectoresCssDao extends AbstractDao implements IFSelectoresCssRepo
 	 * @exception IOException
 	 */
 	@Override
-	public List<SelectoresCssDTO> findByTbSiaEmpresa(@NotNull final Integer didEmpresa) throws IOException {
+	public List<SelectoresCssDTO> findByTbSiaEmpresa(final Integer didEmpresa) throws IOException {
 
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
