@@ -15,6 +15,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +38,7 @@ import com.sun.istack.NotNull;
  *
  */
 @Component
+@Scope("prototype")
 public class ProcessDataModule extends ProcessDataAbstract implements Callable<List<IFProcessPrice>> {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataModule.class);  
