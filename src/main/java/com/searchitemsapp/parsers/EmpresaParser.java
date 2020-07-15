@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dto.EmpresaDTO;
 import com.searchitemsapp.entities.TbSiaEmpresa;
-import com.sun.istack.NotNull;
+
 
 import lombok.NoArgsConstructor;
 
@@ -26,14 +26,14 @@ import lombok.NoArgsConstructor;
 public class EmpresaParser implements IFParser<EmpresaDTO, TbSiaEmpresa> {
 	
 	@Override
-	public EmpresaDTO toDTO(@NotNull final TbSiaEmpresa tbSiaPEmpresas) {	
+	public EmpresaDTO toDTO(final TbSiaEmpresa tbSiaPEmpresas) {	
 		
 		return new ModelMapper().map(tbSiaPEmpresas, EmpresaDTO.class);
 		
 	}
 	
 	@Override
-	public List<EmpresaDTO> toListDTO(@NotNull final List<TbSiaEmpresa> lsEmpresas) {
+	public List<EmpresaDTO> toListDTO(final List<TbSiaEmpresa> lsEmpresas) {
 			
 		List<EmpresaDTO> listDto = Lists.newArrayList(); 
 		

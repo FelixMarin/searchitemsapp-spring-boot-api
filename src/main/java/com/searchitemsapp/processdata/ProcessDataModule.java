@@ -24,7 +24,8 @@ import com.google.common.collect.Maps;
 import com.searchitemsapp.dto.EmpresaDTO;
 import com.searchitemsapp.dto.MarcasDTO;
 import com.searchitemsapp.dto.UrlDTO;
-import com.sun.istack.NotNull;
+
+
 
 /**
  * Esta clase es la encargada de inicializar el proceso
@@ -144,10 +145,10 @@ public class ProcessDataModule extends ProcessDataAbstract implements Callable<L
 		return bStatus?getStatusConnectionCode(urlDto.getNomUrl()):200;
 	}
 
-	private boolean validaYCargaResultado(@NotNull final int iIdEmpresa, 
-			@NotNull final String[] arProducto, 
-			@NotNull final IFProcessPrice resDto, 
-			@NotNull final Pattern pattern) {
+	private boolean validaYCargaResultado(final int iIdEmpresa, 
+			final String[] arProducto, 
+			final IFProcessPrice resDto, 
+			final Pattern pattern) {
 		
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());

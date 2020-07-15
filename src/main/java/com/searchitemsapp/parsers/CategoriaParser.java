@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dto.CategoriaDTO;
 import com.searchitemsapp.entities.TbSiaCategoriasEmpresa;
-import com.sun.istack.NotNull;
+
 
 import lombok.NoArgsConstructor;
 
@@ -26,14 +26,14 @@ import lombok.NoArgsConstructor;
 public class CategoriaParser implements IFParser<CategoriaDTO, TbSiaCategoriasEmpresa>  {
 	
 	@Override
-	public CategoriaDTO toDTO(@NotNull final TbSiaCategoriasEmpresa tbSiaPCategorias) {	
+	public CategoriaDTO toDTO(final TbSiaCategoriasEmpresa tbSiaPCategorias) {	
 		
 		return new ModelMapper().map(tbSiaPCategorias, CategoriaDTO.class);
 		
 	}
 	
 	@Override
-	public List<CategoriaDTO> toListDTO(@NotNull final List<TbSiaCategoriasEmpresa> lsCategorias) {
+	public List<CategoriaDTO> toListDTO(final List<TbSiaCategoriasEmpresa> lsCategorias) {
 		
 		List<CategoriaDTO> liDto = Lists.newArrayList();
 		

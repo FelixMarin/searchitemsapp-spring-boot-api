@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dto.SelectoresCssDTO;
 import com.searchitemsapp.entities.TbSiaSelectoresCss;
-import com.sun.istack.NotNull;
+
 
 import lombok.NoArgsConstructor;
 
@@ -26,14 +26,14 @@ import lombok.NoArgsConstructor;
 public class SelectoresCssParser implements IFParser<SelectoresCssDTO, TbSiaSelectoresCss> {
 
 	@Override
-	public SelectoresCssDTO toDTO(@NotNull final TbSiaSelectoresCss tbSiaSelectores) {
+	public SelectoresCssDTO toDTO(final TbSiaSelectoresCss tbSiaSelectores) {
 		
 		return new ModelMapper().map(tbSiaSelectores, SelectoresCssDTO.class);
 		
 	}
 
 	@Override
-	public List<SelectoresCssDTO> toListDTO(@NotNull final List<TbSiaSelectoresCss> lsTbSiaSelectoresCss) {
+	public List<SelectoresCssDTO> toListDTO(final List<TbSiaSelectoresCss> lsTbSiaSelectoresCss) {
 		
 		List<SelectoresCssDTO> listDto = Lists.newArrayList(); 
 		

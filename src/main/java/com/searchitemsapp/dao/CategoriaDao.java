@@ -16,7 +16,7 @@ import com.searchitemsapp.dao.repository.IFCategoriaRepository;
 import com.searchitemsapp.dto.CategoriaDTO;
 import com.searchitemsapp.entities.TbSiaCategoriasEmpresa;
 import com.searchitemsapp.parsers.IFParser;
-import com.sun.istack.NotNull;
+
 
 /**
  * Encapsula el acceso a la base de datos. Por lo que cuando la capa 
@@ -78,7 +78,7 @@ public class CategoriaDao extends AbstractDao implements IFCategoriaRepository {
 	 * @return CategoriaDTO
 	 */
 	@Override
-	public CategoriaDTO findByDid(@NotNull Integer did) {
+	public CategoriaDTO findByDid(Integer did) {
 		
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());

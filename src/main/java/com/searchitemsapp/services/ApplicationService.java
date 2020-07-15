@@ -71,11 +71,8 @@ public class ApplicationService implements IFService<String,String> {
 		}
 		
 		Map<String,EmpresaDTO> mapEmpresas = Maps.newHashMap();		
-		List<MarcasDTO> listTodasMarcas = Lists.newArrayList();		
 		Map<Integer,Boolean> mapDynEmpresas = Maps.newHashMap();
 	
-		urlComposer.applicationData(mapEmpresas, listTodasMarcas, mapDynEmpresas);
-		
 		String didPais = params[0];
 		String didCategoria = params[1];
 		String ordenacion = params[2];
@@ -88,7 +85,9 @@ public class ApplicationService implements IFService<String,String> {
 		ExecutorService executorService = Executors.newCachedThreadPool();
 
 		try {
-						
+			urlComposer.applicationData(mapEmpresas, mapDynEmpresas);
+			List<MarcasDTO> listTodasMarcas = urlComposer.getListTodasMarcas();
+			
 			List<SelectoresCssDTO> lselectores = urlComposer.listSelectoresCssPorEmpresa(empresas, didPais, didCategoria);
 			Collection<UrlDTO> lResultDtoUrlsTratado = urlComposer.replaceWildcardCharacter(didPais, 
 					didCategoria, producto, empresas, lselectores, mapEmpresas);

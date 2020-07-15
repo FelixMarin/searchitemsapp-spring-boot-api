@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dto.NomProductoDTO;
 import com.searchitemsapp.entities.TbSiaNomProducto;
-import com.sun.istack.NotNull;
 
 import lombok.NoArgsConstructor;
+
 
 /**
  * Es un componente analizador de software que 
@@ -26,13 +26,13 @@ import lombok.NoArgsConstructor;
 public class NomProductoParser implements IFParser<NomProductoDTO, TbSiaNomProducto> {
 
 	@Override
-	public NomProductoDTO toDTO(@NotNull final TbSiaNomProducto tbSiaNomProducto) {
+	public NomProductoDTO toDTO(final TbSiaNomProducto tbSiaNomProducto) {
 		
 		return new ModelMapper().map(tbSiaNomProducto, NomProductoDTO.class);
 		
 	}
 	@Override
-	public List<NomProductoDTO> toListDTO(@NotNull final List<TbSiaNomProducto> lsTbSiaNomProducto) {
+	public List<NomProductoDTO> toListDTO(final List<TbSiaNomProducto> lsTbSiaNomProducto) {
 		
 		List<NomProductoDTO> listDto = Lists.newArrayList(); 
 		

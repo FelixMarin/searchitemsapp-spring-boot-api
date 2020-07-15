@@ -16,7 +16,8 @@ import com.searchitemsapp.dao.repository.IFEmpresaRepository;
 import com.searchitemsapp.dto.EmpresaDTO;
 import com.searchitemsapp.entities.TbSiaEmpresa;
 import com.searchitemsapp.parsers.IFParser;
-import com.sun.istack.NotNull;
+
+
 
 /**
  * Encapsula el acceso a la base de datos. Por lo que cuando la capa 
@@ -77,7 +78,7 @@ public class EmpresaDao extends AbstractDao implements IFEmpresaRepository {
 	 * @return EmpresaDTO
 	 */
 	@Override
-	public EmpresaDTO findByDid(@NotNull final Integer did) throws IOException {
+	public EmpresaDTO findByDid(final Integer did) throws IOException {
 		
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
@@ -107,8 +108,8 @@ public class EmpresaDao extends AbstractDao implements IFEmpresaRepository {
 	 */
 	@Override
 	public List<EmpresaDTO> findByDidAndTbSiaCategoriasEmpresa(
-			@NotNull final Integer didEmpresa, 
-			@NotNull final Integer didCatEmpresa) throws IOException {
+			final Integer didEmpresa, 
+			final Integer didCatEmpresa) throws IOException {
 		
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
