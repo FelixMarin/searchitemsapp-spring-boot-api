@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.searchitemsapp.dao.repository.IFSelectoresCssRepository;
 import com.searchitemsapp.dto.EmpresaDTO;
 import com.searchitemsapp.dto.SelectoresCssDTO;
-import com.sun.istack.NotNull;
+
 
 /**
  * Implementación del dao.
@@ -60,7 +60,7 @@ public class SelectoresCssImpl implements IFImplementacion<SelectoresCssDTO, Emp
 	 * @exception IOException
 	 */
 	@Override
-	public SelectoresCssDTO findByDid(@NotNull final SelectoresCssDTO selectorCssDto) throws IOException {
+	public SelectoresCssDTO findByDid(final SelectoresCssDTO selectorCssDto) throws IOException {
 		
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
@@ -78,7 +78,7 @@ public class SelectoresCssImpl implements IFImplementacion<SelectoresCssDTO, Emp
 	 * @exception IOException
 	 */
 	@Override
-	public List<SelectoresCssDTO> findByTbSia(@NotNull final SelectoresCssDTO selectoresCssDto, EmpresaDTO empresaDto) throws IOException {
+	public List<SelectoresCssDTO> findByTbSia(final SelectoresCssDTO selectoresCssDto, EmpresaDTO empresaDto) throws IOException {
 			
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());

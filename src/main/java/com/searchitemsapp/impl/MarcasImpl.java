@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import com.searchitemsapp.dao.repository.IFMarcasRepository;
 import com.searchitemsapp.dto.CategoriaDTO;
 import com.searchitemsapp.dto.MarcasDTO;
-import com.sun.istack.NotNull;
+
 
 
 /**
@@ -61,7 +61,7 @@ public class MarcasImpl implements IFImplementacion<MarcasDTO, CategoriaDTO> {
 	 * @exception IOException
 	 */
 	@Override
-	public MarcasDTO findByDid(@NotNull final MarcasDTO marcasDTO) throws IOException {
+	public MarcasDTO findByDid(final MarcasDTO marcasDTO) throws IOException {
 
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());

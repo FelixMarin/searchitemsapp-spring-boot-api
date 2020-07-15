@@ -16,7 +16,7 @@ import com.searchitemsapp.dao.repository.IFUrlRepository;
 import com.searchitemsapp.dto.UrlDTO;
 import com.searchitemsapp.entities.TbSiaUrl;
 import com.searchitemsapp.parsers.IFParser;
-import com.sun.istack.NotNull;
+
 
 /**
  * Encapsula el acceso a la base de datos. Por lo que cuando la capa 
@@ -77,7 +77,7 @@ public class UrlDao extends AbstractDao implements IFUrlRepository {
 	 * @return UrlDTO
 	 */
 	@Override
-	public UrlDTO findByDid(@NotNull final Integer did) throws IOException {
+	public UrlDTO findByDid(final Integer did) throws IOException {
 
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
@@ -105,8 +105,8 @@ public class UrlDao extends AbstractDao implements IFUrlRepository {
 	 * @exception IOException
 	 */
 	@Override
-	public List<UrlDTO> findByDidAndDesUrl(@NotNull final Integer didPais, 
-			@NotNull final String didCategoria) throws IOException {
+	public List<UrlDTO> findByDidAndDesUrl(final Integer didPais, 
+			final String didCategoria) throws IOException {
 
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
@@ -140,7 +140,7 @@ public class UrlDao extends AbstractDao implements IFUrlRepository {
 	 * @exception IOException
 	 */
 	@Override
-	public List<UrlDTO> findByDidAndNomUrl(@NotNull final Integer didPais, @NotNull final String didCategoria) throws IOException {
+	public List<UrlDTO> findByDidAndNomUrl(final Integer didPais, final String didCategoria) throws IOException {
 
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());

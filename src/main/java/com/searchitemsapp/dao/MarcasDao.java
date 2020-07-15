@@ -16,7 +16,7 @@ import com.searchitemsapp.dao.repository.IFMarcasRepository;
 import com.searchitemsapp.dto.MarcasDTO;
 import com.searchitemsapp.entities.TbSiaMarcas;
 import com.searchitemsapp.parsers.IFParser;
-import com.sun.istack.NotNull;
+
 
 /**
  * Encapsula el acceso a la base de datos. Por lo que cuando la capa 
@@ -76,7 +76,7 @@ public class MarcasDao extends AbstractDao implements IFMarcasRepository {
 	 * @return MarcasDTO
 	 */
 	@Override
-	public MarcasDTO findByDid(@NotNull final Integer did) throws IOException {
+	public MarcasDTO findByDid(final Integer did) throws IOException {
 
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());

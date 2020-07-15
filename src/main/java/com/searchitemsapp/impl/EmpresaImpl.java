@@ -14,7 +14,8 @@ import com.searchitemsapp.dao.EmpresaDao;
 import com.searchitemsapp.dao.repository.IFEmpresaRepository;
 import com.searchitemsapp.dto.CategoriaDTO;
 import com.searchitemsapp.dto.EmpresaDTO;
-import com.sun.istack.NotNull;
+
+
 
 /**
  * Implementación del dao.
@@ -61,7 +62,7 @@ public class EmpresaImpl implements IFImplementacion<EmpresaDTO, CategoriaDTO> {
 	 * @exception IOException
 	 */
 	@Override
-	public EmpresaDTO findByDid(@NotNull final EmpresaDTO empresaDto) throws IOException {
+	public EmpresaDTO findByDid(final EmpresaDTO empresaDto) throws IOException {
 		
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
@@ -84,8 +85,8 @@ public class EmpresaImpl implements IFImplementacion<EmpresaDTO, CategoriaDTO> {
 	 */
 	@Override
 	public List<EmpresaDTO> findByTbSia(
-			@NotNull final EmpresaDTO empresaDto, 
-			@NotNull final CategoriaDTO categoriaDto) throws IOException {
+			final EmpresaDTO empresaDto, 
+			final CategoriaDTO categoriaDto) throws IOException {
 		
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
