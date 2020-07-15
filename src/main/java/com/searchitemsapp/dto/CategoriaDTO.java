@@ -1,8 +1,12 @@
 package com.searchitemsapp.dto;
 
-import java.util.Map;
-
 import org.springframework.stereotype.Component;
+
+import com.sun.istack.NotNull;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 
@@ -15,81 +19,17 @@ import org.springframework.stereotype.Component;
  * @author Felix Marin Ramirez
  *
  */
+@Data @NoArgsConstructor @AllArgsConstructor
 @Component
 public class CategoriaDTO implements IFdto {
 
+	@NotNull
 	private Integer did;
 	private Boolean bolActivo;
 	private String desCatEmpresa;
 	private String nomCatEmpresa;	
-	private Map<Integer,String> empresas;
-	private Map<Integer,String> marcas;
-	private Map<Integer,String> productos;
-	
-	public CategoriaDTO() {
-		super();
-	}
-	
-	public Integer getDid() {
-		return did;
-	}
+	private EmpresaDTO empresas;
+	private MarcasDTO marcas;
+	private NomProductoDTO productos;
 
-	public void setDid(Integer did) {
-		this.did = did;
-	}
-
-	public Boolean getBolActivo() {
-		return bolActivo;
-	}
-
-	public void setBolActivo(Boolean bolActivo) {
-		this.bolActivo = bolActivo;
-	}
-
-	public String getDesCatEmpresa() {
-		return desCatEmpresa;
-	}
-
-	public void setDesCatEmpresa(String desCatEmpresa) {
-		this.desCatEmpresa = desCatEmpresa;
-	}
-
-	public String getNomCatEmpresa() {
-		return nomCatEmpresa;
-	}
-
-	public void setNomCatEmpresa(String nomCatEmpresa) {
-		this.nomCatEmpresa = nomCatEmpresa;
-	}
-
-	public Map<Integer,String> getEmpresas() {
-		return empresas;
-	}
-
-	public void setEmpresas(Map<Integer,String> empresas) {
-		this.empresas = empresas;
-	}
-
-	public Map<Integer,String> getMarcas() {
-		return marcas;
-	}
-
-	public void setMarcas(Map<Integer,String> marcas) {
-		this.marcas = marcas;
-	}
-
-	public Map<Integer,String> getProductos() {
-		return productos;
-	}
-
-	public void setProductos(Map<Integer,String> productos) {
-		this.productos = productos;
-	}
-
-	@Override
-	public String toString() {
-		return "CategoriaDTO [did=" + did + ", bolActivo=" + bolActivo + ", desCatEmpresa=" + desCatEmpresa
-				+ ", nomCatEmpresa=" + nomCatEmpresa + ", empresas=" + empresas + ", marcas=" + marcas + ", productos="
-				+ productos + "]";
-	}
 }

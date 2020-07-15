@@ -457,12 +457,12 @@ public abstract class ProcessDataAbstract {
 
 		int idEmpresaActual = urlDto.getDidEmpresa();
 
-		ifProcessPrice.setImagen(elementoPorCssSelector(elem, urlDto.getSelectores().get("SEL_IMAGE"), urlDto, mapEmpresas));
-		ifProcessPrice.setNomProducto(elementoPorCssSelector(elem, urlDto.getSelectores().get("SEL_PRODUCTO"), urlDto, mapEmpresas));
-		ifProcessPrice.setDesProducto(elementoPorCssSelector(elem, urlDto.getSelectores().get("SEL_PRODUCTO"), urlDto, mapEmpresas));
-		ifProcessPrice.setPrecio(elementoPorCssSelector(elem, urlDto.getSelectores().get("SEL_PRECIO"), urlDto, mapEmpresas));
-		ifProcessPrice.setPrecioKilo(elementoPorCssSelector(elem, urlDto.getSelectores().get("SEL_PRECIO_KILO"), urlDto, mapEmpresas));
-		ifProcessPrice.setNomUrl(elementoPorCssSelector(elem, urlDto.getSelectores().get("SEL_LINK_PROD"), urlDto, mapEmpresas));
+		ifProcessPrice.setImagen(elementoPorCssSelector(elem, urlDto.getSelectores().getSelImage(), urlDto, mapEmpresas));
+		ifProcessPrice.setNomProducto(elementoPorCssSelector(elem, urlDto.getSelectores().getSelProducto(), urlDto, mapEmpresas));
+		ifProcessPrice.setDesProducto(elementoPorCssSelector(elem, urlDto.getSelectores().getSelProducto(), urlDto, mapEmpresas));
+		ifProcessPrice.setPrecio(elementoPorCssSelector(elem, urlDto.getSelectores().getSelPrecio(), urlDto, mapEmpresas));
+		ifProcessPrice.setPrecioKilo(elementoPorCssSelector(elem, urlDto.getSelectores().getSelPreKilo(), urlDto, mapEmpresas));
+		ifProcessPrice.setNomUrl(elementoPorCssSelector(elem, urlDto.getSelectores().getSelLinkProd(), urlDto, mapEmpresas));
 		ifProcessPrice.setDidEmpresa(urlDto.getDidEmpresa());
 		ifProcessPrice.setNomEmpresa(urlDto.getNomEmpresa());
 

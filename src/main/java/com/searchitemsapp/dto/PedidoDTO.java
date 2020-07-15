@@ -2,6 +2,12 @@ package com.searchitemsapp.dto;
 
 import org.springframework.stereotype.Component;
 
+import com.sun.istack.NotNull;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 
 /**
@@ -13,35 +19,12 @@ import org.springframework.stereotype.Component;
  * @author Felix Marin Ramirez
  *
  */
+@Data @NoArgsConstructor @AllArgsConstructor
 @Component
 public class PedidoDTO implements IFdto {
 	
+	@NotNull
 	private String categoria;
 	private String producto;
 
-	public PedidoDTO() {
-		super();
-	}
-
-	public String getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
-	}
-
-	public String getProducto() {
-		return producto;
-	}
-
-	public void setProducto(String producto) {
-		this.producto = producto;
-	}
-
-	@Override
-	public String toString() {
-		return "PedidoDTO [categoria=" + categoria + ", producto=" + producto + "]";
-	}
-	
 }

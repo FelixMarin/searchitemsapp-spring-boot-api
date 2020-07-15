@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.searchitemsapp.dto.CategoriaDTO;
 import com.searchitemsapp.dto.EmpresaDTO;
 import com.searchitemsapp.dto.PaisDTO;
@@ -159,19 +158,7 @@ public class UrlComposer extends ProcessDataAbstract implements IFUrlComposer {
 			}
 			
 			if(Objects.nonNull(selectoresCssDTO)) {	
-				Map<String, String> mapSelectores  = Maps.newHashMap();
-				mapSelectores.put("SCRAP_PATTERN", selectoresCssDTO.getScrapPattern());
-				mapSelectores.put("SCRAP_NO_PATTERN", selectoresCssDTO.getScrapNoPattern());
-				mapSelectores.put("SEL_IMAGE", selectoresCssDTO.getSelImage());
-				mapSelectores.put("SEL_LINK_PROD", selectoresCssDTO.getSelLinkProd());
-				mapSelectores.put("SEL_PAGINACION", selectoresCssDTO.getSelPaginacion());
-				mapSelectores.put("SEL_PRECIO", selectoresCssDTO.getSelPrecio());
-				mapSelectores.put("SEL_PRECIO_KILO", selectoresCssDTO.getSelPreKilo());
-				mapSelectores.put("SEL_PRODUCTO", selectoresCssDTO.getSelProducto());
-				mapSelectores.put("BOOL_ACTIVO", selectoresCssDTO.getBolActivo().toString());
-				mapSelectores.put("DID", selectoresCssDTO.getDid().toString());
-				mapSelectores.put("FEC_MODIFICACION", selectoresCssDTO.getFecModificacion().toString());
-				resDtoUrls.setSelectores(mapSelectores);
+				resDtoUrls.setSelectores(selectoresCssDTO);
 			}
 		}
 	}

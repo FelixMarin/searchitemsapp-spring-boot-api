@@ -60,7 +60,7 @@ public class ProcessDataCarrefour implements IFProcessDataEmpresas {
 		
 		String urlBase = urlDto.getNomUrl();
 		
-		String selectorPaginacion = urlDto.getSelectores().get("SEL_PAGINACION");	
+		String selectorPaginacion = urlDto.getSelectores().getSelPaginacion();	
 		
 		int numresultados = NumberUtils.toInt(env.getProperty("flow.value.paginacion.url.carrefour"));
 		

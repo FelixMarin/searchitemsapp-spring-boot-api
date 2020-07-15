@@ -58,7 +58,7 @@ public class ProcessDataHipercor implements IFProcessDataEmpresas {
 		
 		String urlBase = urlDto.getNomUrl();
 		
-		String selectorPaginacion = urlDto.getSelectores().get("SEL_PAGINACION");
+		String selectorPaginacion = urlDto.getSelectores().getSelPaginacion();	
 		
 		String strPaginacion = document.select(selectorPaginacion).text();
 			

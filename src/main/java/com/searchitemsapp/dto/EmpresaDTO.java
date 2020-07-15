@@ -1,8 +1,12 @@
 package com.searchitemsapp.dto;
 
-import java.util.Map;
-
 import org.springframework.stereotype.Component;
+
+import com.sun.istack.NotNull;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Objeto de Transferencia de Datos (DTO) 
@@ -13,9 +17,11 @@ import org.springframework.stereotype.Component;
  * @author Felix Marin Ramirez
  *
  */
+@Data @NoArgsConstructor @AllArgsConstructor
 @Component
 public class EmpresaDTO implements IFdto {
 
+	@NotNull
 	private Integer did;
 	private Boolean bolActivo;
 	private String desEmpresa;
@@ -26,106 +32,7 @@ public class EmpresaDTO implements IFdto {
 	private String nomCatEmpresa;
 	private Integer didPais;
 	private String nomPais;
-	private Map<String, String> selectores;
-	private Map<Integer, String> urls;
+	private SelectoresCssDTO selectores;
+	private UrlDTO urls;
 
-	public EmpresaDTO() {
-		super();
-	}
-
-	public Integer getDid() {
-		return did;
-	}
-
-	public void setDid(Integer did) {
-		this.did = did;
-	}
-
-	public Boolean getBolActivo() {
-		return bolActivo;
-	}
-
-	public void setBolActivo(Boolean bolActivo) {
-		this.bolActivo = bolActivo;
-	}
-
-	public String getDesEmpresa() {
-		return desEmpresa;
-	}
-
-	public void setDesEmpresa(String desEmpresa) {
-		this.desEmpresa = desEmpresa;
-	}
-
-	public String getNomEmpresa() {
-		return nomEmpresa;
-	}
-
-	public void setNomEmpresa(String nomEmpresa) {
-		this.nomEmpresa = nomEmpresa;
-	}
-
-	public Boolean getBolDynScrap() {
-		return bolDynScrap;
-	}
-
-	public void setBolDynScrap(Boolean bolDynScrap) {
-		this.bolDynScrap = bolDynScrap;
-	}
-	
-	public Integer getDidCatEmpresa() {
-		return didCatEmpresa;
-	}
-
-	public void setDidCatEmpresa(Integer didCatEmpresa) {
-		this.didCatEmpresa = didCatEmpresa;
-	}
-
-	public String getNomCatEmpresa() {
-		return nomCatEmpresa;
-	}
-
-	public void setNomCatEmpresa(String nomCatEmpresa) {
-		this.nomCatEmpresa = nomCatEmpresa;
-	}
-	
-	public Map<String, String> getSelectores() {
-		return selectores;
-	}
-
-	public void setSelectores(Map<String, String> selectores) {
-		this.selectores = selectores;
-	}
-	
-	public Map<Integer, String> getUrls() {
-		return urls;
-	}
-
-	public void setUrls(Map<Integer, String> urls) {
-		this.urls = urls;
-	}
-	
-	public Integer getDidPais() {
-		return didPais;
-	}
-
-	public void setDidPais(Integer didPais) {
-		this.didPais = didPais;
-	}
-
-	public String getNomPais() {
-		return nomPais;
-	}
-
-	public void setNomPais(String nomPais) {
-		this.nomPais = nomPais;
-	}
-
-	@Override
-	public String toString() {
-		return "EmpresaDTO [did=" + did + ", bolActivo=" + bolActivo + ", desEmpresa=" + desEmpresa + ", nomEmpresa="
-				+ nomEmpresa + ", bolDynScrap=" + bolDynScrap + ", didCatEmpresa=" + didCatEmpresa + ", nomCatEmpresa="
-				+ nomCatEmpresa + ", didPais=" + didPais + ", nomPais=" + nomPais + ", selectores=" + selectores
-				+ ", urls=" + urls + "]";
-	}
 }

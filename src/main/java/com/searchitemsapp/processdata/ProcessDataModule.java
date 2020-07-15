@@ -44,8 +44,6 @@ public class ProcessDataModule extends ProcessDataAbstract implements Callable<L
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataModule.class);  
 	
 	private static final String SEPARADOR_URL = "%20";
-	private static final String SCRAP_NO_PATTERN = "SCRAP_NO_PATTERN";
-	private static final String SCRAP_PATTERN = "SCRAP_PATTERN";
 
 	private static Map<Integer, Map<String, String>> mapaCookies = Maps.newHashMap(); 
 	private UrlDTO urlDto; 
@@ -107,8 +105,8 @@ public class ProcessDataModule extends ProcessDataAbstract implements Callable<L
 	            }
 	          
 	            entradas = selectScrapPattern(document,
-	            		urlDto.getSelectores().get(SCRAP_PATTERN), 
-	            		urlDto.getSelectores().get(SCRAP_NO_PATTERN));
+	            		urlDto.getSelectores().getScrapPattern(), 
+	            		urlDto.getSelectores().getScrapNoPattern());
 
 	    		for (Element elem : entradas) {
 	    			
