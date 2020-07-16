@@ -6,17 +6,16 @@ import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Repository;
 
+import com.google.common.collect.Lists;
 import com.searchitemsapp.dao.repository.IFCategoriaRepository;
 import com.searchitemsapp.dto.CategoriaDTO;
 import com.searchitemsapp.entities.TbSiaCategoriasEmpresa;
-import com.searchitemsapp.parsers.IFParser;
 
+import lombok.NoArgsConstructor;
 
 /**
  * Encapsula el acceso a la base de datos. Por lo que cuando la capa 
@@ -26,75 +25,35 @@ import com.searchitemsapp.parsers.IFParser;
  * @author Felix Marin Ramirez
  *
  */
-@SuppressWarnings({"unchecked"})
+@SuppressWarnings("unchecked")
+@NoArgsConstructor
 @Repository
 public class CategoriaDao extends AbstractDao implements IFCategoriaRepository {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(CategoriaDao.class);   
-	
-	@Autowired
-	private IFParser<CategoriaDTO, TbSiaCategoriasEmpresa> parser;
-	
 	@Autowired
 	private Environment env;
-	
-	public CategoriaDao() {
-		super();
-	}
-	
-	/**
-	 * Método que devuelve todos los elementos de la tabla {@link TbSiaCategoriasEmpresa}.
-	 * 
-	 * @return List<CategoriaDTO>
-	 * @exception IOException
-	 */
+
 	@Override
-	public List<CategoriaDTO> findAll() throws IOException {
+	public List<CategoriaDTO> findAll() throws IOException, NoResultException {
 		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
+		List<CategoriaDTO> liDto = Lists.newArrayList();
 		
-		List<CategoriaDTO> resultado = null;
-		
-		Query q = entityManager.createQuery(env
+		Query q = getEntityManager().createQuery(env
 				.getProperty("flow.value.categoria.select.all"), TbSiaCategoriasEmpresa.class);
+		
+		List<TbSiaCategoriasEmpresa> liEntities = ((List<TbSiaCategoriasEmpresa>) q.getResultList());
+		
+		liEntities.forEach(elem -> {
+			liDto.add(getModelMapper().map(elem, CategoriaDTO.class));
+		});
 	
-		try {
-			resultado = parser.toListDTO(((List<TbSiaCategoriasEmpresa>) q.getResultList()));
-		}catch(NoResultException e) {
-			if(LOGGER.isErrorEnabled()) {
-				LOGGER.error(Thread.currentThread().getStackTrace()[1].toString(),e);
-			}
-		}
-		
-		return resultado;
+		return liDto;
 	}
-		
-	/**
-	 * A partir de un indentifcador se obtiene un elemento de la tabla.
-	 * 
-	 * @param id
-	 * @return CategoriaDTO
-	 */
+
 	@Override
-	public CategoriaDTO findByDid(Integer did) {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-			LOGGER.info(String.valueOf(did),this.getClass());
-		}
+	public CategoriaDTO findByDid(Integer did) throws NoResultException {
 				
-		CategoriaDTO categoriaDTO = null;
-		
-		try {
-			categoriaDTO = parser.toDTO(entityManager.find(TbSiaCategoriasEmpresa.class, did));
-		}catch(NoResultException e) {
-			if(LOGGER.isErrorEnabled()) {
-				LOGGER.error(Thread.currentThread().getStackTrace()[1].toString(),e);
-			}
-		}
-		
-		return categoriaDTO;
+		return getModelMapper().map(getEntityManager()
+					.find(TbSiaCategoriasEmpresa.class, did), CategoriaDTO.class);
 	}
 }
