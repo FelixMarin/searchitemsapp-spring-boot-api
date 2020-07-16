@@ -138,22 +138,15 @@ public abstract class ProcessDataAbstract {
 	 * los datos se cachean mientras esté la aplicación activa.
 	 */
 	public void applicationData(final Map<String,EmpresaDTO> mapEmpresas, 
-			final Map<Integer,Boolean> mapDynEmpresas) {
+			final Map<Integer,Boolean> mapDynEmpresas) throws IOException {
 		
-		try {
 			List<EmpresaDTO> listEmpresaDto = iFEmpresaImpl.findAll();
 
 			listEmpresaDto.stream().forEach(empresaDTO -> {
 				mapEmpresas.put(empresaDTO.getNomEmpresa(), empresaDTO);
 				mapDynEmpresas.put(empresaDTO.getDid(), empresaDTO.getBolDynScrap());
 			});
-			
-		}catch(IOException e) {
-			if(LOGGER.isErrorEnabled()) {
-				LOGGER.error(Thread.currentThread().getStackTrace()[1].toString(),e);
-			}
 		}
-	}
 	
 	public List<MarcasDTO> getListTodasMarcas() throws IOException  {
 		return iFMarcasImp.findAll();

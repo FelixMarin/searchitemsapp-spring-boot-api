@@ -20,7 +20,7 @@ public interface IFUrlComposer {
 			throws IOException;
 	
 	abstract public void applicationData(final Map<String,EmpresaDTO> mapEmpresas, 
-			final Map<Integer,Boolean> mapDynEmpresas) ;
+			final Map<Integer,Boolean> mapDynEmpresas) throws IOException;
 	
 	abstract public List<SelectoresCssDTO> listSelectoresCssPorEmpresa(
 			final String didEmpresas, 
