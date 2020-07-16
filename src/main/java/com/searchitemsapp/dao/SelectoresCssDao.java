@@ -2,7 +2,6 @@ package com.searchitemsapp.dao;
 import java.io.IOException;
 import java.util.List;
 
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +24,14 @@ public class SelectoresCssDao extends AbstractDao implements IFSelectoresCssRepo
 	private Environment env;
 
 	@Override
-	public List<SelectoresCssDTO> findAll() throws IOException, NoResultException {
+	public List<SelectoresCssDTO> findAll() throws IOException {
 		
 		List<SelectoresCssDTO> listDto = Lists.newArrayList(); 
 			
 		Query q = getEntityManager().createQuery(env
 				.getProperty("flow.value.selectorescss.select.all"), TbSiaSelectoresCss.class);
 		
-		List<TbSiaSelectoresCss> liEntities = ((List<TbSiaSelectoresCss>) q.getResultList());
+		List<TbSiaSelectoresCss> liEntities = (q.getResultList());
 		
 		liEntities.forEach(elem -> {
 			listDto.add(getModelMapper().map(elem, SelectoresCssDTO.class));
@@ -42,7 +41,7 @@ public class SelectoresCssDao extends AbstractDao implements IFSelectoresCssRepo
 	}
 
 	@Override
-	public SelectoresCssDTO findByDid(final Integer did) throws IOException, NoResultException {
+	public SelectoresCssDTO findByDid(final Integer did) throws IOException {
 				
 		return getModelMapper().map(getEntityManager()
 				.find(TbSiaSelectoresCss.class, did), SelectoresCssDTO.class);
@@ -50,7 +49,7 @@ public class SelectoresCssDao extends AbstractDao implements IFSelectoresCssRepo
 
 	@Override
 	public List<SelectoresCssDTO> findByTbSiaEmpresa(
-			final Integer didEmpresa) throws IOException, NoResultException {
+			final Integer didEmpresa) throws IOException {
 
 		List<SelectoresCssDTO> listDto = Lists.newArrayList(); 
 
@@ -60,7 +59,7 @@ public class SelectoresCssDao extends AbstractDao implements IFSelectoresCssRepo
 		
 		q.setParameter("didEmpresa", didEmpresa);
 
-		List<TbSiaSelectoresCss> liEntities = ((List<TbSiaSelectoresCss>) q.getResultList());
+		List<TbSiaSelectoresCss> liEntities = (q.getResultList());
 		
 		liEntities.forEach(elem -> {
 			listDto.add(getModelMapper().map(elem, SelectoresCssDTO.class));

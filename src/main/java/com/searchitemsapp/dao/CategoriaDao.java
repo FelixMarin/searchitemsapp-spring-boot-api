@@ -3,7 +3,6 @@ package com.searchitemsapp.dao;
 import java.io.IOException;
 import java.util.List;
 
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +33,14 @@ public class CategoriaDao extends AbstractDao implements IFCategoriaRepository {
 	private Environment env;
 
 	@Override
-	public List<CategoriaDTO> findAll() throws IOException, NoResultException {
+	public List<CategoriaDTO> findAll() throws IOException {
 		
 		List<CategoriaDTO> liDto = Lists.newArrayList();
 		
 		Query q = getEntityManager().createQuery(env
 				.getProperty("flow.value.categoria.select.all"), TbSiaCategoriasEmpresa.class);
 		
-		List<TbSiaCategoriasEmpresa> liEntities = ((List<TbSiaCategoriasEmpresa>) q.getResultList());
+		List<TbSiaCategoriasEmpresa> liEntities = (q.getResultList());
 		
 		liEntities.forEach(elem -> {
 			liDto.add(getModelMapper().map(elem, CategoriaDTO.class));
@@ -51,7 +50,7 @@ public class CategoriaDao extends AbstractDao implements IFCategoriaRepository {
 	}
 
 	@Override
-	public CategoriaDTO findByDid(Integer did) throws NoResultException {
+	public CategoriaDTO findByDid(Integer did) {
 				
 		return getModelMapper().map(getEntityManager()
 					.find(TbSiaCategoriasEmpresa.class, did), CategoriaDTO.class);

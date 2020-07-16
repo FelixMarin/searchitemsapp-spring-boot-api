@@ -3,7 +3,6 @@ package com.searchitemsapp.dao;
 import java.io.IOException;
 import java.util.List;
 
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +25,14 @@ public class UrlDao extends AbstractDao implements IFUrlRepository {
 	private Environment env;
 
 	@Override
-	public List<UrlDTO> findAll() throws IOException, NoResultException {
+	public List<UrlDTO> findAll() throws IOException {
 		
 		List<UrlDTO> listDto = Lists.newArrayList(); 
 		
 		Query q = getEntityManager().createQuery(env
 				.getProperty("flow.value.url.select.all"), TbSiaUrl.class);
 		
-		List<TbSiaUrl> liEntities = ((List<TbSiaUrl>) q.getResultList());
+		List<TbSiaUrl> liEntities = (q.getResultList());
 		
 		liEntities.forEach(elem -> {
 			listDto.add(getModelMapper().map(elem, UrlDTO.class));
@@ -43,7 +42,7 @@ public class UrlDao extends AbstractDao implements IFUrlRepository {
 	}
 
 	@Override
-	public UrlDTO findByDid(final Integer did) throws IOException, NoResultException {
+	public UrlDTO findByDid(final Integer did) throws IOException {
 
 		return getModelMapper().map(getEntityManager()
 				.find(TbSiaUrl.class, did), UrlDTO.class);
@@ -51,7 +50,7 @@ public class UrlDao extends AbstractDao implements IFUrlRepository {
 	
 	@Override
 	public List<UrlDTO> findByDidAndDesUrl(final Integer didPais, 
-			final String didCategoria) throws IOException, NoResultException {
+			final String didCategoria) throws IOException {
 
 		List<UrlDTO> listDto = Lists.newArrayList(); 
 		
@@ -61,7 +60,7 @@ public class UrlDao extends AbstractDao implements IFUrlRepository {
 		q.setParameter(env.getProperty("flow.value.empresa.didCategoria.key"), Integer.parseInt(didCategoria));
 		q.setParameter(env.getProperty("flow.value.categoria.didPais.key"), didPais);
 		
-		List<UrlDTO> listUrlDto = toListODTO((List<Object[]>) q.getResultList());
+		List<UrlDTO> listUrlDto = toListODTO(q.getResultList());
 		
 		listUrlDto.forEach(elem -> {
 			listDto.add(getModelMapper().map(elem, UrlDTO.class));
@@ -74,7 +73,7 @@ public class UrlDao extends AbstractDao implements IFUrlRepository {
 	public List<UrlDTO> findByDidAndNomUrl(
 			final Integer didPais, 
 			final String didCategoria) 
-					throws IOException, NoResultException {
+					throws IOException {
 
 		List<UrlDTO> listDto = Lists.newArrayList(); 
 		
@@ -84,7 +83,7 @@ public class UrlDao extends AbstractDao implements IFUrlRepository {
 		q.setParameter(env.getProperty("flow.value.empresa.didCategoria.key"), Integer.parseInt(didCategoria));
 		q.setParameter(env.getProperty("flow.value.categoria.didPais.key"), didPais);
 
-		List<TbSiaUrl> liEntities = ((List<TbSiaUrl>) q.getResultList());
+		List<TbSiaUrl> liEntities = (q.getResultList());
 		
 		liEntities.forEach(elem -> {
 			listDto.add(getModelMapper().map(elem, UrlDTO.class));
