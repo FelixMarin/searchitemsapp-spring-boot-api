@@ -3,7 +3,6 @@ package com.searchitemsapp.dao;
 import java.io.IOException;
 import java.util.List;
 
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -27,14 +26,14 @@ public class NomProductoDao extends AbstractDao implements IFNomProductoReposito
 	private Environment env;
 
 	@Override
-	public List<NomProductoDTO> findAll() throws IOException, NoResultException {
+	public List<NomProductoDTO> findAll() throws IOException {
 		
 		List<NomProductoDTO> listDto = Lists.newArrayList(); 
 		
 		Query q = getEntityManager().createQuery(env
 				.getProperty("flow.value.nomproducto.select.all"), TbSiaNomProducto.class);
 		
-		List<TbSiaNomProducto> liEntities = ((List<TbSiaNomProducto>) q.getResultList());
+		List<TbSiaNomProducto> liEntities = (q.getResultList());
 		
 		liEntities.forEach(elem -> {
 			listDto.add(getModelMapper().map(elem, NomProductoDTO.class));
@@ -44,7 +43,7 @@ public class NomProductoDao extends AbstractDao implements IFNomProductoReposito
 	}
 	
 	@Override
-	public NomProductoDTO findByDid(Integer did) throws IOException, NoResultException {
+	public NomProductoDTO findByDid(Integer did) throws IOException {
 		throw new NotImplementedException("Funcionalidad no implementada");
 	}
 }

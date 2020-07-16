@@ -3,7 +3,6 @@ package com.searchitemsapp.dao;
 import java.io.IOException;
 import java.util.List;
 
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +25,14 @@ public class MarcasDao extends AbstractDao implements IFMarcasRepository {
 	private Environment env;
 
 	@Override
-	public List<MarcasDTO> findAll() throws IOException, NoResultException {
+	public List<MarcasDTO> findAll() throws IOException {
 		
 		List<MarcasDTO> listDto = Lists.newArrayList();
 		
 		Query q = getEntityManager().createQuery(env
 				.getProperty("flow.value.marcas.select.all"), TbSiaMarcas.class);
 		
-		List<TbSiaMarcas> liEntities = ((List<TbSiaMarcas>) q.getResultList());
+		List<TbSiaMarcas> liEntities = (q.getResultList());
 		
 		liEntities.forEach(elem -> {
 			listDto.add(getModelMapper().map(elem, MarcasDTO.class));
@@ -43,7 +42,7 @@ public class MarcasDao extends AbstractDao implements IFMarcasRepository {
 	}
 	
 	@Override
-	public MarcasDTO findByDid(final Integer did) throws IOException, NoResultException {
+	public MarcasDTO findByDid(final Integer did) throws IOException {
 		
 		return getModelMapper().map((getEntityManager()
 				.find(TbSiaMarcas.class, did)), MarcasDTO.class);
