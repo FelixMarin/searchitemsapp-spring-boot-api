@@ -3,6 +3,10 @@ package com.searchitemsapp.dao;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.modelmapper.ModelMapper;
+
+import lombok.Data;
+
 /**
  * Clase Abstracta que implementan todas las clases
  * DAO. En esta clase es donde se instancia al 
@@ -14,18 +18,16 @@ import javax.persistence.PersistenceContext;
  * @param <R>
  * @param <T>
  */
-public abstract class AbstractDao{
+@Data
+public abstract class AbstractDao {
 	
-	/*
-	 * Variables Globales
-	 */
+	private static final ModelMapper MODEL_MAPPER = new ModelMapper();
+	
 	@PersistenceContext
-	protected EntityManager entityManager;
+	private EntityManager entityManager;
 	
-	/*
-	 * Constructor
-	 */
-	public AbstractDao() {
-		super();
+	protected static ModelMapper getModelMapper() {
+		return MODEL_MAPPER;
 	}
+
 }
