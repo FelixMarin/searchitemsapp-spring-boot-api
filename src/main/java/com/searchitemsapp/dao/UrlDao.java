@@ -92,26 +92,4 @@ public class UrlDao extends AbstractDao implements IFUrlRepository {
 		
 		return listDto;
 	}
-	
-	private List<UrlDTO> toListODTO(final List<Object[]> urlList) {
-		
-		List<UrlDTO> listUrlDto = Lists.newArrayList();
-		
-		if (!urlList.isEmpty()){ 
-			
-			urlList.forEach(obj -> {
-				UrlDTO urlPDto = new UrlDTO();
-				urlPDto.setNomUrl(String.valueOf(obj[0]));
-				urlPDto.setDidEmpresa(Integer.parseInt(String.valueOf(obj[1])));
-				urlPDto.setDid(Integer.parseInt(String.valueOf(obj[2])));
-				urlPDto.setBolActivo(Boolean.parseBoolean(null!=obj[3]?String.valueOf(obj[3]):null));
-				urlPDto.setNomEmpresa(String.valueOf(obj[4]));
-				urlPDto.setBolStatus(Boolean.parseBoolean(null!=obj[5]?String.valueOf(obj[5]):null));
-				urlPDto.setBolLogin(Boolean.parseBoolean(null!=obj[6]?String.valueOf(obj[6]):null));
-				urlPDto.setDesUrl(String.valueOf(obj[7]));
-				listUrlDto.add(urlPDto);				
-			});
-		}
-		return listUrlDto;
-	}
 }
