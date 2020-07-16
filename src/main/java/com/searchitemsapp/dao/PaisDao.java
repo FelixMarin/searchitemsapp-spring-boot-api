@@ -2,8 +2,6 @@ package com.searchitemsapp.dao;
 
 import java.io.IOException;
 
-import javax.persistence.NoResultException;
-
 import org.springframework.stereotype.Repository;
 
 import com.searchitemsapp.dao.repository.IFPaisRepository;
@@ -17,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class PaisDao extends AbstractDao implements IFPaisRepository {
 
 	@Override
-	public PaisDTO findByDid(final Integer did) throws IOException, NoResultException {
+	public PaisDTO findByDid(final Integer did) throws IOException {
 				
 		return getModelMapper().map(getEntityManager()
 				.find(TbSiaPais.class, did), PaisDTO.class);

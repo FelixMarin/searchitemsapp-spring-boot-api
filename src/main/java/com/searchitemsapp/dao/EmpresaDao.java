@@ -3,7 +3,6 @@ package com.searchitemsapp.dao;
 import java.io.IOException;
 import java.util.List;
 
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +25,14 @@ public class EmpresaDao extends AbstractDao implements IFEmpresaRepository {
 	private Environment env;
 
 	@Override
-	public List<EmpresaDTO> findAll() throws IOException, NoResultException {
+	public List<EmpresaDTO> findAll() throws IOException {
 		
 		List<EmpresaDTO> listDto = Lists.newArrayList(); 
 		
 		Query q = getEntityManager().createQuery(env
 				.getProperty("flow.value.empresa.select.all"), TbSiaEmpresa.class);
 		
-		List<TbSiaEmpresa> liEntities = ((List<TbSiaEmpresa>) q.getResultList());
+		List<TbSiaEmpresa> liEntities = (q.getResultList());
 		
 		liEntities.forEach(elem -> {
 			listDto.add(getModelMapper().map(elem, EmpresaDTO.class));
@@ -43,7 +42,7 @@ public class EmpresaDao extends AbstractDao implements IFEmpresaRepository {
 	}
 
 	@Override
-	public EmpresaDTO findByDid(final Integer did) throws IOException, NoResultException {
+	public EmpresaDTO findByDid(final Integer did) throws IOException {
 		
 		return getModelMapper().map((getEntityManager()
 				.find(TbSiaEmpresa.class, did)), EmpresaDTO.class);
@@ -53,7 +52,7 @@ public class EmpresaDao extends AbstractDao implements IFEmpresaRepository {
 	public List<EmpresaDTO> findByDidAndTbSiaCategoriasEmpresa(
 			final Integer didEmpresa, 
 			final Integer didCatEmpresa) 
-					throws IOException, NoResultException {
+					throws IOException {
 		
 		List<EmpresaDTO> listDto = Lists.newArrayList(); 
 	
@@ -63,7 +62,7 @@ public class EmpresaDao extends AbstractDao implements IFEmpresaRepository {
 		q.setParameter(env.getProperty("flow.value.categoria.didEmpresa.key"), didEmpresa);	
 		q.setParameter(env.getProperty("flow.value.categoria.didCategoriaEmpresa.key"), didCatEmpresa);	
 		
-		List<TbSiaEmpresa> liEntities = ((List<TbSiaEmpresa>) q.getResultList());
+		List<TbSiaEmpresa> liEntities = (q.getResultList());
 		
 		liEntities.forEach(elem -> {
 			listDto.add(getModelMapper().map(elem, EmpresaDTO.class));
