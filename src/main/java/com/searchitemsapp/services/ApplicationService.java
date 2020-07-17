@@ -88,7 +88,9 @@ public class ApplicationService implements IFService<String,String> {
 			urlComposer.applicationData(mapEmpresas, mapDynEmpresas);
 			List<MarcasDTO> listTodasMarcas = urlComposer.getListTodasMarcas();
 			
-			List<SelectoresCssDTO> lselectores = urlComposer.listSelectoresCssPorEmpresa(empresas, didPais, didCategoria);
+			List<SelectoresCssDTO> lselectores = urlComposer
+					.listSelectoresCssPorEmpresa(empresas);
+			
 			Collection<UrlDTO> lResultDtoUrlsTratado = urlComposer.replaceWildcardCharacter(didPais, 
 					didCategoria, producto, empresas, lselectores, mapEmpresas);
 

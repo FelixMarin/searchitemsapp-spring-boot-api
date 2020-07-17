@@ -31,24 +31,24 @@ public class ProcessDataMercadona implements IFProcessDataMercadona {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataMercadona.class);  
 
-	private static final String LT_EM_GT_CIERRE = "&lt;/em&gt;";
-	private static final String SEPARADOR_URL = "%20";
-	private static final String LT_EM_GT = "&lt;em&gt;";
-	private static final String PARAMS_QUERY = "{\"params\":\"query=";
-	private static final String CLICK_ANALYTICS_TRUE = "&clickAnalytics=true\"}";
-	private static final String TAG_FIN_ROOT = "</root>";
-	private static final String TAG_INI_ROOT = "<root>";
+	private static final String LTEMGTCIERRE = "&lt;/em&gt;";
+	private static final String SEPARADORURL = "%20";
+	private static final String LTEMGT = "&lt;em&gt;";
+	private static final String PARAMSQUERY = "{\"params\":\"query=";
+	private static final String CLICKANALYTICSTRUE = "&clickAnalytics=true\"}";
+	private static final String TAGFINROOT = "</root>";
+	private static final String TAGINIROOT = "<root>";
 	
-	private static final String CABECERA_XML = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>";
-	private static final String REFERRER_MERCADONA = "https://tienda.mercadona.es/";
-	private static final String AGENT_ALL = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36";
-	private static final String ACCEPT_LANGUAGE = "Accept-Language";	
-	private static final String ES_ES = "es-ES,es;q=0.8";
-	private static final String ACCEPT_ENCODING = "Accept-Encoding";
+	private static final String CABECERAXML = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>";
+	private static final String REFERRERMERCADONA = "https://tienda.mercadona.es/";
+	private static final String AGENTALL = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36";
+	private static final String ACCEPTLANGUAGE = "Accept-Language";	
+	private static final String ESES = "es-ES,es;q=0.8";
+	private static final String ACCEPTENCODING = "Accept-Encoding";
 	private static final String ACCEPT = "Accept";
-	private static final String ACEPT_VALUE_JSON = "application/json";
-	private static final String GZIP_DEFLATE_SDCH = "gzip, deflate, sdch";	
-	private static final String URL_ALL_PRODUCTS = "https://lolamarket.com/tienda/mercadona/buscar/";
+	private static final String ACEPTVALUEJSON = "application/json";
+	private static final String GZIPDEFLATESDCH = "gzip, deflate, sdch";	
+	private static final String URLALLPRODUCTS = "https://lolamarket.com/tienda/mercadona/buscar/";
 
 	private ProcessDataMercadona() {
 		super();
@@ -104,9 +104,9 @@ public class ProcessDataMercadona implements IFProcessDataMercadona {
 		if(StringUtils.isAllEmpty(xml)) {
 			return new Document(StringUtils.EMPTY);
 		} else {
-			xml = CABECERA_XML.concat(TAG_INI_ROOT).concat(xml).concat(TAG_FIN_ROOT);
-			xml = xml.replace(LT_EM_GT, StringUtils.EMPTY);
-			xml = xml.replace(LT_EM_GT_CIERRE, StringUtils.EMPTY);
+			xml = CABECERAXML.concat(TAGINIROOT).concat(xml).concat(TAGFINROOT);
+			xml = xml.replace(LTEMGT, StringUtils.EMPTY);
+			xml = xml.replace(LTEMGTCIERRE, StringUtils.EMPTY);
 		}
 		
 		Document doc = Jsoup.parse(xml, StringUtils.EMPTY, Parser.xmlParser());
@@ -137,18 +137,18 @@ public class ProcessDataMercadona implements IFProcessDataMercadona {
 	public Connection getConnection(final String strUrl, final String producto) {
 		
 		return Jsoup.connect(strUrl)
-				.userAgent(AGENT_ALL)
+				.userAgent(AGENTALL)
 				.method(Connection.Method.POST)
-				.referrer(REFERRER_MERCADONA)
+				.referrer(REFERRERMERCADONA)
 				.ignoreContentType(Boolean.TRUE)
-				.header(ACCEPT_LANGUAGE, ES_ES)
-				.header(ACCEPT_ENCODING, GZIP_DEFLATE_SDCH)
-				.header(ACCEPT, ACEPT_VALUE_JSON)
+				.header(ACCEPTLANGUAGE, ESES)
+				.header(ACCEPTENCODING, GZIPDEFLATESDCH)
+				.header(ACCEPT, ACEPTVALUEJSON)
 				.maxBodySize(0)
 				.timeout(100000)
-				.requestBody(PARAMS_QUERY
+				.requestBody(PARAMSQUERY
 						.concat(producto)
-						.concat(CLICK_ANALYTICS_TRUE));
+						.concat(CLICKANALYTICSTRUE));
 	}
 	
 	/**
@@ -164,9 +164,9 @@ public class ProcessDataMercadona implements IFProcessDataMercadona {
 		
 		if(!StringUtils.isAllEmpty(resDto.getNomProducto())) {
 			productoAux= resDto.getNomProducto()
-				.replace(StringUtils.SPACE, SEPARADOR_URL);
+				.replace(StringUtils.SPACE, SEPARADORURL);
 		}
 		
-		return URL_ALL_PRODUCTS.concat(productoAux);
+		return URLALLPRODUCTS.concat(productoAux);
 	}
 }

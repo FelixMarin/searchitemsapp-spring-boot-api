@@ -34,9 +34,8 @@ public class UrlDao extends AbstractDao implements IFUrlRepository {
 		
 		List<TbSiaUrl> liEntities = (q.getResultList());
 		
-		liEntities.forEach(elem -> {
-			listDto.add(getModelMapper().map(elem, UrlDTO.class));
-		});
+		liEntities.forEach(elem -> listDto
+				.add(getModelMapper().map(elem, UrlDTO.class)));
 		
 		return listDto;
 	}
@@ -62,9 +61,8 @@ public class UrlDao extends AbstractDao implements IFUrlRepository {
 		
 		List<UrlDTO> listUrlDto = toListODTO(q.getResultList());
 		
-		listUrlDto.forEach(elem -> {
-			listDto.add(getModelMapper().map(elem, UrlDTO.class));
-		});
+		listUrlDto.forEach(elem -> listDto
+				.add(getModelMapper().map(elem, UrlDTO.class)));
 		
 		return listDto;
 	}
@@ -85,9 +83,8 @@ public class UrlDao extends AbstractDao implements IFUrlRepository {
 
 		List<TbSiaUrl> liEntities = (q.getResultList());
 		
-		liEntities.forEach(elem -> {
-			listDto.add(getModelMapper().map(elem, UrlDTO.class));
-		});
+		liEntities.forEach(elem -> listDto
+				.add(getModelMapper().map(elem, UrlDTO.class)));
 		
 		return listDto;
 	}
