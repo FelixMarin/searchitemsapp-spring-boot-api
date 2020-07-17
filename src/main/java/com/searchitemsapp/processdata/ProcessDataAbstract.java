@@ -153,10 +153,7 @@ public abstract class ProcessDataAbstract {
 	}
 	
 	public List<SelectoresCssDTO> listSelectoresCssPorEmpresa(
-			final String didEmpresas, 
-			final String didPais,
-			final String didCategoria) 
-					throws IOException {
+			final String didEmpresas) {
 
 		String emp;
 		
@@ -364,17 +361,13 @@ public abstract class ProcessDataAbstract {
 		List<String> tokens = Lists.newArrayList();
 		
 		List<String> listProducto = Arrays.asList(arProducto);  
-		listProducto.forEach(elem -> {
-			tokens.add(elem.toUpperCase());
-		});
+		listProducto.forEach(elem -> tokens.add(elem.toUpperCase()));
 		
 		StringBuilder stringBuilder = new StringBuilder(10);
 		
 		stringBuilder.append("(");
 		
-		tokens.forEach(e -> {
-			stringBuilder.append(".*").append(e);
-		});
+		tokens.forEach(e -> stringBuilder.append(".*").append(e));
 		
 		stringBuilder.append(")");
 		
@@ -382,9 +375,7 @@ public abstract class ProcessDataAbstract {
 		
 		stringBuilder.append("|(");
 		
-		tokens.forEach(e -> {
-			stringBuilder.append(".*").append(e);			
-		});
+		tokens.forEach(e -> stringBuilder.append(".*").append(e));
 
 		stringBuilder.append(")");
 		
@@ -403,8 +394,7 @@ public abstract class ProcessDataAbstract {
 			final int iIdEmpresa, 
 			final String nomProducto, 
 			final Map<String,EmpresaDTO> mapEmpresas,
-			final List<MarcasDTO> listTodasMarcas,
-			final Map<Integer,Boolean> mapDynEmpresas) {
+			final List<MarcasDTO> listTodasMarcas) {
 		
 		String strProducto;
 		

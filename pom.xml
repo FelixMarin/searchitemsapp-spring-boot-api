@@ -18,6 +18,14 @@
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
+	
+	<distributionManagement>
+       <repository>
+         <id>internal.repo</id>
+         <name>Internal repo</name>
+         <url>https://github.com/FelixMarin/searchitemsapp-spring-boot-version.git</url>
+       </repository>
+   </distributionManagement>
 
 	<dependencies>
 		<dependency>

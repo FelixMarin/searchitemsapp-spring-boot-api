@@ -161,7 +161,7 @@ public class ProcessDataModule extends ProcessDataAbstract implements Callable<L
 			return Boolean.FALSE;
 		} 
 		
-		String strProducto = filtroMarca(iIdEmpresa, resDto.getNomProducto(), mapEmpresas, listTodasMarcas, mapDynEmpresas);
+		String strProducto = filtroMarca(iIdEmpresa, resDto.getNomProducto(), mapEmpresas, listTodasMarcas);
 		
 		if(StringUtils.isAllBlank(strProducto)) {
 			return Boolean.FALSE;
@@ -222,6 +222,7 @@ public class ProcessDataModule extends ProcessDataAbstract implements Callable<L
 		this.mapEmpresas = mapEmpresas;
 	}
 
+	@Override
 	public List<MarcasDTO> getListTodasMarcas() {
 		return listTodasMarcas;
 	}

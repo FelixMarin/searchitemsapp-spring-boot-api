@@ -33,9 +33,8 @@ public class SelectoresCssDao extends AbstractDao implements IFSelectoresCssRepo
 		
 		List<TbSiaSelectoresCss> liEntities = (q.getResultList());
 		
-		liEntities.forEach(elem -> {
-			listDto.add(getModelMapper().map(elem, SelectoresCssDTO.class));
-		});
+		liEntities.forEach(elem -> listDto
+				.add(getModelMapper().map(elem, SelectoresCssDTO.class)));
 		
 		return listDto;
 	}
@@ -61,9 +60,8 @@ public class SelectoresCssDao extends AbstractDao implements IFSelectoresCssRepo
 
 		List<TbSiaSelectoresCss> liEntities = (q.getResultList());
 		
-		liEntities.forEach(elem -> {
-			listDto.add(getModelMapper().map(elem, SelectoresCssDTO.class));
-		});
+		liEntities.forEach(elem -> listDto
+				.add(getModelMapper().map(elem, SelectoresCssDTO.class)));
 		
 		return listDto;
 	}	

@@ -34,9 +34,8 @@ public class MarcasDao extends AbstractDao implements IFMarcasRepository {
 		
 		List<TbSiaMarcas> liEntities = (q.getResultList());
 		
-		liEntities.forEach(elem -> {
-			listDto.add(getModelMapper().map(elem, MarcasDTO.class));
-		});
+		liEntities.forEach(elem -> listDto
+				.add(getModelMapper().map(elem, MarcasDTO.class)));
 		
 		return listDto;
 	}

@@ -25,20 +25,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProcessPriceModule implements IFProcessPrice {
 	
-	private transient final Logger LOGGER = LoggerFactory.getLogger(IFProcessPrice.class); 
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(ProcessPriceModule.class); 
 	
-	private transient final String DECIMALES = ".00";
-	private transient final String DEFAULT_STR_PRICE = "1000.00";
-	private transient final String REGEX_NUMERO_DECIMAL = "(\\d*[,][0-9]*)|([0-9]{1,9})";
-	private transient final String REGEX_INTEGER = "\\d+";
-	private transient final String BARRA_KILO_GRAM = "/kg";
-	private transient final double DEFAULT_PRICE = 1000.00;
+	private static final transient String DECIMALES = ".00";
+	private static final transient String DEFAULTSTRPRICE = "1000.00";
+	private static final transient String REGEXNUMERODECIMAL = "(\\d*[,][0-9]*)|([0-9]{1,9})";
+	private static final transient String REGEXINTEGER = "\\d+";
+	private static final transient String BARRAKILOGRAM = "/kg";
+	private static final transient double DEFAULTPRICE = 1000.00;
 	
-	private transient final String PIPE_STRING = "|";
-	private transient final String COMMA_STRING = ",";
-	private transient final String DOT_STRING = ".";
+	private static final transient String PIPESTRING = "|";
+	private static final transient String COMMASTRING = ",";
+	private static final transient String DOTSTRING = ".";
 	
-	private transient final String EURO_SYMBOL = "/Eur";
+	private static final transient String EUROSYMBOL = "/Eur";
 	
 	private int identificador;
 	private String nomProducto;
@@ -102,7 +102,7 @@ public class ProcessPriceModule implements IFProcessPrice {
 			if(a.getOrdenacion() == 1) {
 	
 				if(StringUtils.isAllEmpty(a.getPrecio())) {
-					a.setPrecio(String.valueOf(DEFAULT_PRICE));
+					a.setPrecio(String.valueOf(DEFAULTPRICE));
 				}
 
 				i = convertirDouble(a.getPrecio())
@@ -114,7 +114,7 @@ public class ProcessPriceModule implements IFProcessPrice {
 		
 				if(Objects.isNull(a.getPrecioKilo()) || 
 						StringUtils.isAllEmpty(a.getPrecioKilo())) {
-					a.setPrecioKilo(String.valueOf(DEFAULT_PRICE));
+					a.setPrecioKilo(String.valueOf(DEFAULTPRICE));
 				}
 
 				mismoPrecioYPrecioKilo(a, b);
@@ -163,17 +163,17 @@ public class ProcessPriceModule implements IFProcessPrice {
 	 */
 	private  String extraerDecimal(final String cadena) {
 		
-		if(COMMA_STRING.equals(cadena)) {
-			return DEFAULT_STR_PRICE;
+		if(COMMASTRING.equals(cadena)) {
+			return DEFAULTSTRPRICE;
 		}
 	     
 	  String resultado = StringUtils.EMPTY;
 	  
-	  String cadenaAux = cadena.replace(DOT_STRING, StringUtils.EMPTY);
+	  String cadenaAux = cadena.replace(DOTSTRING, StringUtils.EMPTY);
 	 
-	  if(cadenaAux.contains(PIPE_STRING)) {
+	  if(cadenaAux.contains(PIPESTRING)) {
 		  cadenaAux = cadenaAux.substring(
-				  cadenaAux.lastIndexOf(PIPE_STRING)+1,
+				  cadenaAux.lastIndexOf(PIPESTRING)+1,
 				  cadenaAux.length()).trim().
 				  replaceAll(StringUtils.SPACE
 						  .concat(StringUtils.SPACE),
@@ -181,14 +181,14 @@ public class ProcessPriceModule implements IFProcessPrice {
 	  }
 
 	  Matcher mDecimal = Pattern.compile(
-			  REGEX_NUMERO_DECIMAL, Pattern.MULTILINE).matcher(cadenaAux);
+			  REGEXNUMERODECIMAL, Pattern.MULTILINE).matcher(cadenaAux);
 
 	  if (mDecimal.find()) {
 	     resultado = mDecimal.group(0);
 	  }
 
 	  if(!StringUtils.isAllEmpty(resultado)) {	  
-		  resultado = resultado.replace(COMMA_STRING, DOT_STRING);
+		  resultado = resultado.replace(COMMASTRING, DOTSTRING);
 	  } else {
 		  return extraerEntero(cadenaAux);
 	  }
@@ -207,15 +207,15 @@ public class ProcessPriceModule implements IFProcessPrice {
 	private  String extraerEntero(final String cadena) {
 		
 		String resultado = StringUtils.EMPTY;		
-		Matcher mEntero = Pattern.compile(REGEX_NUMERO_DECIMAL, Pattern.MULTILINE).matcher(cadena);
+		Matcher mEntero = Pattern.compile(REGEXNUMERODECIMAL, Pattern.MULTILINE).matcher(cadena);
 		
 	  if(mEntero.find()) {
 		  return DECIMALES;
 	  }
 		
-	  String cadenaAux = cadena.replace(DOT_STRING, StringUtils.EMPTY);
+	  String cadenaAux = cadena.replace(DOTSTRING, StringUtils.EMPTY);
 		
-	  mEntero = Pattern.compile(REGEX_NUMERO_DECIMAL, Pattern.MULTILINE).matcher(cadenaAux);
+	  mEntero = Pattern.compile(REGEXNUMERODECIMAL, Pattern.MULTILINE).matcher(cadenaAux);
 		
 	    if(mEntero.find()) {
 		   resultado = mEntero.group();
@@ -223,7 +223,7 @@ public class ProcessPriceModule implements IFProcessPrice {
 	    }
 
 		if(StringUtils.isAllEmpty(resultado)) {
-			  mEntero = Pattern.compile(REGEX_INTEGER, Pattern.MULTILINE).matcher(cadenaAux);
+			  mEntero = Pattern.compile(REGEXINTEGER, Pattern.MULTILINE).matcher(cadenaAux);
 
 			if(mEntero.find()) {
 				  resultado = mEntero.group();
@@ -246,13 +246,13 @@ public class ProcessPriceModule implements IFProcessPrice {
 		if(StringUtils.isAllEmpty(a.getPrecioKilo()) &&
 				!StringUtils.isAllEmpty(a.getPrecio())) {
 			a.setPrecioKilo(extraerDecimal(a.getPrecio())
-					.concat(BARRA_KILO_GRAM));
+					.concat(BARRAKILOGRAM));
 		}
 		
 		if(StringUtils.isAllEmpty(b.getPrecioKilo()) &&
 				!StringUtils.isAllEmpty(b.getPrecio())) {
 			b.setPrecioKilo(extraerDecimal(b.getPrecio())
-					.concat(BARRA_KILO_GRAM));
+					.concat(BARRAKILOGRAM));
 		}
 	}
 	
@@ -266,22 +266,22 @@ public class ProcessPriceModule implements IFProcessPrice {
 		
 		if(!StringUtils.isAllEmpty(a.getPrecio())) {
 			a.setPrecio(extraerDecimal(a.getPrecio())
-					.concat(EURO_SYMBOL)
-					.replace(DOT_STRING,COMMA_STRING));	
+					.concat(EUROSYMBOL)
+					.replace(DOTSTRING,COMMASTRING));	
 			
 			b.setPrecio(extraerDecimal(b.getPrecio())
-					.concat(EURO_SYMBOL)
-					.replace(DOT_STRING,COMMA_STRING));
+					.concat(EUROSYMBOL)
+					.replace(DOTSTRING,COMMASTRING));
 		}
 		
 		if(!StringUtils.isAllEmpty(a.getPrecioKilo())) {
 			a.setPrecioKilo(extraerDecimal(a.getPrecioKilo())
-			.concat(BARRA_KILO_GRAM)
-			.replace(DOT_STRING,COMMA_STRING));	
+			.concat(BARRAKILOGRAM)
+			.replace(DOTSTRING,COMMASTRING));	
 	
 			b.setPrecioKilo(extraerDecimal(b.getPrecioKilo())
-			.concat(BARRA_KILO_GRAM)
-			.replace(DOT_STRING,COMMA_STRING));	
+			.concat(BARRAKILOGRAM)
+			.replace(DOTSTRING,COMMASTRING));	
 		}
 	}
 	
