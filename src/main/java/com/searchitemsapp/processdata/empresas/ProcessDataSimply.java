@@ -26,8 +26,8 @@ public class ProcessDataSimply implements IFProcessDataSimply {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataSimply.class);  
 	
-	private static final String STRING_ENIE_MIN = "ñ";
-	private static final String ENIE_URL = "%F1";
+	private static final String STRINGENIEMIN = "ñ";
+	private static final String ENIEURL = "%F1";
 	
 	@Autowired
 	private Environment env;
@@ -101,6 +101,6 @@ public class ProcessDataSimply implements IFProcessDataSimply {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
 		}
 		
-		return producto.replace(STRING_ENIE_MIN, ENIE_URL);
+		return producto.replace(STRINGENIEMIN, ENIEURL);
 	}
 }

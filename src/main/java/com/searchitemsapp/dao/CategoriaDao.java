@@ -42,9 +42,8 @@ public class CategoriaDao extends AbstractDao implements IFCategoriaRepository {
 		
 		List<TbSiaCategoriasEmpresa> liEntities = (q.getResultList());
 		
-		liEntities.forEach(elem -> {
-			liDto.add(getModelMapper().map(elem, CategoriaDTO.class));
-		});
+		liEntities.forEach(elem -> liDto
+				.add(getModelMapper().map(elem, CategoriaDTO.class)));
 	
 		return liDto;
 	}

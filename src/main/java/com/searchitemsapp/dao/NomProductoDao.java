@@ -35,9 +35,8 @@ public class NomProductoDao extends AbstractDao implements IFNomProductoReposito
 		
 		List<TbSiaNomProducto> liEntities = (q.getResultList());
 		
-		liEntities.forEach(elem -> {
-			listDto.add(getModelMapper().map(elem, NomProductoDTO.class));
-		});
+		liEntities.forEach(elem -> listDto
+				.add(getModelMapper().map(elem, NomProductoDTO.class)));
 		
 		return listDto;
 	}

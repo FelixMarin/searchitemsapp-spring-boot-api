@@ -10,8 +10,6 @@ import org.modelmapper.ModelMapper;
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dto.UrlDTO;
 
-import lombok.Data;
-
 /**
  * Clase Abstracta que implementan todas las clases
  * DAO. En esta clase es donde se instancia al 
@@ -23,13 +21,16 @@ import lombok.Data;
  * @param <R>
  * @param <T>
  */
-@Data
 public abstract class AbstractDao {
 	
 	private static final ModelMapper MODEL_MAPPER = new ModelMapper();
 	
 	@PersistenceContext
 	private EntityManager entityManager;
+	
+	protected EntityManager getEntityManager() {
+		return entityManager;
+	}
 	
 	protected static ModelMapper getModelMapper() {
 		return MODEL_MAPPER;
@@ -56,5 +57,4 @@ public abstract class AbstractDao {
 		}
 		return listUrlDto;
 	}
-
 }

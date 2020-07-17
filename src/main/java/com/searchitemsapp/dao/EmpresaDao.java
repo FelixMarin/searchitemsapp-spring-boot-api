@@ -34,9 +34,8 @@ public class EmpresaDao extends AbstractDao implements IFEmpresaRepository {
 		
 		List<TbSiaEmpresa> liEntities = (q.getResultList());
 		
-		liEntities.forEach(elem -> {
-			listDto.add(getModelMapper().map(elem, EmpresaDTO.class));
-		});
+		liEntities.forEach(elem -> listDto
+				.add(getModelMapper().map(elem, EmpresaDTO.class)));
 		
 		return listDto;
 	}
@@ -64,9 +63,8 @@ public class EmpresaDao extends AbstractDao implements IFEmpresaRepository {
 		
 		List<TbSiaEmpresa> liEntities = (q.getResultList());
 		
-		liEntities.forEach(elem -> {
-			listDto.add(getModelMapper().map(elem, EmpresaDTO.class));
-		});
+		liEntities.forEach(elem ->listDto
+				.add(getModelMapper().map(elem, EmpresaDTO.class)));
 		
 		return listDto;
 	}
