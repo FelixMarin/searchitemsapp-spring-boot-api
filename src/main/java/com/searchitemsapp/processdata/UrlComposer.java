@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -93,6 +93,7 @@ public class UrlComposer extends ProcessDataAbstract implements IFUrlComposer {
 				cargaSelectoresCss(urlDto, listTodosSelectoresCss);
 				
 				String productoTratado = StringUtils.EMPTY;	
+				
 				if(urlDto.getBolActivo().booleanValue()) {
 					if(mapEmpresas.get(EROSKI).getDid().equals(urlDto.getDidEmpresa())) {
 						productoTratado = reemplazarCaracteresEroski(producto);
@@ -137,29 +138,11 @@ public class UrlComposer extends ProcessDataAbstract implements IFUrlComposer {
 	 * @param listTodosElementNodes
 	 */
 	private void cargaSelectoresCss(UrlDTO resDtoUrls, List<SelectoresCssDTO> listTodosElementNodes) {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
-		
-		if(Objects.nonNull(resDtoUrls) && 
-				Objects.nonNull(resDtoUrls.getDidEmpresa()) &&
-				Objects.nonNull(listTodosElementNodes) &&
-				!listTodosElementNodes.isEmpty()) {
-		
-			Integer empDidEnUlrs = resDtoUrls.getDidEmpresa();
 	
-			SelectoresCssDTO selectoresCssDTO = null;			
-			for (SelectoresCssDTO elementNodesDTO : listTodosElementNodes) {
-				if (elementNodesDTO.getDidEmpresa().equals(empDidEnUlrs)) {
-					selectoresCssDTO = elementNodesDTO;
-					break;
-				}
-			}
+		SelectoresCssDTO selectoresCssDTO = listTodosElementNodes
+				.stream().filter(x -> x.getDidEmpresa().equals(resDtoUrls.getDidEmpresa()))
+				.collect(Collectors.toList()).get(0);
 			
-			if(Objects.nonNull(selectoresCssDTO)) {	
-				resDtoUrls.setSelectores(selectoresCssDTO);
-			}
-		}
+		resDtoUrls.setSelectores(selectoresCssDTO);
 	}
 }
