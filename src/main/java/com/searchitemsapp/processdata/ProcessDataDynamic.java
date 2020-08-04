@@ -21,14 +21,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.core.env.Environment;
 import com.searchitemsapp.processdata.empresas.IFProcessDataConsum;
 
-/**
- * Módulo de web para el procesamiento de datos dinámico. 
- * Esta clase contiene la lógica necesaria para extraer 
- * información de sitios web que se forman de manera dinámica. 
- * 
- * @author Felix Marin Ramirez
- *
- */
 @Component
 public class ProcessDataDynamic {
 	
@@ -46,16 +38,6 @@ public class ProcessDataDynamic {
 		super();
 	}
 	
-	/**
-	 * Método que permite extraer informacíon de una web que 
-	 * se construye dinámicamente en el navegador y no existe
-	 * una fuente html como tal.
-	 * 
-	 * @param strUrl
-	 * @param didEmpresa
-	 * @return String
-	 * @throws InterruptedException
-	 */
 	public String getDynHtmlContent(final String strUrl, final int didEmpresa) throws InterruptedException {
 		
 		if(LOGGER.isInfoEnabled()) {
@@ -84,19 +66,7 @@ public class ProcessDataDynamic {
 		 
 		return resultado;
 	}
-	
-	/**
-	 * Genera un WebDriver para controlar el navegador (Chrome o Firefox)
-	 * dependiendo del párametro insertado.
-	 * 
-	 * Hay dos posibilidades:
-	 * 
-	 * 		- Chrome Web Driver
-	 * 			ò
-	 * 		- Firefox Web Driver
-	 * 
-	 * @param selector
-	 */
+		
 	private WebDriver initWebDriver(final int selector) {
 		if(selector == 1) {
 			return setupWebDriverChrome();
@@ -104,14 +74,7 @@ public class ProcessDataDynamic {
 			return setupWebDriverFirefox();
 		}
 	}
-	
-	/**
-	 * Configuración del web driver de Chrome.
-	 * 
-	 * Un WebDriver es una herramienta para 
-	 * automatizar extraciones de datos de 
-	 * aplicaciones Web.
-	 */
+
 	private WebDriver setupWebDriverChrome() {
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--headless");
@@ -132,14 +95,7 @@ public class ProcessDataDynamic {
 			
 			return webDriver;
 	}
-	
-	/**
-	 * Configuración del web driver de Firefox.
-	 * 
-	 * Un WebDriver es una herramienta para 
-	 * automatizar extraciones de datos de 
-	 * aplicaciones Web.
-	 */
+
 	private WebDriver setupWebDriverFirefox() {
 		
 			FirefoxOptions options = new FirefoxOptions();
@@ -155,11 +111,7 @@ public class ProcessDataDynamic {
 			
 			return webDriver;
 	}
-	
-	/**
-	 * Funcionalidad para cerrar las ventanas que puedan
-	 * quedar abiertas en el buscador headless.
-	 */
+
 	private void cleanWindows(WebDriver webDriver) {            
         Set<String> windows = webDriver.getWindowHandles();
         Iterator<String> iter = windows.iterator();
@@ -178,13 +130,7 @@ public class ProcessDataDynamic {
         }
         webDriver.switchTo().window(winNames[0]);
     }
-	
-	/**
-	 * Devuelve el controlador del web driver.
-	 * 
-	 * @param selector
-	 * @return String
-	 */
+
 	private String initDriver(final int selector) {
 		if(selector == 1) {
 			return env.getProperty("flow.value.chrome.driver");

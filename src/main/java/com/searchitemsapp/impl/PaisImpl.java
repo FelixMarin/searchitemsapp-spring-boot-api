@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,29 +25,15 @@ import com.searchitemsapp.dto.PaisDTO;
 @Component
 public class PaisImpl implements IFImplementacion<PaisDTO, CategoriaDTO> {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(PaisImpl.class);  
-	
 	@Autowired
 	private IFPaisRepository paisDao;
 	
 	public PaisImpl() {
 		super();
 	}
-	
-	/**
-	 * Recupera un elemento de la tabla a partir
-	 * de su identificador.
-	 * 
-	 * @param PaisDTO
-	 * @return PaisDTO
-	 * @exception IOException
-	 */
+
 	@Override
 	public PaisDTO findByDid(final PaisDTO paisDto) throws IOException {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
 		
 		return paisDao.findByDid(paisDto.getDid());
 	}

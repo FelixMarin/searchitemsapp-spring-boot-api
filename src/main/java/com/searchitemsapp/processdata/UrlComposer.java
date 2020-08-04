@@ -21,14 +21,6 @@ import com.searchitemsapp.dto.SelectoresCssDTO;
 import com.searchitemsapp.dto.UrlDTO;
 import com.searchitemsapp.impl.IFUrlImpl;
 
-/**
- * En esta clase se configuran las URLs de los
- * sitios web a los que posteriormente se extraerá
- * la información.
- *  
- * @author Felix Marin Ramirez
- *
- */
 @Component
 public class UrlComposer extends ProcessDataAbstract implements IFUrlComposer {
 	
@@ -52,19 +44,6 @@ public class UrlComposer extends ProcessDataAbstract implements IFUrlComposer {
 		super();
 	}
 	
-	/**
-	 * Método que reemplaza los carateres comodines
-	 * por el nombre del producto a buscar. Los comodines
-	 * tienen la siguiente forma '{1}'.
-	 * 
-	 * @param didPais
-	 * @param didCategoria
-	 * @param producto
-	 * @param empresas
-	 * @param listTodosSelectoresCss
-	 * @return List<UrlDTO>
-	 * @throws IOException
-	 */
 	public List<UrlDTO> replaceWildcardCharacter(final String didPais, 
 			final String didCategoria, 
 			final String producto,
@@ -72,10 +51,6 @@ public class UrlComposer extends ProcessDataAbstract implements IFUrlComposer {
 			final List<SelectoresCssDTO> listTodosSelectoresCss,
 			final Map<String,EmpresaDTO> mapEmpresas) 
 			throws IOException {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
 		
 		paisDto.setDid(NumberUtils.toInt(didPais));		
 		categoriaDto.setDid(NumberUtils.toInt(didCategoria));
@@ -116,9 +91,9 @@ public class UrlComposer extends ProcessDataAbstract implements IFUrlComposer {
 					
 				} else {
 					if(LOGGER.isInfoEnabled()) {
-						LOGGER.info("La URL: ".
-								concat(urlDto.getDid().toString()).
-								concat(" esta deshabilitada."));
+						LOGGER.info("La URL: "
+								.concat(urlDto.getDid().toString())
+								.concat(" esta deshabilitada."));
 					}
 				}
 			}catch(IOException e) {
@@ -128,15 +103,7 @@ public class UrlComposer extends ProcessDataAbstract implements IFUrlComposer {
 		
 		return listUrlDto;
 	}
-	
-	/**
-	 * Este método obtinen los selectores correspondietes
-	 * a cada una de las empresas solicitadas en la solicitud 
-	 * de servicio.
-	 * 
-	 * @param resDtoUrls
-	 * @param listTodosElementNodes
-	 */
+
 	private void cargaSelectoresCss(UrlDTO resDtoUrls, List<SelectoresCssDTO> listTodosElementNodes) {
 	
 		SelectoresCssDTO selectoresCssDTO = listTodosElementNodes

@@ -10,22 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.searchitemsapp.dao.EmpresaDao;
 import com.searchitemsapp.dao.repository.IFEmpresaRepository;
 import com.searchitemsapp.dto.CategoriaDTO;
 import com.searchitemsapp.dto.EmpresaDTO;
 
-
-
-/**
- * Implementación del dao.
- * 
- * Esta clase ofrece los métodos que permiten interactuar con
- * la capa de persistencia. 
- * 
- * @author Felix Marin Ramirez
- *
- */
 @Component
 public class EmpresaImpl implements IFImplementacion<EmpresaDTO, CategoriaDTO> {
 	
@@ -37,13 +25,7 @@ public class EmpresaImpl implements IFImplementacion<EmpresaDTO, CategoriaDTO> {
 	public EmpresaImpl() {
 		super();
 	}
-	
-	/**
-	 * Recupera todos los datos de tabla {@link EmpresaDao}.
-	 * 
-	 * @return List<EmpresaDTO>
-	 * @exception  IOException
-	 */
+
 	@Override
 	public List<EmpresaDTO> findAll() throws IOException {
 		
@@ -53,14 +35,7 @@ public class EmpresaImpl implements IFImplementacion<EmpresaDTO, CategoriaDTO> {
 		
 		return empresaDao.findAll();
 	}	
-	
-	/**
-	 * Recupear una empresa a partir de su identificador.
-	 * 
-	 * @param EmpresaDTO
-	 * @return EmpresaDTO
-	 * @exception IOException
-	 */
+
 	@Override
 	public EmpresaDTO findByDid(final EmpresaDTO empresaDto) throws IOException {
 		
@@ -74,15 +49,7 @@ public class EmpresaImpl implements IFImplementacion<EmpresaDTO, CategoriaDTO> {
 		
 		return empresaDao.findByDid(empresaDto.getDid());
 	}
-	
-	/**
-	 * Recupera una lista de objetos {@link EmpresaDTO} en formato entidad.
-	 * 
-	 * @param EmpresaDTO empresaDto
-	 * @param CategoriaDTO categoriaDto
-	 * @return List<EmpresaDTO>
-	 * @exception IOException
-	 */
+
 	@Override
 	public List<EmpresaDTO> findByTbSia(
 			final EmpresaDTO empresaDto, 
