@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Connection;
@@ -42,7 +43,8 @@ import com.searchitemsapp.processdata.empresas.IFProcessDataEmpresasFactory;
 import com.searchitemsapp.processdata.empresas.IFProcessDataEroski;
 import com.searchitemsapp.processdata.empresas.IFProcessDataMercadona;
 import com.searchitemsapp.processdata.empresas.IFProcessDataSimply;
-import com.searchitemsapp.processdata.empresas.ProcessDataEmpresasFactory;
+
+import lombok.NonNull;
 
 
 
@@ -108,7 +110,7 @@ public abstract class ProcessDataAbstract {
 	private IFImplementacion<MarcasDTO, CategoriaDTO> iFMarcasImp;
 		
 	@Autowired
-	private IFProcessDataMercadona scrapingMercadona;
+	private IFProcessDataMercadona ifProcessDataMercadona;
 				
 	@Autowired
 	private IFProcessDataCondis ifProcessDataCondis;
@@ -131,12 +133,7 @@ public abstract class ProcessDataAbstract {
 	protected ProcessDataAbstract() {
 		super();
 	}
-	
-	/**
-	 * Método que carga los datos estáticos usados en el proceso
-	 * de las peticiones. Este método solo se ejecuta una vez,
-	 * los datos se cachean mientras esté la aplicación activa.
-	 */
+
 	public void applicationData(final Map<String,EmpresaDTO> mapEmpresas, 
 			final Map<Integer,Boolean> mapDynEmpresas) throws IOException {
 		
@@ -187,19 +184,7 @@ public abstract class ProcessDataAbstract {
 		
 		return listaSelectoresResultado;
 	}
-	
-	
-	/**
-	 * Con esta metodo se comprueba el Status code de la respuesta que recibo al hacer
-	 * la peticion EJM: 
-	 * 		200 OK 300 Multiple Choices 301 Moved Permanently 305 Use Proxy .
-	 * 		400 Bad Request 403 Forbidden 404 Not Found 500 Internal Server Error.
-	 * 		502 Bad Gateway 503 Service Unavailable.
-	 * 
-	 * @param url
-	 * @return Status Code
-	 * @throws IOException
-	 */
+		
 	protected int getStatusConnectionCode(final String url) {
 
 		if(LOGGER.isInfoEnabled()) {
@@ -231,17 +216,6 @@ public abstract class ProcessDataAbstract {
 		return iResultado;
 	}
 
-	/**
-	 * Este método devuelve un objeto de la clase Document con el contenido del
-	 * HTML de la web que permitirá parsearlo con los métodos de la libreía
-	 * JSoup.
-	 * 
-	 * @param url
-	 * @return Documento con el HTML
-	 * @throws IOException
-	 * @throws URISyntaxException 
-	 * @throws InterruptedException 
-	 */
 	protected List<Document> getHtmlDocument(final UrlDTO urlDto, 
 			final Map<String, String> mapLoginPageCookies,
 			final String producto,
@@ -249,10 +223,6 @@ public abstract class ProcessDataAbstract {
 			final Map<Integer,Boolean> mapDynEmpresas) 
 					throws IOException, URISyntaxException, InterruptedException {
 
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
-		
     	List<Document> listDocuments = Lists.newArrayList();
     	
 		int idEmpresa = urlDto.getDidEmpresa();			
@@ -263,10 +233,12 @@ public abstract class ProcessDataAbstract {
     	List<String> liUrlsPorEmpresaPaginacion = urlsPaginacion(document, urlDto, idEmpresa);
    		 			
    		if(!liUrlsPorEmpresaPaginacion.isEmpty()) {
-	   		for (String url : liUrlsPorEmpresaPaginacion) {
+     			
+	  		for (String url : liUrlsPorEmpresaPaginacion) {
 	   			listDocuments.add(getDocument(url, idEmpresa, 
 	   					producto, mapLoginPageCookies, mapEmpresas, mapDynEmpresas));
 			}
+	  		
    		} else {
    			listDocuments.add(document);
    		}
@@ -274,20 +246,6 @@ public abstract class ProcessDataAbstract {
 		return listDocuments;
 	}
 	
-	/**
-	 * Devuelve un listado con de las URLs correspondientes
-	 * a uno de los supermecados a los que se le van a 
-	 * extraer los datos.
-	 * 
-	 * {@link ProcessDataEmpresasFactory#getScrapingEmpresa(int)}
-	 * 
-	 * @param document
-	 * @param urlDto
-	 * @param selectorCssDto
-	 * @param idEmpresa
-	 * @return List<String>
-	 * @throws MalformedURLException
-	 */
 	protected List<String> urlsPaginacion(final Document document, 
 			final UrlDTO urlDto, final int idEmpresa) 
 					throws MalformedURLException {
@@ -300,17 +258,6 @@ public abstract class ProcessDataAbstract {
 		return listUrlsResultado;
 	}
 	
-	/**
-	 * Este método extrae la informacíon a partir
-	 * de un selector. Devuelve un conjunto de 
-	 * elementos que coincidan con el patron de
-	 * busqeda.
-	 * 
-	 * @param document
-	 * @param strScrapPattern
-	 * @param strScrapNotPattern
-	 * @return Elements
-	 */
 	protected Elements selectScrapPattern(final Document document,
 			final String strScrapPattern, final String strScrapNotPattern) {
 
@@ -325,15 +272,6 @@ public abstract class ProcessDataAbstract {
         return entradas;
 	}
 
-	/**
-	 * Método que valida el resultado obtenido. 
-	 * 
-	 * @param arProducto
-	 * @param nomProducto
-	 * @param iIdEmpresa
-	 * @param pattern
-	 * @return boolean
-	 */
 	protected String eliminarTildes(final String cadena) {
 			
 		if(cadena.indexOf(CHAR_ENIE_COD) != -1) {
@@ -347,15 +285,7 @@ public abstract class ProcessDataAbstract {
 		return Normalizer.normalize(resultado, Normalizer.Form.NFC);
 		
 	}
-	
-	/**
-	 * Método que compone un patrón regex con el que se
-	 * realizará el filtrado de productos a partir del 
-	 * parámetro de entrada.
-	 * 
-	 * @param arProducto
-	 * @return Pattern
-	 */
+
 	protected Pattern createPatternProduct(final String[] arProducto) {
 
 		List<String> tokens = Lists.newArrayList();
@@ -382,14 +312,6 @@ public abstract class ProcessDataAbstract {
 		return Pattern.compile(stringBuilder.toString());
 	}
 	
-	/**
-	 * Método encargado de filtra la marca del producto. 
-	 * Elimina la marca de la descripción del producto.
-	 * 
-	 * @param iIdEmpresa
-	 * @param nomProducto
-	 * @return String
-	 */
 	protected String filtroMarca(
 			final int iIdEmpresa, 
 			final String nomProducto, 
@@ -406,32 +328,14 @@ public abstract class ProcessDataAbstract {
 			strProducto = nomProducto;
 		}
 		
-		for (MarcasDTO marcaDto : listTodasMarcas) {
-			if(strProducto.toLowerCase()
-					.startsWith(marcaDto
-							.getNomMarca()
-							.toLowerCase())) {
-				
-				strProducto = strProducto.toLowerCase()
-						.replaceAll(marcaDto.getNomMarca()
-							.toLowerCase(), StringUtils.EMPTY).trim();
-				break;
-			}
-		}
-		return strProducto;
+		final String strProductoEval = strProducto;
+		listTodasMarcas.stream().filter(marcaDto -> marcaDto.getNomMarca().toLowerCase()
+				.startsWith(strProductoEval.toLowerCase())).collect(Collectors.toList());
+		
+		return strProducto.toLowerCase().replaceAll(listTodasMarcas.get(0).getNomMarca().toLowerCase(), StringUtils.EMPTY).trim();
+		
 	}
 	
-	/**
-	 * Este método se encarga de extraer cada uno de los datos 
-	 * del producto para componer un objeto de tipo IFProcessPrice.
-	 * 
-	 * @param elem
-	 * @param selectoresCssDto
-	 * @param urlDto
-	 * @param ordenacion
-	 * @return IFProcessPrice
-	 * @throws IOException
-	 */
 	protected IFProcessPrice fillProcessPrice(final Element elem,
 			final UrlDTO urlDto, 
 			final String ordenacion, 
@@ -450,7 +354,7 @@ public abstract class ProcessDataAbstract {
 		ifProcessPrice.setNomEmpresa(urlDto.getNomEmpresa());
 
 		if(idEmpresaActual == mapEmpresas.get(MERCADONA).getDid()) {
-			ifProcessPrice.setNomUrlAllProducts(scrapingMercadona.getUrlAll(ifProcessPrice));
+			ifProcessPrice.setNomUrlAllProducts(ifProcessDataMercadona.getUrlAll(ifProcessPrice));
 			ifProcessPrice.setImagen(ifProcessPrice.getImagen().replace(COMMA_STRING, DOT_STRING));
 		}else {
 			ifProcessPrice.setNomUrlAllProducts(urlDto.getNomUrl());
@@ -460,16 +364,7 @@ public abstract class ProcessDataAbstract {
 		
 		return ifProcessPrice;
 	}
-	
-	/**
-	 * Funcionalidad que se encaga de corregir el nombre del producto
-	 * en el caso de contenga espacios en blanco, caracteres especiales
-	 * o palabras reservadas no permitidas.
-	 * 
-	 * @param producto
-	 * @return String
-	 * @throws IOException
-	 */
+
 	protected String tratarProducto(final String producto) throws IOException {
 		
 		if(LOGGER.isInfoEnabled()) {
@@ -488,35 +383,6 @@ public abstract class ProcessDataAbstract {
 		}
 	}
 	
-	protected String reeplazarTildesCondis(final String producto) {
-		return ifProcessDataCondis.eliminarTildesProducto(producto);
-	}
-	
-	protected String reeplazarCaracteresCondis(final String producto) {
-		return ifProcessDataCondis.reemplazarCaracteres(producto);
-	}
-	
-	protected String reemplazarCaracteresEroski(final String producto) {
-		return ifProcessDataEroski.reemplazarCaracteres(producto);
-	}
-	
-	protected String reeplazarCaracteresSimply(final String producto) {
-		return ifProcessDataSimply.reemplazarCaracteres(producto);
-	}
-		
-	/**
-	 * Este método devuelve un objeto de la clase Document con el contenido del
-	 * HTML de la web.
-	 * 
-	 * @param strUrl
-	 * @param didEmpresa
-	 * @param producto
-	 * @param mapLoginPageCookies
-	 * @return Document
-	 * @throws InterruptedException
-	 * @throws URISyntaxException
-	 * @throws IOException
-	 */
 	private Document getDocument(final String strUrl, 
 			final int didEmpresa, final String producto,
 			final Map<String, String> mapLoginPageCookies,
@@ -524,7 +390,6 @@ public abstract class ProcessDataAbstract {
 			final Map<Integer,Boolean> mapDynEmpresas) 
 					throws InterruptedException, URISyntaxException, IOException {
 	
-		Document document = null;
 		Connection connection  = null;
 		Response response = null;
 		
@@ -533,11 +398,11 @@ public abstract class ProcessDataAbstract {
 		URL url = new URL(strUrl);
 
 		if(bDynScrap) {			
-			document = Jsoup.parse(procesDataDynamic
+			return Jsoup.parse(procesDataDynamic
 					.getDynHtmlContent(strUrl, didEmpresa), 
 					url.toURI().toString());
 		} else if(isMercadona) {			
-			connection = scrapingMercadona.getConnection(strUrl, producto);	
+			connection = ifProcessDataMercadona.getConnection(strUrl, producto);	
 			response = connection.execute();
 		} else {			
 			connection = Jsoup.connect(strUrl)
@@ -557,56 +422,26 @@ public abstract class ProcessDataAbstract {
 			connection.cookies(mapLoginPageCookies);
 		}
 		
-		if(bDynScrap) {
-			return document;
-		} else if(isMercadona) {
-       		return scrapingMercadona.getDocument(strUrl, response.body());
+		if(isMercadona) {
+       		return ifProcessDataMercadona.getDocument(strUrl, response.body());
        	} else {
 			return response.parse();
 		}
 	}
 	
-	/**
-	 * Extrae la marca del principio de los resultado para
-	 * no distorsionar el resultado.
-	 * 
-	 * @param nomProducto
-	 * @return
-	 */
-	private String eliminarMarcaPrincipio(final String nomProducto) {
-
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
+	private String eliminarMarcaPrincipio(@NonNull final String nomProducto) {
 		
 		String[] nomProdSeparado = nomProducto.trim().split(StringUtils.SPACE);
 				
 		StringBuilder stringBuilder = new StringBuilder(10);
 		
-		for (int i = 0; i < nomProdSeparado.length; i++) {
-			
-			String may = nomProdSeparado[i].toUpperCase();			
-			if(nomProdSeparado[i].equals(may)) {
-				continue;
-			}
-			
-			stringBuilder.append(nomProdSeparado[i]).append(StringUtils.SPACE);
-		}
+		Arrays.asList(nomProdSeparado).stream()
+		.filter(x -> !x.toUpperCase().equals(x))
+		.forEach(x -> {	stringBuilder.append(x).append(StringUtils.SPACE); });
 		
 		return stringBuilder.toString();
 	}	
-	
-	/**
-	 * Método que extrae los datos del elemento a partir de
-	 * un selector. Dependiendo de la empresa la técnica de
-	 * extraccion de los datos es de una manera u otra.
-	 * 
-	 * @param elem
-	 * @param cssSelector
-	 * @param urlDto
-	 * @return String
-	 * @throws MalformedURLException
-	 */
+
 	private String elementoPorCssSelector(final Element elem, 
 			final String cssSelector,
 			final UrlDTO urlDto,
@@ -625,7 +460,7 @@ public abstract class ProcessDataAbstract {
 		
 		if(mapEmpresas.get(MERCADONA).getDid().equals(urlDto.getDidEmpresa())) {
 			
-			strResult = scrapingMercadona.getResult(elem, cssSelector);
+			strResult = ifProcessDataMercadona.getResult(elem, cssSelector);
 			
 		} else if(mapEmpresas.get(CONDIS).getDid().equals(urlDto.getDidEmpresa()) &&
 				SCRIPT.equalsIgnoreCase(lista.get(0))) {	
@@ -646,14 +481,6 @@ public abstract class ProcessDataAbstract {
 		return validaResultadoElementValue(strResult, urlDto.getNomUrl());
 	}
 	
-	/**
-	 * Valida los datos extraidos de los elementos.
-	 * 
-	 * @param strResult
-	 * @param strUrl
-	 * @return String
-	 * @throws MalformedURLException
-	 */
 	private String validaResultadoElementValue(String strResult, 
 			final String strUrl) throws MalformedURLException {
 		
@@ -693,36 +520,15 @@ public abstract class ProcessDataAbstract {
 		return resultado;
 	}	
 	
-	/**
-	 * Realiza la adicion de caracteres a una cadena para proporcionarle una
-	 * longitud determinada
-	 *
-	 * @param pstrCadena   cadena
-	 * @param piLongitud   Longitud de la cadena
-	 * @param pchrCaracter caracter
-	 * @param piTipo       Tipo de adicion (Izquierda o Derecha)
-	 * @return cadena ajustada
-	 * @modelguid {360E79DB-48FE-4795-9E71-37FCA8F0B22D}
-	 */
-	private String anadirCaracteres(String strCadena, char chrCaracter, int iLongitud, int iTipo) {
+	private String anadirCaracteres(@NonNull String strCadena, char chrCaracter, int iLongitud, int iTipo) {
 
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
-		
-		if(StringUtils.isAllEmpty(strCadena)) {
-			return StringUtils.EMPTY;
-		}
-		
 		StringBuilder stringBuilder = new StringBuilder(10);
 		
 		if (iTipo == 0) {
 			stringBuilder.append(strCadena);
 		}
 		
-		final int dif = iLongitud - strCadena.length();
-		
-		for (int i = 0; i < dif; i++) {
+		for (int i = 0; i < (iLongitud - strCadena.length()); i++) {
 			stringBuilder.append(chrCaracter);
 		}
 
@@ -733,10 +539,10 @@ public abstract class ProcessDataAbstract {
 		return stringBuilder.toString();
 	}
 	
-	private String extraerValorDelElemento(int l,Element elem,
+	private String extraerValorDelElemento(int length,Element elem,
 			List<String> lista,String cssSelector) {
 		
-		switch (l) {
+		switch (length) {
 		case 1:
 			return elem.select(lista.get(0)).text();
 		case 2:
@@ -744,5 +550,21 @@ public abstract class ProcessDataAbstract {
 		default:
 			return elem.select(cssSelector).text();
 		}
+	}
+	
+	protected String reeplazarTildesCondis(final String producto) {
+		return ifProcessDataCondis.eliminarTildesProducto(producto);
+	}
+	
+	protected String reeplazarCaracteresCondis(final String producto) {
+		return ifProcessDataCondis.reemplazarCaracteres(producto);
+	}
+	
+	protected String reemplazarCaracteresEroski(final String producto) {
+		return ifProcessDataEroski.reemplazarCaracteres(producto);
+	}
+	
+	protected String reeplazarCaracteresSimply(final String producto) {
+		return ifProcessDataSimply.reemplazarCaracteres(producto);
 	}
 }

@@ -60,37 +60,17 @@ public class ProcessPriceModule implements IFProcessPrice {
 	public ProcessPriceModule() {
 		super();
 	}
-	
-	/**
-	 * Ordena la lista de productos por precio.
-	 * 
-	 * @return List<IFProcessPrice>
-	 */
+
 	public List<IFProcessPrice> ordenarLista(List<IFProcessPrice> lista) {
 		lista.sort(this);
 		return lista;
 	}
 	
-	/**
-	 * Metodo implementado por la interfaz Comparator.
-	 * 
-	 * @return int
-	 */
 	@Override
 	public int compare(IFProcessPrice a, IFProcessPrice b) {
 		return processPrice(a, b);
 	}
 	
-	/**
-	 * Recibe dos objetos de con los precios de los productos. Los precios
-	 * en formato string son tratados para poder ser convertidos en numeros
-	 * decimales. Se comparan y se devuelve el resultado de la comparación.
-	 * 
-	 * @param a
-	 * @param b
-	 * @return int
-	 * @exception UnsupportedAttributeException
-	 */
 	public int processPrice(final IFProcessPrice a, final IFProcessPrice b) {
 		
 		int i= 0;
@@ -134,13 +114,7 @@ public class ProcessPriceModule implements IFProcessPrice {
 		
 		return i;
 	}
-	
-	/**
-	 * Extrae el valor númerico de la cadena y lo convierte en double.
-	 * 
-	 * @param strPrecioKilo
-	 * @return Double
-	 */
+
 	private  Double convertirDouble(final String strPrecioKilo) {
 		
 		String strPrecioKiloRes = extraerDecimal(strPrecioKilo);
@@ -152,15 +126,7 @@ public class ProcessPriceModule implements IFProcessPrice {
 		strPrecioKiloRes = strPrecioKiloRes.trim();
 		return Double.parseDouble(strPrecioKiloRes);
 	}
-	
-	/**
-	 * Método que contiene el Algoritmo encargado de 
-	 * extraer el valor decimal correspondiente al precio 
-	 * de la cadena en la que va insertado. 
-	 * 
-	 * @param cadena
-	 * @return String
-	 */
+
 	private  String extraerDecimal(final String cadena) {
 		
 		if(COMMASTRING.equals(cadena)) {
@@ -195,15 +161,7 @@ public class ProcessPriceModule implements IFProcessPrice {
 	  
 	  return resultado;
 	}
-	
-	/**
-	 * Método que contiene el Algoritmo encargado de 
-	 * extraer el valor entero correspondiente al precio 
-	 * de la cadena en la que va insertado. 
-	 * 
-	 * @param cadena
-	 * @return String
-	 */
+
 	private  String extraerEntero(final String cadena) {
 		
 		String resultado = StringUtils.EMPTY;		
@@ -234,13 +192,6 @@ public class ProcessPriceModule implements IFProcessPrice {
 		return resultado;
 	}
 	
-	/**
-	 * Si la variable de peso por kilo está vacía se le aplica
-	 * el valor del precio por unidad.
-	 * 
-	 * @param a
-	 * @param b
-	 */
 	private  void mismoPrecioYPrecioKilo(IFProcessPrice a, IFProcessPrice b) {
 		
 		if(StringUtils.isAllEmpty(a.getPrecioKilo()) &&
@@ -255,13 +206,7 @@ public class ProcessPriceModule implements IFProcessPrice {
 					.concat(BARRAKILOGRAM));
 		}
 	}
-	
-	/**
-	 * Metodo que formatea los precios para que todos aparezcan igual.
-	 * 
-	 * @param a
-	 * @param b
-	 */
+
 	private  void estilizarPrecios(final IFProcessPrice a, final IFProcessPrice b) {
 		
 		if(!StringUtils.isAllEmpty(a.getPrecio())) {
