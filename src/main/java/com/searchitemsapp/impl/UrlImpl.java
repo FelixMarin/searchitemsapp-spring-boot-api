@@ -1,6 +1,7 @@
 package com.searchitemsapp.impl;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringTokenizer;
@@ -57,29 +58,17 @@ public class UrlImpl implements IFUrlImpl, IFImplementacion<UrlDTO, CategoriaDTO
 	 */
 	@Override
 	public UrlDTO findByDid(final UrlDTO urlDTO) throws IOException {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
 			
 		return urlDao.findByDid(urlDTO.getDid());
 	}
 	
 	public List<UrlDTO> obtenerUrls(PaisDTO paisDto, CategoriaDTO categoriaDto) throws IOException {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
-		
+			
 		return urlDao.findByDidAndDesUrl(paisDto.getDid(), String.valueOf(categoriaDto.getDid()));
 	}
 	
 	public List<UrlDTO> obtenerUrlsLogin(PaisDTO paisDto, CategoriaDTO categoriaDto) throws IOException {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
-		
+			
 		return urlDao.findByDidAndNomUrl(paisDto.getDid(), String.valueOf(categoriaDto.getDid()));
 	}
 	
@@ -109,13 +98,13 @@ public class UrlImpl implements IFUrlImpl, IFImplementacion<UrlDTO, CategoriaDTO
 			return lsIdsEmpresas;
 		}
 		
-		for (String id : arIdsEpresas) {
-			for (UrlDTO urlDTO : listUrlDTO) {
-				if(Integer.parseInt(id) == urlDTO.getDidEmpresa()) {
-					lsIdsEmpresas.add(urlDTO);
-				}
-			}
-		}
+		List<String> liIdsEmpresas = Arrays.asList(arIdsEpresas);
+		
+		liIdsEmpresas.forEach(strId -> {
+			listUrlDTO.stream().filter(x -> x.getDidEmpresa() == Integer.parseInt(strId)).forEach(x -> {
+				lsIdsEmpresas.add(x);
+			});
+		});
 		
 		return lsIdsEmpresas;
 	}
