@@ -13,19 +13,15 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import org.springframework.core.env.Environment;
 import com.searchitemsapp.processdata.empresas.IFProcessDataConsum;
 
 @Component
 public class ProcessDataDynamic {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataDynamic.class);  
-
 	private static final String SCROLLDOWN = "window.scrollTo(0, document.body.scrollHeight);";	
 
 	@Autowired
@@ -40,11 +36,7 @@ public class ProcessDataDynamic {
 	
 	public String getDynHtmlContent(final String strUrl, final int didEmpresa) throws InterruptedException {
 		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
-		
-		String resultado;	
+		String strResultado;	
 		int didConsum = Integer.parseInt(env.getProperty("flow.value.did.empresa.consum"));
 		
 		System.getProperties().setProperty(initDriver(0), 
@@ -54,17 +46,17 @@ public class ProcessDataDynamic {
 		cleanWindows(webDriver);
 		
 		if(didConsum == didEmpresa) {			
-			resultado = processdataConsum.getHtmlContent(webDriver, strUrl);
+			strResultado = processdataConsum.getHtmlContent(webDriver, strUrl);
 		} else {
 			webDriver.navigate().to(strUrl);
 			JavascriptExecutor js = (JavascriptExecutor) webDriver;
 			js.executeScript(SCROLLDOWN);
-			resultado = webDriver.getPageSource();
+			strResultado = webDriver.getPageSource();
 		}
 		
 		cleanWindows(webDriver);
 		 
-		return resultado;
+		return strResultado;
 	}
 		
 	private WebDriver initWebDriver(final int selector) {

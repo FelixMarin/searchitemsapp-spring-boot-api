@@ -50,7 +50,7 @@ public class ProcessDataModule extends ProcessDataAbstract implements Callable<L
 		
 		String[] arProducto = producto.split(StringUtils.SPACE);
 		int iIdEmpresa = urlDto.getDidEmpresa();
-		Pattern pattern = createPatternProduct(arProducto);
+		Pattern patternProducto = createPatternProduct(arProducto);
 		List<IFProcessPrice> lResultadoDto = Lists.newArrayList();
 				
 		Map<String, String> mapLoginPageCookies = mapaCookies.get(iIdEmpresa);
@@ -72,11 +72,11 @@ public class ProcessDataModule extends ProcessDataAbstract implements Callable<L
             	
             	try {
             		
-	    			IFProcessPrice resDto = fillProcessPrice(elem, urlDto, ordenacion, 
+	    			IFProcessPrice ifProcessPrice = fillProcessPrice(elem, urlDto, ordenacion, 
 	    					new ProcessPriceModule(), mapEmpresas);
 	    			
-	    			if(validaYCargaResultado(iIdEmpresa, arProducto, resDto,  pattern)) {
-	    				lResultadoDto.add(resDto);
+	    			if(validaYCargaResultado(iIdEmpresa, arProducto, ifProcessPrice,  patternProducto)) {
+	    				lResultadoDto.add(ifProcessPrice);
 	    			}
     			
             	}catch(IOException e) {
@@ -95,17 +95,17 @@ public class ProcessDataModule extends ProcessDataAbstract implements Callable<L
 
 	private boolean validaYCargaResultado(final int iIdEmpresa, 
 			final String[] arProducto, 
-			final IFProcessPrice resDto, 
-			final Pattern pattern) {
+			final IFProcessPrice ifProcessPrice, 
+			final Pattern patternProducto) {
 			
-		if(Objects.isNull(resDto.getNomProducto()) || iIdEmpresa == 0 ||
-				StringUtils.isAllEmpty(resDto.getPrecio()) ||
-				Objects.isNull(resDto.getPrecioKilo()) || 
-				StringUtils.isAllEmpty(resDto.getPrecioKilo())) {
+		if(Objects.isNull(ifProcessPrice.getNomProducto()) || iIdEmpresa == 0 ||
+				StringUtils.isAllEmpty(ifProcessPrice.getPrecio()) ||
+				Objects.isNull(ifProcessPrice.getPrecioKilo()) || 
+				StringUtils.isAllEmpty(ifProcessPrice.getPrecioKilo())) {
 			return Boolean.FALSE;
 		} 
 		
-		String strProducto = filtroMarca(iIdEmpresa, resDto.getNomProducto(), mapEmpresas, listTodasMarcas);
+		String strProducto = filtroMarca(iIdEmpresa, ifProcessPrice.getNomProducto(), mapEmpresas, listTodasMarcas);
 		
 		if(StringUtils.isAllBlank(strProducto)) {
 			return Boolean.FALSE;
@@ -119,7 +119,7 @@ public class ProcessDataModule extends ProcessDataAbstract implements Callable<L
 			return Boolean.TRUE;			
 		} else if(arProducto.length > 1) {			
 			
-			return pattern.matcher(eliminarTildes(strProducto).toUpperCase()).find();
+			return patternProducto.matcher(eliminarTildes(strProducto).toUpperCase()).find();
 		} else {
 			return Boolean.FALSE;
 		}
