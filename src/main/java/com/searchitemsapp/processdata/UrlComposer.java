@@ -44,20 +44,20 @@ public class UrlComposer extends ProcessDataAbstract implements IFUrlComposer {
 		super();
 	}
 	
-	public List<UrlDTO> replaceWildcardCharacter(final String didPais, 
-			final String didCategoria, 
-			final String producto,
-			final String empresas,
+	public List<UrlDTO> replaceWildcardCharacter(final String strDidPais, 
+			final String strDidCategoria, 
+			final String strNomProducto,
+			final String strEmpresas,
 			final List<SelectoresCssDTO> listTodosSelectoresCss,
 			final Map<String,EmpresaDTO> mapEmpresas) 
 			throws IOException {
 		
-		paisDto.setDid(NumberUtils.toInt(didPais));		
-		categoriaDto.setDid(NumberUtils.toInt(didCategoria));
+		paisDto.setDid(NumberUtils.toInt(strDidPais));		
+		categoriaDto.setDid(NumberUtils.toInt(strDidCategoria));
 		
-		List<UrlDTO> pListResultadoDto  = urlImpl.obtenerUrlsPorIdEmpresa(paisDto, categoriaDto, empresas);
+		List<UrlDTO> pListResultadoDto  = urlImpl.obtenerUrlsPorIdEmpresa(paisDto, categoriaDto, strEmpresas);
 		
-		String productoTratadoAux = tratarProducto(producto);
+		String productoTratadoAux = tratarProducto(strNomProducto);
 		
 		List<UrlDTO> listUrlDto = Lists.newArrayList();
 	
@@ -71,13 +71,13 @@ public class UrlComposer extends ProcessDataAbstract implements IFUrlComposer {
 				
 				if(urlDto.getBolActivo().booleanValue()) {
 					if(mapEmpresas.get(EROSKI).getDid().equals(urlDto.getDidEmpresa())) {
-						productoTratado = reemplazarCaracteresEroski(producto);
+						productoTratado = reemplazarCaracteresEroski(strNomProducto);
 						productoTratado = tratarProducto(productoTratado);
 					} else if(mapEmpresas.get(SIMPLY).getDid().equals(urlDto.getDidEmpresa())) {
-						productoTratado = reeplazarCaracteresSimply(producto);
+						productoTratado = reeplazarCaracteresSimply(strNomProducto);
 						productoTratado = tratarProducto(productoTratado);
 					} else if(mapEmpresas.get(CONDIS).getDid().equals(urlDto.getDidEmpresa())) {
-						productoTratado = reeplazarTildesCondis(producto);
+						productoTratado = reeplazarTildesCondis(strNomProducto);
 						productoTratado = reeplazarCaracteresCondis(productoTratado);
 						productoTratado = tratarProducto(productoTratado);
 					} else {
@@ -104,12 +104,12 @@ public class UrlComposer extends ProcessDataAbstract implements IFUrlComposer {
 		return listUrlDto;
 	}
 
-	private void cargaSelectoresCss(UrlDTO resDtoUrls, List<SelectoresCssDTO> listTodosElementNodes) {
+	private void cargaSelectoresCss(UrlDTO urlDTO, List<SelectoresCssDTO> listTodosElementNodes) {
 	
 		SelectoresCssDTO selectoresCssDTO = listTodosElementNodes
-				.stream().filter(x -> x.getDidEmpresa().equals(resDtoUrls.getDidEmpresa()))
+				.stream().filter(x -> x.getDidEmpresa().equals(urlDTO.getDidEmpresa()))
 				.collect(Collectors.toList()).get(0);
 			
-		resDtoUrls.setSelectores(selectoresCssDTO);
+		urlDTO.setSelectores(selectoresCssDTO);
 	}
 }

@@ -86,7 +86,7 @@ public class ProcessDataEmpresasFactory implements IFProcessDataEmpresasFactory 
 	 * @param idEmpresa
 	 * @return IFScrapingEmpresas
 	 */
-	public IFProcessDataEmpresas getScrapingEmpresa(final int idEmpresa) {
+	public IFProcessDataEmpresas getEnterpriseData(final int idEmpresa) {
 		
 		if(LOGGER.isInfoEnabled()) {
 			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());

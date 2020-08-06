@@ -1,7 +1,6 @@
 package com.searchitemsapp.processdata;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -32,12 +31,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.dto.CategoriaDTO;
 import com.searchitemsapp.dto.EmpresaDTO;
 import com.searchitemsapp.dto.MarcasDTO;
-import com.searchitemsapp.dto.SelectoresCssDTO;
 import com.searchitemsapp.dto.UrlDTO;
-import com.searchitemsapp.impl.IFImplementacion;
 import com.searchitemsapp.processdata.empresas.IFProcessDataCondis;
 import com.searchitemsapp.processdata.empresas.IFProcessDataEmpresasFactory;
 import com.searchitemsapp.processdata.empresas.IFProcessDataEroski;
@@ -62,37 +58,11 @@ public abstract class ProcessDataAbstract {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataAbstract.class);   
 	
-	private static final String AGENT_ALL = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36";
-	private static final String REFFERER_GOOGLE = "http://www.google.com";
-	private static final String ACCEPT_LANGUAGE = "Accept-Language";	
-	private static final String ES_ES = "es-ES,es;q=0.8";
-	private static final String ACCEPT_ENCODING = "Accept-Encoding";
-	private static final String ACCEPT = "Accept";
 	private static final String PROTOCOL_ACCESSOR ="://";
-	private static final String GZIP_DEFLATE_SDCH = "gzip, deflate, sdch";
-	private static final String ACCEPT_VALUE = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-	private static final String HIPERCOR = "HIPERCOR";
 	private static final String ELCORTEINGLES = "ELCORTEINGLES";
-	private static final String DIA = "DIA";
-	private static final String CONDIS = "CONDIS";
-	private static final String MERCADONA = "MERCADONA";
-	private static final char CHAR_ENIE_COD = '\u00f1';
-	private static final String STRING_ENIE_MIN = "ñ";
-	private static final String STRING_ENIE_MAY = "Ñ";
-	private static final String UNICODE_ENIE = "u00f1";
-	private static final String REEMPLAZABLE_TILDES = "[\\p{InCombiningDiacriticalMarks}]";
-	
+	private static final String MERCADONA = "MERCADONA";	
+	private static final String UNICODE_ENIE = "u00f1";	
 	private static final String LEFT_PARENTHESIS_0 = " (";
-	private static final String DOBLE_BARRA = "//";
-	private static final String HTTPS = "https:";
-	private static final String BARRA = "/";
-	private static final String RIGTH_PARENTHESIS = "\\)";
-	private static final String LEFT_PARENTHESIS = "\\(";
-	private static final String REGEX_PERCENT_DOLAR = "(\\%|\\$00)";
-	private static final String DOT_STRING = ".";
-	private static final String COMMA_STRING = ",";
-	private static final String PIPE_STRING = "|";
-	private static final String SCRIPT = "script";
 	
 	@Autowired 
 	private ProcessDataDynamic procesDataDynamic;
@@ -100,15 +70,6 @@ public abstract class ProcessDataAbstract {
 	@Autowired
 	private IFProcessDataEmpresasFactory processDataEmpresasFactory;
 	
-	@Autowired
-	private IFImplementacion<SelectoresCssDTO, EmpresaDTO> selectoresCssImpl;
-
-	@Autowired
-	private IFImplementacion<EmpresaDTO, CategoriaDTO> iFEmpresaImpl;
-	
-	@Autowired
-	private IFImplementacion<MarcasDTO, CategoriaDTO> iFMarcasImp;
-		
 	@Autowired
 	private IFProcessDataMercadona ifProcessDataMercadona;
 				
@@ -124,98 +85,6 @@ public abstract class ProcessDataAbstract {
 	@Autowired
 	private Environment env;
 	
-	@Autowired
-	private EmpresaDTO empresaDto;
-	
-	@Autowired
-	SelectoresCssDTO selectoresCssDto;
-	
-	protected ProcessDataAbstract() {
-		super();
-	}
-
-	public void applicationData(final Map<String,EmpresaDTO> mapEmpresas, 
-			final Map<Integer,Boolean> mapDynEmpresas) throws IOException {
-		
-			List<EmpresaDTO> listEmpresaDto = iFEmpresaImpl.findAll();
-
-			listEmpresaDto.stream().forEach(empresaDTO -> {
-				mapEmpresas.put(empresaDTO.getNomEmpresa(), empresaDTO);
-				mapDynEmpresas.put(empresaDTO.getDid(), empresaDTO.getBolDynScrap());
-			});
-		}
-	
-	public List<MarcasDTO> getListTodasMarcas() throws IOException  {
-		return iFMarcasImp.findAll();
-	}
-	
-	public List<SelectoresCssDTO> listSelectoresCssPorEmpresa(
-			final String didEmpresas) {
-
-		String emp;
-		
-		if("ALL".equalsIgnoreCase(didEmpresas)) {
-			emp = env.getProperty("flow.value.all.id.empresa");
-		} else {
-			emp = didEmpresas;
-		}
-		
-		StringTokenizer st = new StringTokenizer(emp, COMMA_STRING); 			
-		List<Integer> listaAux = Lists.newArrayList();
-		
-		while (st.hasMoreElements()) {
-			listaAux.add(Integer.parseInt(String.valueOf(st.nextElement())));
-			
-		}
-		
-		List<SelectoresCssDTO> listaSelectoresResultado = Lists.newArrayList();
-		
-		listaAux.forEach(didEmpresa -> {
-			
-			try {
-				empresaDto.setDid(didEmpresa);			
-				List<SelectoresCssDTO> lsel = selectoresCssImpl.findByTbSia(selectoresCssDto, empresaDto);
-				listaSelectoresResultado.addAll(lsel);
-			}catch(IOException e) {
-				throw new UncheckedIOException(e);
-			}
-			
-		});
-		
-		return listaSelectoresResultado;
-	}
-		
-	protected int getStatusConnectionCode(final String url) {
-
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		} 
-		
-		int iResultado = 0;
-
-		try {
-			
-			iResultado = Jsoup.connect(url)
-					.userAgent(AGENT_ALL)
-					.method(Connection.Method.GET)
-					.referrer(REFFERER_GOOGLE)
-					.header(ACCEPT_LANGUAGE, ES_ES)
-					.header(ACCEPT_ENCODING, GZIP_DEFLATE_SDCH)
-					.header(ACCEPT, ACCEPT_VALUE)
-					.maxBodySize(0)
-					.timeout(100000)
-					.ignoreHttpErrors(Boolean.TRUE)
-					.execute()
-					.statusCode();
-			
-		} catch (IOException e) {
-			if(LOGGER.isErrorEnabled()) {
-				LOGGER.error(Thread.currentThread().getStackTrace()[1].toString(),e);
-			}
-		}
-		return iResultado;
-	}
-
 	protected List<Document> getHtmlDocument(final UrlDTO urlDto, 
 			final Map<String, String> mapLoginPageCookies,
 			final String producto,
@@ -253,7 +122,7 @@ public abstract class ProcessDataAbstract {
 		List<String> listUrlsResultado = Lists.newArrayList();
 		
 		listUrlsResultado.addAll(processDataEmpresasFactory
-				.getScrapingEmpresa(idEmpresa).getListaUrls(document, urlDto));
+				.getEnterpriseData(idEmpresa).getListaUrls(document, urlDto));
 		
 		return listUrlsResultado;
 	}
@@ -274,16 +143,15 @@ public abstract class ProcessDataAbstract {
 
 	protected String eliminarTildes(final String cadena) {
 			
-		if(cadena.indexOf(CHAR_ENIE_COD) != -1) {
+		if(cadena.indexOf('\u00f1') != -1) {
 			return cadena;
 		}
 		
-		String resultado = cadena.replace(STRING_ENIE_MAY, UNICODE_ENIE);
+		String resultado = cadena.replace("Ñ", UNICODE_ENIE);
 		resultado = Normalizer.normalize(resultado.toLowerCase(), Normalizer.Form.NFD);
-		resultado = resultado.replaceAll(REEMPLAZABLE_TILDES, StringUtils.EMPTY);
-		resultado = resultado.replace(UNICODE_ENIE, STRING_ENIE_MIN);
+		resultado = resultado.replaceAll("[\\p{InCombiningDiacriticalMarks}]", StringUtils.EMPTY);
+		resultado = resultado.replace(UNICODE_ENIE,  "ñ");
 		return Normalizer.normalize(resultado, Normalizer.Form.NFC);
-		
 	}
 
 	protected Pattern createPatternProduct(final String[] arProducto) {
@@ -320,8 +188,8 @@ public abstract class ProcessDataAbstract {
 		
 		String strProducto;
 		
-		if(iIdEmpresa == mapEmpresas.get(HIPERCOR).getDid() ||
-				iIdEmpresa == mapEmpresas.get(DIA).getDid() ||
+		if(iIdEmpresa == mapEmpresas.get("HIPERCOR").getDid() ||
+				iIdEmpresa == mapEmpresas.get("DIA").getDid() ||
 				iIdEmpresa == mapEmpresas.get(ELCORTEINGLES).getDid()) {
 			strProducto = eliminarMarcaPrincipio(nomProducto);
 		} else {
@@ -355,7 +223,7 @@ public abstract class ProcessDataAbstract {
 
 		if(idEmpresaActual == mapEmpresas.get(MERCADONA).getDid()) {
 			ifProcessPrice.setNomUrlAllProducts(ifProcessDataMercadona.getUrlAll(ifProcessPrice));
-			ifProcessPrice.setImagen(ifProcessPrice.getImagen().replace(COMMA_STRING, DOT_STRING));
+			ifProcessPrice.setImagen(ifProcessPrice.getImagen().replace(",", "."));
 		}else {
 			ifProcessPrice.setNomUrlAllProducts(urlDto.getNomUrl());
 		}
@@ -374,7 +242,7 @@ public abstract class ProcessDataAbstract {
 		String productoTratado=anadirCaracteres(producto, Character.MIN_VALUE, 0, 0);
 		productoTratado=anadirCaracteres(productoTratado, Character.MIN_VALUE, 0, 1);
 		
-		Matcher matcher = Pattern.compile(REGEX_PERCENT_DOLAR).matcher(productoTratado);
+		Matcher matcher = Pattern.compile("(\\%|\\$00)").matcher(productoTratado);
 		
 		if(matcher.find()) {
 			return productoTratado;
@@ -406,13 +274,13 @@ public abstract class ProcessDataAbstract {
 			response = connection.execute();
 		} else {			
 			connection = Jsoup.connect(strUrl)
-					.userAgent(AGENT_ALL)
+					.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36")
 					.method(Connection.Method.GET)
 					.referrer(url.getProtocol().concat(PROTOCOL_ACCESSOR).concat(url.getHost().concat("/")))
 					.ignoreContentType(Boolean.TRUE)
-					.header(ACCEPT_LANGUAGE, ES_ES)
-					.header(ACCEPT_ENCODING, GZIP_DEFLATE_SDCH)
-					.header(ACCEPT, ACCEPT_VALUE)
+					.header("Accept-Language", "es-ES,es;q=0.8")
+					.header("Accept-Encoding", "gzip, deflate, sdch")
+					.header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
 					.maxBodySize(0)
 					.timeout(100000);
 			response = connection.execute();
@@ -450,7 +318,7 @@ public abstract class ProcessDataAbstract {
 		List<String> lista = Lists.newArrayList();
 		String strResult;
 		
-		StringTokenizer st = new StringTokenizer(cssSelector,PIPE_STRING);  
+		StringTokenizer st = new StringTokenizer(cssSelector,"|");  
 		
 		while (st.hasMoreTokens()) {  
 			lista.add(st.nextToken());
@@ -462,8 +330,8 @@ public abstract class ProcessDataAbstract {
 			
 			strResult = ifProcessDataMercadona.getResult(elem, cssSelector);
 			
-		} else if(mapEmpresas.get(CONDIS).getDid().equals(urlDto.getDidEmpresa()) &&
-				SCRIPT.equalsIgnoreCase(lista.get(0))) {	
+		} else if(mapEmpresas.get("CONDIS").getDid().equals(urlDto.getDidEmpresa()) &&
+				"script".equalsIgnoreCase(lista.get(0))) {	
 			
 			strResult = ifProcessDataCondis.tratarTagScript(elem, lista.get(0));
 			
@@ -501,16 +369,16 @@ public abstract class ProcessDataAbstract {
 		}
 		
 		String caracteres = StringUtils.EMPTY;
-		if(Objects.nonNull(strResult) && strResult.trim().startsWith(DOBLE_BARRA)) {
-			caracteres = HTTPS.concat(strResult);
-		} else if(Objects.nonNull(strResult) && strResult.trim().startsWith(BARRA)) {
+		if(Objects.nonNull(strResult) && strResult.trim().startsWith("//")) {
+			caracteres = "https:".concat(strResult);
+		} else if(Objects.nonNull(strResult) && strResult.trim().startsWith("/")) {
 			caracteres = strUrlEmpresa.concat(strResult); 
 		} else if(Objects.nonNull(strResult)){
 			caracteres = strResult;
 		}
 		 
-		String resultado = caracteres.replaceAll(LEFT_PARENTHESIS, StringUtils.EMPTY);
-		resultado = resultado.replaceAll(RIGTH_PARENTHESIS, StringUtils.EMPTY);
+		String resultado = caracteres.replaceAll("\\(", StringUtils.EMPTY);
+		resultado = resultado.replaceAll("\\)", StringUtils.EMPTY);
 		
 		resultado = resultado.replace("€", " eur");
 		resultado = resultado.replace("Kilo", "kg");

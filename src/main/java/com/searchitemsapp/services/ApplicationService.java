@@ -25,17 +25,11 @@ import com.searchitemsapp.dto.EmpresaDTO;
 import com.searchitemsapp.dto.MarcasDTO;
 import com.searchitemsapp.dto.SelectoresCssDTO;
 import com.searchitemsapp.dto.UrlDTO;
+import com.searchitemsapp.processdata.IFApplicationData;
 import com.searchitemsapp.processdata.IFProcessPrice;
 import com.searchitemsapp.processdata.IFUrlComposer;
 import com.searchitemsapp.processdata.ProcessDataModule;
 
-/**
- * @author Felix Marin Ramirez
- * 
- * Servicio que contiene la lógica para obtener listados 
- * de productos ordenados de los distintos supermercados.
- * 
- */
 @Service("applicationService")
 public class ApplicationService implements IFService<String,String> {
 	
@@ -44,6 +38,9 @@ public class ApplicationService implements IFService<String,String> {
 	private static final String ERROR_RESULT = "[{\"request\": \"Error\", " 
 			+ "\"id\" : \"-1\", "
 			+ "\"description\": \"No hay resultados\"}]";
+	
+	@Autowired
+	private IFApplicationData iFApplicationData;
 	
 	@Autowired
 	private IFUrlComposer urlComposer;
@@ -58,10 +55,6 @@ public class ApplicationService implements IFService<String,String> {
 		super();
 	}
 	
-	/**
-	 * Método principal de servicio web.  Este método contiene 
-	 * toda la lógica de negocio del servicio. {@link ProcessDataModule}
-	 */
 	public String service(final String... params) {
 
 		org.apache.log4j.BasicConfigurator.configure();
@@ -71,28 +64,28 @@ public class ApplicationService implements IFService<String,String> {
 		}
 		
 		Map<String,EmpresaDTO> mapEmpresas = Maps.newHashMap();		
-		Map<Integer,Boolean> mapDynEmpresas = Maps.newHashMap();
+		Map<Integer,Boolean> mapIsEmpresasDyn = Maps.newHashMap();
 	
-		String didPais = params[0];
-		String didCategoria = params[1];
-		String ordenacion = params[2];
-		String producto = params[3];
-		String empresas = params[4];
+		String strDidPais = params[0];
+		String strDidCategoria = params[1];
+		String strTipoOrdenacion = params[2];
+		String strNomProducto = params[3];
+		String strEmpresas = params[4];
 		
-		List<IFProcessPrice> listResultDtoFinal = Lists.newArrayList();
+		List<IFProcessPrice> listIfProcessPrice = Lists.newArrayList();
 		int contador = 0;
 	
 		ExecutorService executorService = Executors.newCachedThreadPool();
 
 		try {
-			urlComposer.applicationData(mapEmpresas, mapDynEmpresas);
-			List<MarcasDTO> listTodasMarcas = urlComposer.getListTodasMarcas();
+			iFApplicationData.applicationData(mapEmpresas, mapIsEmpresasDyn);
+			List<MarcasDTO> listTodasMarcas = iFApplicationData.getListTodasMarcas();
 			
-			List<SelectoresCssDTO> lselectores = urlComposer
-					.listSelectoresCssPorEmpresa(empresas);
+			List<SelectoresCssDTO> listTodosSelectoresCss = iFApplicationData
+					.listSelectoresCssPorEmpresa(strEmpresas);
 			
-			Collection<UrlDTO> lResultDtoUrlsTratado = urlComposer.replaceWildcardCharacter(didPais, 
-					didCategoria, producto, empresas, lselectores, mapEmpresas);
+			Collection<UrlDTO> lResultDtoUrlsTratado = urlComposer.replaceWildcardCharacter(strDidPais, 
+					strDidCategoria, strNomProducto, strEmpresas, listTodosSelectoresCss, mapEmpresas);
 
 			Collection<ProcessDataModule> colPDMcallables = Lists.newArrayList();
 		
@@ -100,26 +93,26 @@ public class ApplicationService implements IFService<String,String> {
 				ProcessDataModule processDataModule = applicationContext.getBean(ProcessDataModule.class);
 				
 				processDataModule.setListTodasMarcas(listTodasMarcas);
-				processDataModule.setMapDynEmpresas(mapDynEmpresas);
+				processDataModule.setMapDynEmpresas(mapIsEmpresasDyn);
 				processDataModule.setMapEmpresas(mapEmpresas);
-				processDataModule.setOrdenacion(ordenacion);
-				processDataModule.setProducto(producto);
+				processDataModule.setOrdenacion(strTipoOrdenacion);
+				processDataModule.setProducto(strNomProducto);
 				processDataModule.setUrlDto(elem);
 	
 				colPDMcallables.add(processDataModule);	
 			});
 	
 			List<Future<List<IFProcessPrice>>> listFutureListResDto = executorService.invokeAll(colPDMcallables);
-			listResultDtoFinal = executeFuture(listFutureListResDto);
+			listIfProcessPrice = executeFuture(listFutureListResDto);
 
-            if(listResultDtoFinal.isEmpty()) {            	            	
+            if(listIfProcessPrice.isEmpty()) {            	            	
     			return ERROR_RESULT;
             }
 
-            listResultDtoFinal = ifProcessPrice.ordenarLista(listResultDtoFinal);
+            listIfProcessPrice = ifProcessPrice.ordenarLista(listIfProcessPrice);
 
-         	for (int i = 0; i < listResultDtoFinal.size(); i++) {
-				listResultDtoFinal.get(i).setIdentificador(++contador);
+         	for (int i = 0; i < listIfProcessPrice.size(); i++) {
+				listIfProcessPrice.get(i).setIdentificador(++contador);
 			}
 			
 		}catch(IOException | InterruptedException | ExecutionException e) {
@@ -135,37 +128,22 @@ public class ApplicationService implements IFService<String,String> {
 			executorService.shutdown();
 		}
 
-		return new Gson().toJson(listResultDtoFinal);
+		return new Gson().toJson(listIfProcessPrice);
 	}
-	
-	/**
-	 * La clase Future representa un resultado futuro de un cálculo 
-	 * asincrónico, un resultado que finalmente aparecerá en el Futuro 
-	 * después de que se complete el procesamiento.
-	 * 
-	 * @param resultList Una lista de listas de resultados.
-	 * @return List<IFProcessPrice>
-	 * @throws InterruptedException
-	 * @throws ExecutionException
-	 */
-	private List<IFProcessPrice> executeFuture(final List<Future<List<IFProcessPrice>>> resultList) 
+
+	private List<IFProcessPrice> executeFuture(final List<Future<List<IFProcessPrice>>> listfutureListIfProcessPrice) 
 			throws InterruptedException, ExecutionException {
 		
-		List<IFProcessPrice> listResultFinal = Lists.newArrayList();
+		List<IFProcessPrice> listIfProcessPrice = Lists.newArrayList();
 
-		for(Future<List<IFProcessPrice>> future : resultList) {
+		for(Future<List<IFProcessPrice>> futureListIfProcessPrice : listfutureListIfProcessPrice) {
 			
 			try {
-				if(Objects.isNull(future.get())) {
+				if(Objects.isNull(futureListIfProcessPrice.get())) {
 					continue;
 				}
 				
-				listResultFinal.addAll(future.get(5, TimeUnit.SECONDS));
-				
-				if(LOGGER.isInfoEnabled()) {
-					LOGGER.info(future.get().toString());
-					LOGGER.info(String.valueOf(future.isDone()));
-				}
+				listIfProcessPrice.addAll(futureListIfProcessPrice.get(5, TimeUnit.SECONDS));
 				
 			}catch(TimeoutException e) {
 				if(LOGGER.isErrorEnabled()) {
@@ -174,6 +152,6 @@ public class ApplicationService implements IFService<String,String> {
 			}
 		}
 		
-		return listResultFinal;
+		return listIfProcessPrice;
 	}
 }
