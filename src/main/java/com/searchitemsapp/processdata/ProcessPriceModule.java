@@ -67,52 +67,52 @@ public class ProcessPriceModule implements IFProcessPrice {
 	}
 	
 	@Override
-	public int compare(IFProcessPrice a, IFProcessPrice b) {
-		return processPrice(a, b);
+	public int compare(IFProcessPrice precioPrimario, IFProcessPrice precioSecundario) {
+		return processPrice(precioPrimario, precioSecundario);
 	}
 	
-	public int processPrice(final IFProcessPrice a, final IFProcessPrice b) {
+	public int processPrice(final IFProcessPrice precioPrimario, final IFProcessPrice precioSecundario) {
 		
-		int i= 0;
+		int iResultado= 0;
 
-		boolean bCheck = a.getOrdenacion() == 1 || a.getOrdenacion() == 2;
+		boolean bCheck = precioPrimario.getOrdenacion() == 1 || precioPrimario.getOrdenacion() == 2;
 	
 		if(bCheck) {
 	
-			if(a.getOrdenacion() == 1) {
+			if(precioPrimario.getOrdenacion() == 1) {
 	
-				if(StringUtils.isAllEmpty(a.getPrecio())) {
-					a.setPrecio(String.valueOf(DEFAULTPRICE));
+				if(StringUtils.isAllEmpty(precioPrimario.getPrecio())) {
+					precioPrimario.setPrecio(String.valueOf(DEFAULTPRICE));
 				}
 
-				i = convertirDouble(a.getPrecio())
-						.compareTo(convertirDouble(b.getPrecio()));
+				iResultado = convertirDouble(precioPrimario.getPrecio())
+						.compareTo(convertirDouble(precioSecundario.getPrecio()));
 	
-				estilizarPrecios(a,b);
+				estilizarPrecios(precioPrimario,precioSecundario);
 				
-			} else if(a.getOrdenacion() == 2) {
+			} else if(precioPrimario.getOrdenacion() == 2) {
 		
-				if(Objects.isNull(a.getPrecioKilo()) || 
-						StringUtils.isAllEmpty(a.getPrecioKilo())) {
-					a.setPrecioKilo(String.valueOf(DEFAULTPRICE));
+				if(Objects.isNull(precioPrimario.getPrecioKilo()) || 
+						StringUtils.isAllEmpty(precioPrimario.getPrecioKilo())) {
+					precioPrimario.setPrecioKilo(String.valueOf(DEFAULTPRICE));
 				}
 
-				mismoPrecioYPrecioKilo(a, b);
+				mismoPrecioYPrecioKilo(precioPrimario, precioSecundario);
 	
-				i = convertirDouble(a.getPrecioKilo())
-						.compareTo(convertirDouble(b.getPrecioKilo()));
+				iResultado = convertirDouble(precioPrimario.getPrecioKilo())
+						.compareTo(convertirDouble(precioSecundario.getPrecioKilo()));
 
-				estilizarPrecios(a,b);
+				estilizarPrecios(precioPrimario,precioSecundario);
 			}
 		} else {
-			UnsupportedAttributeException e = new UnsupportedAttributeException("Error en el parametro de ordenacion", String.valueOf(a.getOrdenacion()));
+			UnsupportedAttributeException e = new UnsupportedAttributeException("Error en el parametro de ordenacion", String.valueOf(precioPrimario.getOrdenacion()));
 			if(LOGGER.isErrorEnabled()) {
 				LOGGER.error(Thread.currentThread().getStackTrace()[1].toString(),e);
 			}
 			throw e;
 		}
 		
-		return i;
+		return iResultado;
 	}
 
 	private  Double convertirDouble(final String strPrecioKilo) {
@@ -162,69 +162,69 @@ public class ProcessPriceModule implements IFProcessPrice {
 	  return resultado;
 	}
 
-	private  String extraerEntero(final String cadena) {
+	private  String extraerEntero(final String strPrecio) {
 		
-		String resultado = StringUtils.EMPTY;		
-		Matcher mEntero = Pattern.compile(REGEXNUMERODECIMAL, Pattern.MULTILINE).matcher(cadena);
+		String strResultado = StringUtils.EMPTY;		
+		Matcher mEntero = Pattern.compile(REGEXNUMERODECIMAL, Pattern.MULTILINE).matcher(strPrecio);
 		
 	  if(mEntero.find()) {
 		  return DECIMALES;
 	  }
 		
-	  String cadenaAux = cadena.replace(DOTSTRING, StringUtils.EMPTY);
+	  String cadenaAux = strPrecio.replace(DOTSTRING, StringUtils.EMPTY);
 		
 	  mEntero = Pattern.compile(REGEXNUMERODECIMAL, Pattern.MULTILINE).matcher(cadenaAux);
 		
 	    if(mEntero.find()) {
-		   resultado = mEntero.group();
-		   resultado = resultado.concat(DECIMALES);
+		   strResultado = mEntero.group();
+		   strResultado = strResultado.concat(DECIMALES);
 	    }
 
-		if(StringUtils.isAllEmpty(resultado)) {
+		if(StringUtils.isAllEmpty(strResultado)) {
 			  mEntero = Pattern.compile(REGEXINTEGER, Pattern.MULTILINE).matcher(cadenaAux);
 
 			if(mEntero.find()) {
-				  resultado = mEntero.group();
-				  resultado = resultado.concat(DECIMALES);
+				  strResultado = mEntero.group();
+				  strResultado = strResultado.concat(DECIMALES);
 			}
 		}
 		
-		return resultado;
+		return strResultado;
 	}
 	
-	private  void mismoPrecioYPrecioKilo(IFProcessPrice a, IFProcessPrice b) {
+	private  void mismoPrecioYPrecioKilo(IFProcessPrice precioPrimario, IFProcessPrice precioSecundario) {
 		
-		if(StringUtils.isAllEmpty(a.getPrecioKilo()) &&
-				!StringUtils.isAllEmpty(a.getPrecio())) {
-			a.setPrecioKilo(extraerDecimal(a.getPrecio())
+		if(StringUtils.isAllEmpty(precioPrimario.getPrecioKilo()) &&
+				!StringUtils.isAllEmpty(precioPrimario.getPrecio())) {
+			precioPrimario.setPrecioKilo(extraerDecimal(precioPrimario.getPrecio())
 					.concat(BARRAKILOGRAM));
 		}
 		
-		if(StringUtils.isAllEmpty(b.getPrecioKilo()) &&
-				!StringUtils.isAllEmpty(b.getPrecio())) {
-			b.setPrecioKilo(extraerDecimal(b.getPrecio())
+		if(StringUtils.isAllEmpty(precioSecundario.getPrecioKilo()) &&
+				!StringUtils.isAllEmpty(precioSecundario.getPrecio())) {
+			precioSecundario.setPrecioKilo(extraerDecimal(precioSecundario.getPrecio())
 					.concat(BARRAKILOGRAM));
 		}
 	}
 
-	private  void estilizarPrecios(final IFProcessPrice a, final IFProcessPrice b) {
+	private  void estilizarPrecios(final IFProcessPrice precioPrimario, final IFProcessPrice precioSecundario) {
 		
-		if(!StringUtils.isAllEmpty(a.getPrecio())) {
-			a.setPrecio(extraerDecimal(a.getPrecio())
+		if(!StringUtils.isAllEmpty(precioPrimario.getPrecio())) {
+			precioPrimario.setPrecio(extraerDecimal(precioPrimario.getPrecio())
 					.concat(EUROSYMBOL)
 					.replace(DOTSTRING,COMMASTRING));	
 			
-			b.setPrecio(extraerDecimal(b.getPrecio())
+			precioSecundario.setPrecio(extraerDecimal(precioSecundario.getPrecio())
 					.concat(EUROSYMBOL)
 					.replace(DOTSTRING,COMMASTRING));
 		}
 		
-		if(!StringUtils.isAllEmpty(a.getPrecioKilo())) {
-			a.setPrecioKilo(extraerDecimal(a.getPrecioKilo())
+		if(!StringUtils.isAllEmpty(precioPrimario.getPrecioKilo())) {
+			precioPrimario.setPrecioKilo(extraerDecimal(precioPrimario.getPrecioKilo())
 			.concat(BARRAKILOGRAM)
 			.replace(DOTSTRING,COMMASTRING));	
 	
-			b.setPrecioKilo(extraerDecimal(b.getPrecioKilo())
+			precioSecundario.setPrecioKilo(extraerDecimal(precioSecundario.getPrecioKilo())
 			.concat(BARRAKILOGRAM)
 			.replace(DOTSTRING,COMMASTRING));	
 		}
