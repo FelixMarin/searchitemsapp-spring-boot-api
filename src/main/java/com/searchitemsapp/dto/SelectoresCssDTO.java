@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
  */
 @Data @NoArgsConstructor @AllArgsConstructor
 @Component
-public class SelectoresCssDTO  implements IFdto {
+public class SelectoresCssDTO {
 	
 	private Integer did;
 	private Boolean bolActivo;

@@ -36,13 +36,11 @@ public class ApplicationData implements IFApplicationData {
 	@Autowired
 	private Environment env;
 
-	public void applicationData(final Map<String,EmpresaDTO> mapEmpresas, 
-			final Map<Integer,Boolean> mapDynEmpresas) throws IOException {
+	public void applicationData(final Map<Integer,Boolean> mapDynEmpresas) throws IOException {
 		
 			List<EmpresaDTO> listEmpresaDto = iFEmpresaImpl.findAll();
 
 			listEmpresaDto.stream().forEach(empresaDTO -> {
-				mapEmpresas.put(empresaDTO.getNomEmpresa(), empresaDTO);
 				mapDynEmpresas.put(empresaDTO.getDid(), empresaDTO.getBolDynScrap());
 			});
 		}

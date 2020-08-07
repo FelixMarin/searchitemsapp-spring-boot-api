@@ -9,14 +9,14 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import org.springframework.core.env.Environment;
 import com.searchitemsapp.dto.UrlDTO;
+
+import lombok.NoArgsConstructor;
 
 
 
@@ -28,37 +28,17 @@ import com.searchitemsapp.dto.UrlDTO;
  *
  */
 @Component
-public class ProcessDataDia implements IFProcessDataEmpresas {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataDia.class);   
+@NoArgsConstructor
+public class ProcessDataDia implements IFProcessDataDIA {
 	
 	private static final String PROTOCOL_ACCESSOR ="://";
 	
 	@Autowired
 	private Environment env;
 
-	public ProcessDataDia() {
-		super();
-	}
-
-	/**
-	 * Compone una lista de URLs de la empresa Consum.
-	 * Con estas URLs se realizarán las peticiones al
-	 * sitio web para extraer los datos. 
-	 * 
-	 * @param document
-	 * @param urlDto
-	 * @param selectorCssDto
-	 * @return List<String>
-	 * @exception MalformedURLException
-	 */
 	@Override
 	public List<String> getListaUrls(final Document document, final UrlDTO urlDto) 
 					throws MalformedURLException {
-
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
 		
 		String urlBase = urlDto.getNomUrl();
 		String selectorPaginacion = urlDto.getSelectores().getSelPaginacion();	
@@ -88,5 +68,10 @@ public class ProcessDataDia implements IFProcessDataEmpresas {
 		}
 		
 		return listaUrls;
+	}
+
+	@Override
+	public int get_DID() {
+		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.dia"));
 	}
 }

@@ -17,5 +17,5 @@ import com.searchitemsapp.dto.UrlDTO;
  */
 public interface IFProcessDataEmpresas {
 
-	public abstract List<String> getListaUrls(final Document document, final UrlDTO urlDto) throws MalformedURLException;
+	abstract List<String> getListaUrls(final Document document, final UrlDTO urlDto) throws MalformedURLException;
 }

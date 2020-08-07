@@ -9,55 +9,29 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import org.springframework.core.env.Environment;
 import com.searchitemsapp.dto.UrlDTO;
 
-/**
- * Módulo de scraping especifico diseñado para la 
- * extracción de datos del sitio web de Alcampo.
- * 
- * @author Felix Marin Ramirez
- *
- */
+import lombok.NoArgsConstructor;
+
 @Component
+@NoArgsConstructor
 public class ProcessDataAlcampo implements IFProcessDataEmpresas {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataAlcampo.class);   
 	
 	private static final String PATTERN = ".*&page=([0-9]+)";
 	private static final String ZERO_STRING = "0";
 	
 	@Autowired
 	private Environment env;
-
-	public ProcessDataAlcampo() {
-		super();
-	}
 	
-	/**
-	 * Compone una lista de URLs de la web de Alcampo.
-	 * Con estas URLs se realizarán las peticiones al
-	 * sitio web para extraer los datos. 
-	 * 
-	 * @param document
-	 * @param urlDto
-	 * @param selectorCssDto
-	 * @return List<String>
-	 * @exception MalformedURLException
-	 */
 	@Override
 	public List<String> getListaUrls(Document document, UrlDTO urlDto) 
 			throws MalformedURLException {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
 		
 		String urlBase = urlDto.getNomUrl();
 		
@@ -101,5 +75,9 @@ public class ProcessDataAlcampo implements IFProcessDataEmpresas {
 		}		
 		
 		return listaUrls;
+	}
+	
+	public int get_DID() {
+		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.alcampo"));
 	}
 }

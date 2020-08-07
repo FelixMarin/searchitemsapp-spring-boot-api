@@ -1,37 +1,18 @@
 package com.searchitemsapp.entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
 
-import org.hibernate.annotations.TypeDef;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
 import org.springframework.stereotype.Component;
 
-/**
- * Definición de tipos customizados.
- */
-@TypeDef(
-		   name = "didDef",
-		   defaultForType = Integer.class,
-		   typeClass = Integer.class
-		)
-
-@TypeDef(
-		   name = "bolAct",
-		   defaultForType = Boolean.class,
-		   typeClass = Boolean.class
-		)
-
-@TypeDef(
-		   name = "strDef",
-		   defaultForType = String.class,
-		   typeClass = String.class
-		)
-
-/**
- * The persistent class for the tb_sia_nom_productos database table.
- * 
- *  @author Felix Marin Ramirez
- */
 @Entity
 @Component
 @Table(name="tb_sia_nom_productos", schema = "sia")
@@ -41,11 +22,9 @@ public class TbSiaNomProducto implements Serializable {
 
 	@Id
 	@Column(name = "did")
-	@org.hibernate.annotations.Type(type="didDef")
 	private Integer did;
 
 	@Column(name="nom_producto")
-	@org.hibernate.annotations.Type(type="strDef")
 	private String nomProducto;
 
 	//bi-directional many-to-one association to TbSiaCategoriasEmpresa

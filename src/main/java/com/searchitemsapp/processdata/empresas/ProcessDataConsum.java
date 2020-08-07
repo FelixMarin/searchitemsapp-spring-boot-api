@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.nodes.Document;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
@@ -16,49 +17,30 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dto.UrlDTO;
 
+import lombok.NoArgsConstructor;
 
-/**
- * Módulo de scraping especifico diseñado para la 
- * extracción de datos del sitio web de Consum.
- * 
- * @author Felix Marin Ramirez
- *
- */
 @Component
+@NoArgsConstructor
 public class ProcessDataConsum implements IFProcessDataConsum {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataConsum.class);   
 
 	private static final String SCROLL_INTO_VIEW = "arguments[0].scrollIntoView(true)";
-
-	private ProcessDataConsum() {
-		super();
-	}
 	
-	/**
-	 * Compone una lista de URLs de la empresa Consum.
-	 * Con estas URLs se realizarán las peticiones al
-	 * sitio web para extraer los datos. 
-	 * 
-	 * @param document
-	 * @param urlDto
-	 * @param selectorCssDto
-	 * @return List<String>
-	 * @exception MalformedURLException
-	 */
+	@Autowired
+	private Environment env;
+
 	@Override
 	public List<String> getListaUrls(Document document, UrlDTO urlDto)
 			throws MalformedURLException {
 
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
-		
 		String urlBase = urlDto.getNomUrl();
 		List<String> listaUrls = Lists.newArrayList();
 		listaUrls.add(urlBase);
@@ -66,21 +48,7 @@ public class ProcessDataConsum implements IFProcessDataConsum {
 		return listaUrls;
 	}
 
-	/**
-	 * Se obtiene el sitio web utilizando el web driver. 
-	 * De este modo se puede obtener un sitio web después 
-	 * de ejecutar javascript.
-	 * 
-	 * @param webDriver
-	 * @param strUrl
-	 * @return String
-	 * @throws InterruptedException
-	 */
 	public String getHtmlContent(final WebDriver webDriver, final String strUrl) throws InterruptedException {
-
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
 		
 		WebElement wButton;
 		JavascriptExecutor js = (JavascriptExecutor) webDriver;
@@ -109,5 +77,9 @@ public class ProcessDataConsum implements IFProcessDataConsum {
 		}
 
 		return webDriver.getPageSource();
+	}
+	
+	public int get_DID() {
+		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.consum"));
 	}
 }

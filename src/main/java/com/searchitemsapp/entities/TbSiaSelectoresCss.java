@@ -1,7 +1,6 @@
 package com.searchitemsapp.entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
@@ -13,41 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.TypeDef;
 import org.springframework.stereotype.Component;
 
-/**
- * Definición de tipos customizados.
- */
-@TypeDef(
-		   name = "didDef",
-		   defaultForType = Integer.class,
-		   typeClass = Integer.class
-		)
-
-@TypeDef(
-		   name = "bolAct",
-		   defaultForType = Boolean.class,
-		   typeClass = Boolean.class
-		)
-
-@TypeDef(
-		   name = "strDef",
-		   defaultForType = String.class,
-		   typeClass = String.class
-		)
-
-@TypeDef(
-		   name = "dateDef",
-		   defaultForType = Timestamp.class,
-		   typeClass = Timestamp.class
-		)
-
-/**
- * The persistent class for the tb_sia_selectores_css database table.
- * 
- *  @author Felix Marin Ramirez
- */
 @Entity
 @Component
 @Table(name="tb_sia_selectores_css", schema = "sia")
@@ -57,46 +23,36 @@ public class TbSiaSelectoresCss implements Serializable {
 
 	@Id
 	@Column(name = "did")
-	@org.hibernate.annotations.Type(type="didDef")
 	private Integer did;
 
 	@Column(name="bol_activo")
-	@org.hibernate.annotations.Type(type="bolAct")
 	private Boolean bolActivo;
 
 	@Column(name="fec_modificacion", columnDefinition = "DATE")
 	private LocalDate fecModificacion;
 
 	@Column(name="scrap_no_pattern")
-	@org.hibernate.annotations.Type(type="strDef")
 	private String scrapNoPattern;
 
 	@Column(name="scrap_pattern")
-	@org.hibernate.annotations.Type(type="strDef")
 	private String scrapPattern;
 
 	@Column(name="sel_image")
-	@org.hibernate.annotations.Type(type="strDef")
 	private String selImage;
 
 	@Column(name="sel_link_prod")
-	@org.hibernate.annotations.Type(type="strDef")
 	private String selLinkProd;
 
 	@Column(name="sel_pre_kilo")
-	@org.hibernate.annotations.Type(type="strDef")
 	private String selPreKilo;
 
 	@Column(name="sel_precio")
-	@org.hibernate.annotations.Type(type="strDef")
 	private String selPrecio;
 
 	@Column(name="sel_producto")
-	@org.hibernate.annotations.Type(type="strDef")
 	private String selProducto;
 	
 	@Column(name="sel_paginacion")
-	@org.hibernate.annotations.Type(type="strDef")
 	private String selPaginacion;	
 
 	//bi-directional many-to-one association to TbSiaEmpresa

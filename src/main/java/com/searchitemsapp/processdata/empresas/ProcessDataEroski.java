@@ -5,25 +5,18 @@ import java.util.List;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.nodes.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import org.springframework.core.env.Environment;
 import com.searchitemsapp.dto.UrlDTO;
-/**
- * Módulo de scraping especifico diseñado para la 
- * extracción de datos del sitio web de Eroski.
- * 
- * @author Felix Marin Ramirez
- *
- */
+
+import lombok.NoArgsConstructor;
+
 @Component
+@NoArgsConstructor
 public class ProcessDataEroski implements IFProcessDataEroski {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataEroski.class);  
 	
 	private static final String STRING_ENIE_MIN = "ñ";
 	private static final String ENIE_EROSKI = "$00f1";
@@ -32,29 +25,10 @@ public class ProcessDataEroski implements IFProcessDataEroski {
 	
 	@Autowired
 	private Environment env;
-	
-	private ProcessDataEroski() {
-		super();
-	}
-	
-	/**
-	 * Compone una lista de URLs de la empresa Eroski.
-	 * Con estas URLs se realizarán las peticiones al
-	 * sitio web para extraer los datos. 
-	 * 
-	 * @param document
-	 * @param urlDto
-	 * @param selectorCssDto
-	 * @return List<String>
-	 * @exception MalformedURLException
-	 */
+
 	@Override
 	public List<String> getListaUrls(final Document document, final UrlDTO urlDto) 
 			throws MalformedURLException {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
 		
 		/**
 		 * Se obtiene la URL base. Esta es la URL principal 
@@ -96,19 +70,7 @@ public class ProcessDataEroski implements IFProcessDataEroski {
 		return listaUrls;
 	}
 
-	/**
-	 * Reemplaza los caracteres especiales que pueda tener
-	 * el nombre del producto por sus correspondientes unicode. 
-	 * <br>Ejemplo: "ñ" -> "$00f1".
-	 *  
-	 * @param producto
-	 * @return String
-	 */
 	public String reemplazarCaracteres(final String producto) {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
 		
 		String productoTratado = producto
 				.replace(STRING_ENIE_MIN, ENIE_EROSKI);
@@ -119,5 +81,10 @@ public class ProcessDataEroski implements IFProcessDataEroski {
 		}
 		
 		return productoTratado;
+	}
+
+	@Override
+	public int get_DID() {
+		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.eroski"));
 	}
 }

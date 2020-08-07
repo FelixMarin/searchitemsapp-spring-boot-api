@@ -1,5 +1,7 @@
 package com.searchitemsapp.processdata.empresas;
 
 public interface IFProcessDataEroski extends IFProcessDataEmpresas {
-	public String reemplazarCaracteres(final String producto);
+	
+	abstract int get_DID();
+	abstract String reemplazarCaracteres(final String producto);
 }
