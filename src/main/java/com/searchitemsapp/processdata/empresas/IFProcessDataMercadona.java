@@ -8,8 +8,9 @@ import com.searchitemsapp.processdata.IFProcessPrice;
 
 public interface IFProcessDataMercadona extends IFProcessDataEmpresas {
 	
-	String getResult(final Element elem, final String cssSelector);
-	Document getDocument(final String url, final String body);
-	Connection getConnection(final String strUrl, final String producto);
-	String getUrlAll(final IFProcessPrice resDto);
+	abstract int get_DID();
+	abstract String getResult(final Element elem, final String cssSelector);
+	abstract Document getDocument(final String url, final String body);
+	abstract Connection getConnection(final String strUrl, final String producto);
+	abstract String getUrlAll(final IFProcessPrice resDto);
 }

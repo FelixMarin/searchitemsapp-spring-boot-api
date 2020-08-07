@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.json.JSONObject;
 import org.json.XML;
 import org.jsoup.Connection;
@@ -11,26 +12,20 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dto.UrlDTO;
 import com.searchitemsapp.processdata.IFProcessPrice;
 
-/**
- * Módulo de scraping especifico diseñado para la 
- * extracción de datos del sitio web de Mercadona.
- * 
- * @author Felix Marin Ramirez
- *
- */
+import lombok.NoArgsConstructor;
+
 @Component
+@NoArgsConstructor
 public class ProcessDataMercadona implements IFProcessDataMercadona {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataMercadona.class);  
-
 	private static final String LTEMGTCIERRE = "&lt;/em&gt;";
 	private static final String SEPARADORURL = "%20";
 	private static final String LTEMGT = "&lt;em&gt;";
@@ -49,30 +44,14 @@ public class ProcessDataMercadona implements IFProcessDataMercadona {
 	private static final String ACEPTVALUEJSON = "application/json";
 	private static final String GZIPDEFLATESDCH = "gzip, deflate, sdch";	
 	private static final String URLALLPRODUCTS = "https://lolamarket.com/tienda/mercadona/buscar/";
-
-	private ProcessDataMercadona() {
-		super();
-	}
 	
-	/**
-	 * Compone una lista de URLs de la web de Mercadona.
-	 * Con estas URLs se realizarán las peticiones al
-	 * sitio web para extraer los datos. 
-	 * 
-	 * @param document
-	 * @param urlDto
-	 * @param selectorCssDto
-	 * @return List<String>
-	 * @exception MalformedURLException
-	 */
+	@Autowired
+	private Environment env;
+	
 	@Override
 	public List<String> getListaUrls(final Document document, final UrlDTO urlDto)
 			throws MalformedURLException {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
-		
+			
 		String urlBase = urlDto.getNomUrl();
 		
 		List<String> listaUrls = Lists.newArrayList();
@@ -81,19 +60,7 @@ public class ProcessDataMercadona implements IFProcessDataMercadona {
 		return listaUrls;
 	}	
 
-	/**
-	 * Metodo encargado de extraer la información util
-	 * del documento web extraido del sitio de Mercadona.
-	 * 
-	 * @param url
-	 * @param body
-	 * @return Document
-	 */
 	public Document getDocument(final String url, final String body) {
-
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
 		
 		JSONObject json = new JSONObject(body);
 		
@@ -115,25 +82,10 @@ public class ProcessDataMercadona implements IFProcessDataMercadona {
 		return doc;
 	}
 	
-	/**
-	 * Retorna el texto de un elemento obtenido mediate
-	 * el selector indicado el los argumentos.
-	 * 
-	 * @param elem
-	 * @param cssSelector
-	 * @return String
-	 */
 	public String getResult(final Element elem, final String cssSelector) {		
 		return elem.selectFirst(cssSelector).text();
 	}
-	
-	/**
-	 * Retorna la conexión establecida con el sitio web.
-	 * 
-	 * @param strUrl
-	 * @param producto
-	 * @return
-	 */
+
 	public Connection getConnection(final String strUrl, final String producto) {
 		
 		return Jsoup.connect(strUrl)
@@ -151,13 +103,6 @@ public class ProcessDataMercadona implements IFProcessDataMercadona {
 						.concat(CLICKANALYTICSTRUE));
 	}
 	
-	/**
-	 * Devuelve una cadena con la URL de la solicitud realizada 
-	 * al sitio web donde se consulta el producto.
-	 * 
-	 * @param resDto
-	 * @return  String
-	 */
 	public String getUrlAll(final IFProcessPrice resDto) {
 		
 		String productoAux = StringUtils.EMPTY;
@@ -169,4 +114,10 @@ public class ProcessDataMercadona implements IFProcessDataMercadona {
 		
 		return URLALLPRODUCTS.concat(productoAux);
 	}
+
+	public int get_DID() {
+		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.mercadona"));
+	}
+	
+	
 }

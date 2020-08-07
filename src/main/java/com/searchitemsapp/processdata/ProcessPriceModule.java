@@ -11,33 +11,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-
-/**
- * Objeto de Transferencia de Datos (DTO) 
- * es un objeto que transporta datos entre procesos.
- * No tiene más comportamiento que almacenar y entregar 
- * sus propios datos.
- * 
- * @author Felix Marin Ramirez
- *
- */
 @Component
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProcessPriceModule implements IFProcessPrice {
 	
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(ProcessPriceModule.class); 
 	
 	private static final transient String DECIMALES = ".00";
-	private static final transient String DEFAULTSTRPRICE = "1000.00";
 	private static final transient String REGEXNUMERODECIMAL = "(\\d*[,][0-9]*)|([0-9]{1,9})";
-	private static final transient String REGEXINTEGER = "\\d+";
 	private static final transient String BARRAKILOGRAM = "/kg";
-	private static final transient double DEFAULTPRICE = 1000.00;
-	
+	private static final transient double DEFAULTPRICE = 1000.00;	
 	private static final transient String PIPESTRING = "|";
 	private static final transient String COMMASTRING = ",";
-	private static final transient String DOTSTRING = ".";
-	
+	private static final transient String DOTSTRING = ".";	
 	private static final transient String EUROSYMBOL = "/Eur";
 	
 	private int identificador;
@@ -56,10 +48,6 @@ public class ProcessPriceModule implements IFProcessPrice {
 	private String desUrl;
 	private String nomUrlAllProducts;
 	private int ordenacion;
-	
-	public ProcessPriceModule() {
-		super();
-	}
 
 	public List<IFProcessPrice> ordenarLista(List<IFProcessPrice> lista) {
 		lista.sort(this);
@@ -130,7 +118,7 @@ public class ProcessPriceModule implements IFProcessPrice {
 	private  String extraerDecimal(final String cadena) {
 		
 		if(COMMASTRING.equals(cadena)) {
-			return DEFAULTSTRPRICE;
+			return "1000.00";
 		}
 	     
 	  String resultado = StringUtils.EMPTY;
@@ -181,7 +169,7 @@ public class ProcessPriceModule implements IFProcessPrice {
 	    }
 
 		if(StringUtils.isAllEmpty(strResultado)) {
-			  mEntero = Pattern.compile(REGEXINTEGER, Pattern.MULTILINE).matcher(cadenaAux);
+			  mEntero = Pattern.compile("\\d+", Pattern.MULTILINE).matcher(cadenaAux);
 
 			if(mEntero.find()) {
 				  strResultado = mEntero.group();
@@ -228,133 +216,5 @@ public class ProcessPriceModule implements IFProcessPrice {
 			.concat(BARRAKILOGRAM)
 			.replace(DOTSTRING,COMMASTRING));	
 		}
-	}
-	
-	public int getIdentificador() {
-		return identificador;
-	}
-	
-	public void setIdentificador(int identificador) {
-		this.identificador = identificador;
-	}
-	
-	public String getNomProducto() {
-		return nomProducto;
-	}
-	
-	public void setNomProducto(String nomProducto) {
-		this.nomProducto = nomProducto;
-	}
-	
-	public String getDesProducto() {
-		return desProducto;
-	}
-	
-	public void setDesProducto(String desProducto) {
-		this.desProducto = desProducto;
-	}
-	
-	public String getImagen() {
-		return imagen;	
-	}
-	
-	public void setImagen(String imagen) {
-		this.imagen = imagen;
-	}
-	
-	public String getPrecio() {
-		return precio;
-	}
-	
-	public void setPrecio(String precio) {
-		this.precio = precio;
-	}
-	
-	public Integer getDidEmpresa() {
-		return didEmpresa;
-	}
-	
-	public void setDidEmpresa(Integer didEmpresa) {
-		this.didEmpresa = didEmpresa;
-	}
-	
-	public String getPrecioKilo() {
-		return precioKilo;
-	}
-	
-	public void setPrecioKilo(String precioKilo) {
-		this.precioKilo = precioKilo;
-	}
-	
-	public String getNomUrl() {
-		return nomUrl;
-	}
-	
-	public void setNomUrl(String nomUrl) {
-		this.nomUrl = nomUrl;
-	}
-	
-	public Integer getDidUrl() {
-		return didUrl;
-	}
-	
-	public void setDidUrl(Integer didUrl) {
-		this.didUrl = didUrl;
-	}
-	
-	public boolean isBolActivo() {
-		return bolActivo;
-	}
-	
-	public void setBolActivo(boolean bolActivo) {
-		this.bolActivo = bolActivo;
-	}
-	
-	public boolean isBolStatus() {
-		return bolStatus;
-	}
-	
-	public void setBolStatus(boolean bolStatus) {
-		this.bolStatus = bolStatus;
-	}
-	
-	public Boolean isBolLogin() {
-		return bolLogin;
-	}
-	
-	public void setBolLogin(Boolean bolLogin) {
-		this.bolLogin = bolLogin;
-	}
-	
-	public String getDesUrl() {
-		return desUrl;
-	}
-	
-	public void setDesUrl(String desUrl) {
-		this.desUrl = desUrl;
-	}
-	
-	public String getNomUrlAllProducts() {
-		return nomUrlAllProducts;
-	}
-	
-	public void setNomUrlAllProducts(String nomUrlAllProducts) {
-		this.nomUrlAllProducts = nomUrlAllProducts;
-	}
-	
-	public int getOrdenacion() {
-		return ordenacion;
-	}
-	
-	public void setOrdenacion(int ordenacion) {
-		this.ordenacion = ordenacion;
-	}
-	
-	public String getNomEmpresa() {
-		return nomEmpresa;
-	}
-	
-	public void setNomEmpresa(String nomEmpresa) {
-		this.nomEmpresa = nomEmpresa;
 	}
 }

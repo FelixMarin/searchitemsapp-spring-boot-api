@@ -7,8 +7,6 @@ import java.util.Objects;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -19,22 +17,11 @@ import com.searchitemsapp.dto.CategoriaDTO;
 import com.searchitemsapp.dto.PaisDTO;
 import com.searchitemsapp.dto.UrlDTO;
 
+import lombok.NoArgsConstructor;
 
-
-
-/**
- * Implementación del dao.
- * 
- * Esta clase ofrece los métodos que permiten interactuar con
- * la capa de persistencia. 
- * 
- * @author Felix Marin Ramirez
- *
- */
 @Component
+@NoArgsConstructor
 public class UrlImpl implements IFUrlImpl, IFImplementacion<UrlDTO, CategoriaDTO> {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(UrlImpl.class);  
 	
 	private static final String COMA = ",";
 	private static final String ALL = "ALL";
@@ -44,18 +31,7 @@ public class UrlImpl implements IFUrlImpl, IFImplementacion<UrlDTO, CategoriaDTO
 	
 	@Autowired
 	private Environment env;
-	
-	public UrlImpl() {
-		super();
-	}
 
-	/**
-	 * Recupera un elemento de la tabla a partir de su identificador.
-	 * 
-	 * @param UrlDTO
-	 * @return UrlDTO
-	 * @exception IOException
-	 */
 	@Override
 	public UrlDTO findByDid(final UrlDTO urlDTO) throws IOException {
 			
@@ -76,10 +52,6 @@ public class UrlImpl implements IFUrlImpl, IFImplementacion<UrlDTO, CategoriaDTO
 			final CategoriaDTO categoriaDto,
 			final String idsEmpresas) 
 			throws IOException {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
 		
 		String strIdsEmpresas;
 		

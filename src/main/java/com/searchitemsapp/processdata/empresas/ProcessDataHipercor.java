@@ -7,54 +7,27 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.nodes.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import org.springframework.core.env.Environment;
 import com.searchitemsapp.dto.UrlDTO;
 
-/**
- * Módulo de scraping especifico diseñado para la 
- * extracción de datos del sitio web de Hipercor.
- * 
- * @author Felix Marin Ramirez
- *
- */
-@Component
-public class ProcessDataHipercor implements IFProcessDataEmpresas {
+import lombok.NoArgsConstructor;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataHipercor.class);  
-	
+@Component
+@NoArgsConstructor
+public class ProcessDataHipercor implements IFProcessDataHipercor {
+
 	private static final String PATTERN = ".*de ([0-9]+)";
 	
 	@Autowired
 	private Environment env;
 
-	public ProcessDataHipercor() {
-		super();
-	}
-	
-	/**
-	 * Compone una lista de URLs de la web de Hipercor.
-	 * Con estas URLs se realizarán las peticiones al
-	 * sitio web para extraer los datos. 
-	 * 
-	 * @param document
-	 * @param urlDto
-	 * @param selectorCssDto
-	 * @return List<String>
-	 * @exception MalformedURLException
-	 */
 	@Override
 	public List<String> getListaUrls(final Document document, 
 			final UrlDTO urlDto) throws MalformedURLException {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
 		
 		String urlBase = urlDto.getNomUrl();
 		
@@ -83,5 +56,10 @@ public class ProcessDataHipercor implements IFProcessDataEmpresas {
 		}		
 		
 		return listaUrls;
+	}
+
+	@Override
+	public int get_DID() {
+		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.hipercor"));
 	}
 }
