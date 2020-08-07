@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
  */
 @Data @NoArgsConstructor @AllArgsConstructor
 @Component
-public class NomProductoDTO  implements IFdto {
+public class NomProductoDTO {
 
 	private Integer did;
 	private String nomProducto;

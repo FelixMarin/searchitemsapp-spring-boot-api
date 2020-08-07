@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
  */
 @Data @NoArgsConstructor @AllArgsConstructor
 @Component
-public class PedidoDTO implements IFdto {
+public class PedidoDTO {
 	
 	private String categoria;
 	private String producto;

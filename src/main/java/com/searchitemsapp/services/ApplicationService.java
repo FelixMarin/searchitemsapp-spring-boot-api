@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
-import com.searchitemsapp.dto.EmpresaDTO;
 import com.searchitemsapp.dto.MarcasDTO;
 import com.searchitemsapp.dto.SelectoresCssDTO;
 import com.searchitemsapp.dto.UrlDTO;
@@ -34,10 +33,6 @@ import com.searchitemsapp.processdata.ProcessDataModule;
 public class ApplicationService implements IFService<String,String> {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationService.class);  
-	
-	private static final String ERROR_RESULT = "[{\"request\": \"Error\", " 
-			+ "\"id\" : \"-1\", "
-			+ "\"description\": \"No hay resultados\"}]";
 	
 	@Autowired
 	private IFApplicationData iFApplicationData;
@@ -59,11 +54,6 @@ public class ApplicationService implements IFService<String,String> {
 
 		org.apache.log4j.BasicConfigurator.configure();
 		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
-		
-		Map<String,EmpresaDTO> mapEmpresas = Maps.newHashMap();		
 		Map<Integer,Boolean> mapIsEmpresasDyn = Maps.newHashMap();
 	
 		String strDidPais = params[0];
@@ -78,14 +68,14 @@ public class ApplicationService implements IFService<String,String> {
 		ExecutorService executorService = Executors.newCachedThreadPool();
 
 		try {
-			iFApplicationData.applicationData(mapEmpresas, mapIsEmpresasDyn);
+			iFApplicationData.applicationData(mapIsEmpresasDyn);
 			List<MarcasDTO> listTodasMarcas = iFApplicationData.getListTodasMarcas();
 			
 			List<SelectoresCssDTO> listTodosSelectoresCss = iFApplicationData
 					.listSelectoresCssPorEmpresa(strEmpresas);
 			
 			Collection<UrlDTO> lResultDtoUrlsTratado = urlComposer.replaceWildcardCharacter(strDidPais, 
-					strDidCategoria, strNomProducto, strEmpresas, listTodosSelectoresCss, mapEmpresas);
+					strDidCategoria, strNomProducto, strEmpresas, listTodosSelectoresCss);
 
 			Collection<ProcessDataModule> colPDMcallables = Lists.newArrayList();
 		
@@ -94,7 +84,6 @@ public class ApplicationService implements IFService<String,String> {
 				
 				processDataModule.setListTodasMarcas(listTodasMarcas);
 				processDataModule.setMapDynEmpresas(mapIsEmpresasDyn);
-				processDataModule.setMapEmpresas(mapEmpresas);
 				processDataModule.setOrdenacion(strTipoOrdenacion);
 				processDataModule.setProducto(strNomProducto);
 				processDataModule.setUrlDto(elem);
@@ -106,7 +95,9 @@ public class ApplicationService implements IFService<String,String> {
 			listIfProcessPrice = executeFuture(listFutureListResDto);
 
             if(listIfProcessPrice.isEmpty()) {            	            	
-    			return ERROR_RESULT;
+    			return "[{\"request\": \"Error\", " 
+    					+ "\"id\" : \"-1\", "
+    					+ "\"description\": \"No hay resultados\"}]";
             }
 
             listIfProcessPrice = ifProcessPrice.ordenarLista(listIfProcessPrice);

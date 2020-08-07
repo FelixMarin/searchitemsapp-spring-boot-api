@@ -19,7 +19,10 @@ import org.springframework.stereotype.Component;
 
 import com.searchitemsapp.processdata.empresas.IFProcessDataConsum;
 
+import lombok.NoArgsConstructor;
+
 @Component
+@NoArgsConstructor
 public class ProcessDataDynamic {
 	
 	private static final String SCROLLDOWN = "window.scrollTo(0, document.body.scrollHeight);";	
@@ -29,10 +32,6 @@ public class ProcessDataDynamic {
 	
 	@Autowired
 	private Environment env;
-
-	protected ProcessDataDynamic() {
-		super();
-	}
 	
 	public String getDynHtmlContent(final String strUrl, final int didEmpresa) throws InterruptedException {
 		

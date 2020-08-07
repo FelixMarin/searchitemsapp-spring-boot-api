@@ -15,35 +15,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.annotations.TypeDef;
 import org.springframework.stereotype.Component;
 
-/**
- * Definición de tipos customizados.
- */
-@TypeDef(
-		   name = "didDef",
-		   defaultForType = Integer.class,
-		   typeClass = Integer.class
-		)
-
-@TypeDef(
-		   name = "bolAct",
-		   defaultForType = Boolean.class,
-		   typeClass = Boolean.class
-		)
-
-@TypeDef(
-		   name = "strDef",
-		   defaultForType = String.class,
-		   typeClass = String.class
-		)
-
-/**
- * The persistent class for the tb_sia_urls database table.
- * 
- * @author Felix Marin Ramirez
- */
 @Entity
 @Component
 @Table(name="tb_sia_urls", schema = "sia")
@@ -53,27 +26,21 @@ public class TbSiaUrl implements Serializable {
 
 	@Id
 	@Column(name = "did")
-	@org.hibernate.annotations.Type(type="didDef")
 	private Integer did;
 
 	@Column(name="bol_activo")
-	@org.hibernate.annotations.Type(type="bolAct")
 	private Boolean bolActivo;
 
 	@Column(name="des_url")
-	@org.hibernate.annotations.Type(type="strDef")
 	private String desUrl;
 
 	@Column(name="nom_url")
-	@org.hibernate.annotations.Type(type="strDef")
 	private String nomUrl;
 	
 	@Column(name="bol_status")
-	@org.hibernate.annotations.Type(type="bolAct")
 	private Boolean bolStatus;	
 	
 	@Column(name="bol_login")
-	@org.hibernate.annotations.Type(type="bolAct")
 	private Boolean bolLogin;	
 
 	//bi-directional many-to-one association to TbSiaEmpresa

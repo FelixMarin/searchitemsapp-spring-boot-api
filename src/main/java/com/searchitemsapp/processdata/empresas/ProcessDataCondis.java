@@ -7,29 +7,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dto.UrlDTO;
 
-/**
- * Módulo de scraping especifico diseñado para la 
- * extracción de datos del sitio web de Condis.
- * 
- * @author Felix Marin Ramirez
- *
- */
+import lombok.NoArgsConstructor;
+
 @Component
+@NoArgsConstructor
 public class ProcessDataCondis implements IFProcessDataCondis {
 
 	private static final String DOBLE_CERO_STRING = "00";
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataCondis.class);  
-	
 	private static final String REGEX_NUMERO_DECIMAL = "\\d*[,][0-9]*";
 	private static final String[] ARRAY_TILDES_NORMALES_MIN = {"á","é","í","ó","ú"};
 	private static final String[] ARRAY_VOCALES_MIN = {"a","e","i","o","u"};
@@ -40,32 +34,15 @@ public class ProcessDataCondis implements IFProcessDataCondis {
 	private static final String DECIMALES_STRING = ",00";
 	private static final char LEFT_SLASH_CHAR = '\'';
 	private static final String SPECIALS_CHARS_STRING = "\r\n|\r|\n";
-	
 	private static final String ENIE_CONDIS = "%D1";
-
-	public ProcessDataCondis() {
-		super();
-	}
 	
-	/**
-	 * Compone una lista de URLs de la empresa Condis.
-	 * Con estas URLs se realizarán las peticiones al
-	 * sitio web para extraer los datos. 
-	 * 
-	 * @param document
-	 * @param urlDto
-	 * @param selectorCssDto
-	 * @return List<String>
-	 * @exception MalformedURLException
-	 */
+	@Autowired
+	private Environment env;
+
 	@Override
 	public List<String> getListaUrls(final Document document, 
 			final UrlDTO urlDto)
 					throws MalformedURLException {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
 		
 		String urlBase = urlDto.getNomUrl();
 		List<String> listaUrls = Lists.newArrayList();
@@ -76,11 +53,7 @@ public class ProcessDataCondis implements IFProcessDataCondis {
 	
 	
 	public String tratarTagScript(final Element elem, final String cssSelector) {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
-		
+
 		String resultado = StringUtils.EMPTY;
 		Matcher matcher;
 		
@@ -121,14 +94,7 @@ public class ProcessDataCondis implements IFProcessDataCondis {
 		
 		return resultado;
 	}
-	
-	/**
-	 * Reemplaza los caracteres con tilde por los mismos
-	 * caracteres sin tilde.
-	 * 
-	 * @param producto
-	 * @return String
-	 */
+
 	public String eliminarTildesProducto(final String producto) {
 		
 		if(StringUtils.isAllEmpty(producto)) {
@@ -145,21 +111,14 @@ public class ProcessDataCondis implements IFProcessDataCondis {
 		return productoAux;
 	}
 	
-	/**
-	 * Metodo que reemplaza el caracter 'ñ'en la URL por
-	 * un caracter especial codigficado.
-	 * 
-	 * @param producto
-	 * @return String
-	 */
 	public String reemplazarCaracteres(final String producto) {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
-		
 		return producto.replace(STRING_ENIE_MIN, ENIE_CONDIS);
-		
 	}
 
+	@Override
+	public int get_DID() {
+		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.condis"));
+	}
+
+	
 }

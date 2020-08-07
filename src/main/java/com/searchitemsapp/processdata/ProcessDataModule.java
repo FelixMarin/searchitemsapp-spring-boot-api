@@ -20,11 +20,19 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.searchitemsapp.dto.EmpresaDTO;
 import com.searchitemsapp.dto.MarcasDTO;
 import com.searchitemsapp.dto.UrlDTO;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 @Component
+@Data
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Scope("prototype")
 public class ProcessDataModule extends ProcessDataAbstract implements Callable<List<IFProcessPrice>> {
 	
@@ -34,28 +42,21 @@ public class ProcessDataModule extends ProcessDataAbstract implements Callable<L
 	private UrlDTO urlDto; 
 	private String producto;
 	private String ordenacion;
-	private Map<String,EmpresaDTO> mapEmpresas;
 	private List<MarcasDTO> listTodasMarcas;
 	private Map<Integer,Boolean> mapDynEmpresas;
 	
 	@Autowired
 	private Environment env;
 
-	public ProcessDataModule() {
-		super();
-	}
-
 	public  List<IFProcessPrice> checkHtmlDocument() 
 			throws IOException, URISyntaxException, InterruptedException {
 		
-		String[] arProducto = producto.split(StringUtils.SPACE);
 		int iIdEmpresa = urlDto.getDidEmpresa();
-		Pattern patternProducto = createPatternProduct(arProducto);
 		List<IFProcessPrice> lResultadoDto = Lists.newArrayList();
 				
 		Map<String, String> mapLoginPageCookies = mapaCookies.get(iIdEmpresa);
 		
-    	List<Document> listDocuments = getHtmlDocument(urlDto, mapLoginPageCookies, producto, mapEmpresas, mapDynEmpresas);
+    	List<Document> listDocuments = getHtmlDocument(urlDto, mapLoginPageCookies, producto, mapDynEmpresas);
     	
     	listDocuments.stream()
     	.filter(document -> Objects.nonNull(document))
@@ -72,10 +73,9 @@ public class ProcessDataModule extends ProcessDataAbstract implements Callable<L
             	
             	try {
             		
-	    			IFProcessPrice ifProcessPrice = fillProcessPrice(elem, urlDto, ordenacion, 
-	    					new ProcessPriceModule(), mapEmpresas);
+	    			IFProcessPrice ifProcessPrice = fillProcessPrice(elem, urlDto, ordenacion);
 	    			
-	    			if(validaYCargaResultado(iIdEmpresa, arProducto, ifProcessPrice,  patternProducto)) {
+	    			if(validaResultado(iIdEmpresa, ifProcessPrice)) {
 	    				lResultadoDto.add(ifProcessPrice);
 	    			}
     			
@@ -88,24 +88,19 @@ public class ProcessDataModule extends ProcessDataAbstract implements Callable<L
         return lResultadoDto;
 	}
 
-	@Override
-	public List<IFProcessPrice> call() throws IOException, URISyntaxException, InterruptedException {
-		return checkHtmlDocument();
-	}
-
-	private boolean validaYCargaResultado(final int iIdEmpresa, 
-			final String[] arProducto, 
-			final IFProcessPrice ifProcessPrice, 
-			final Pattern patternProducto) {
+	private boolean validaResultado(final int iIdEmpresa, 
+			final IFProcessPrice ifProcessPrice) {
 			
-		if(Objects.isNull(ifProcessPrice.getNomProducto()) || iIdEmpresa == 0 ||
+		if(StringUtils.isAllEmpty(ifProcessPrice.getNomProducto()) ||
 				StringUtils.isAllEmpty(ifProcessPrice.getPrecio()) ||
-				Objects.isNull(ifProcessPrice.getPrecioKilo()) || 
 				StringUtils.isAllEmpty(ifProcessPrice.getPrecioKilo())) {
 			return Boolean.FALSE;
 		} 
 		
-		String strProducto = filtroMarca(iIdEmpresa, ifProcessPrice.getNomProducto(), mapEmpresas, listTodasMarcas);
+		String[] arProducto = producto.split(StringUtils.SPACE);
+		Pattern patternProducto = createPatternProduct(arProducto);
+		
+		String strProducto = filtroMarca(iIdEmpresa, ifProcessPrice.getNomProducto(), listTodasMarcas);
 		
 		if(StringUtils.isAllBlank(strProducto)) {
 			return Boolean.FALSE;
@@ -125,6 +120,11 @@ public class ProcessDataModule extends ProcessDataAbstract implements Callable<L
 		}
 	}
 
+	@Override
+	public List<IFProcessPrice> call() throws IOException, URISyntaxException, InterruptedException {
+		return checkHtmlDocument();
+	}
+
 	private boolean validaURL(final String baseUri,final String url) {
 		return url.equalsIgnoreCase(baseUri);
 	}
@@ -133,52 +133,4 @@ public class ProcessDataModule extends ProcessDataAbstract implements Callable<L
 		return Objects.nonNull(elem.selectFirst(env.getProperty("flow.value.pagina.siguiente.carrefour"))) ||
 		Objects.nonNull(elem.selectFirst(env.getProperty("flow.value.pagina.acceso.popup.peso")));
 	}	
-	
-	public UrlDTO getUrlDto() {
-		return urlDto;
-	}
-
-	public void setUrlDto(UrlDTO urlDto) {
-		this.urlDto = urlDto;
-	}
-
-	public String getProducto() {
-		return producto;
-	}
-
-	public void setProducto(String producto) {
-		this.producto = producto;
-	}
-
-	public String getOrdenacion() {
-		return ordenacion;
-	}
-
-	public void setOrdenacion(String ordenacion) {
-		this.ordenacion = ordenacion;
-	}
-
-	public Map<String, EmpresaDTO> getMapEmpresas() {
-		return mapEmpresas;
-	}
-
-	public void setMapEmpresas(Map<String, EmpresaDTO> mapEmpresas) {
-		this.mapEmpresas = mapEmpresas;
-	}
-
-	public List<MarcasDTO> getListTodasMarcas() {
-		return listTodasMarcas;
-	}
-
-	public void setListTodasMarcas(List<MarcasDTO> listTodasMarcas) {
-		this.listTodasMarcas = listTodasMarcas;
-	}
-
-	public Map<Integer, Boolean> getMapDynEmpresas() {
-		return mapDynEmpresas;
-	}
-
-	public void setMapDynEmpresas(Map<Integer, Boolean> mapDynEmpresas) {
-		this.mapDynEmpresas = mapDynEmpresas;
-	}
 }

@@ -13,36 +13,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.annotations.TypeDef;
 import org.springframework.stereotype.Component;
 
-/**
- * Definición de tipos customizados.
- */
-@TypeDef(
-		   name = "didDef",
-		   defaultForType = Integer.class,
-		   typeClass = Integer.class
-		)
-
-@TypeDef(
-		   name = "bolAct",
-		   defaultForType = Boolean.class,
-		   typeClass = Boolean.class
-		)
-
-@TypeDef(
-		   name = "strDef",
-		   defaultForType = String.class,
-		   typeClass = String.class
-		)
-
-/**
- * The persistent class for the tb_sia_categorias_empresas database table.
- * 
- * @author Felix Marin Ramirez
- *
- */
 @Entity
 @Component
 @Table(name="tb_sia_categorias_empresas", schema = "sia")
@@ -52,19 +24,15 @@ public class TbSiaCategoriasEmpresa implements Serializable {
 
 	@Id
 	@Column(name = "did")
-	@org.hibernate.annotations.Type(type="didDef")
 	private Integer did;
 
 	@Column(name="bol_activo")
-	@org.hibernate.annotations.Type(type="bolAct")
 	private Boolean bolActivo;
 
 	@Column(name="des_cat_empresa")
-	@org.hibernate.annotations.Type(type="strDef")
 	private String desCatEmpresa;
 
 	@Column(name="nom_cat_empresa")
-	@org.hibernate.annotations.Type(type="strDef")
 	private String nomCatEmpresa;
 
 	//bi-directional many-to-one association to TbSiaEmpresa

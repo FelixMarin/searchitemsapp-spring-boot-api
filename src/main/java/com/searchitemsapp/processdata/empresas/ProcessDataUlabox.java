@@ -8,14 +8,14 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.nodes.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import org.springframework.core.env.Environment;
 import com.searchitemsapp.dto.UrlDTO;
+
+import lombok.NoArgsConstructor;
 
 /**
  * Módulo de scraping especifico diseñado para la 
@@ -25,9 +25,8 @@ import com.searchitemsapp.dto.UrlDTO;
  *
  */
 @Component
+@NoArgsConstructor
 public class ProcessDataUlabox implements IFProcessDataEmpresas {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataUlabox.class);  
 	
 	private static final String PATTERN = ".*… ([0-9]+)";
 	private static final String CHARSET = "…";
@@ -35,28 +34,9 @@ public class ProcessDataUlabox implements IFProcessDataEmpresas {
 	@Autowired
 	private Environment env;
 
-	public ProcessDataUlabox() {
-		super();
-	}
-	
-	/**
-	 * Compone una lista de URLs de la web de Ulabox.
-	 * Con estas URLs se realizarán las peticiones al
-	 * sitio web para extraer los datos. 
-	 * 
-	 * @param document
-	 * @param urlDto
-	 * @param selectorCssDto
-	 * @return List<String>
-	 * @exception MalformedURLException
-	 */
 	@Override
 	public List<String> getListaUrls(final Document document, 
 			final UrlDTO urlDto) throws MalformedURLException {
-		
-		if(LOGGER.isInfoEnabled()) {
-			LOGGER.info(Thread.currentThread().getStackTrace()[1].toString());
-		}
 	
 		String urlBase = urlDto.getNomUrl();
 	
@@ -94,5 +74,9 @@ public class ProcessDataUlabox implements IFProcessDataEmpresas {
 		}
 		
 		return listaUrls;
+	}
+	
+	public int get_DID() {
+		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.ulabox"));
 	}
 }

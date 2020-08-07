@@ -3,7 +3,6 @@ package com.searchitemsapp.processdata;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,24 +14,29 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dto.CategoriaDTO;
-import com.searchitemsapp.dto.EmpresaDTO;
 import com.searchitemsapp.dto.PaisDTO;
 import com.searchitemsapp.dto.SelectoresCssDTO;
 import com.searchitemsapp.dto.UrlDTO;
 import com.searchitemsapp.impl.IFUrlImpl;
+import com.searchitemsapp.processdata.empresas.IFProcessDataEroski;
+import com.searchitemsapp.processdata.empresas.IFProcessDataSimply;
+
+import lombok.NoArgsConstructor;
 
 @Component
+@NoArgsConstructor
 public class UrlComposer extends ProcessDataAbstract implements IFUrlComposer {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UrlComposer.class);   
 
-	private static final String EROSKI = "EROSKI";
-	private static final String SIMPLY = "SIMPLY";
-	private static final String CONDIS = "CONDIS";
-	private static final String WILDCARD = "{1}";
-
 	@Autowired
-	private IFUrlImpl urlImpl;
+	private IFProcessDataEroski ifProcessDataEroski;
+	
+	@Autowired
+	private IFProcessDataSimply ifProcessDataSimply;
+	
+	@Autowired
+	private IFUrlImpl ifUrlImpl;
 	
 	@Autowired
 	private CategoriaDTO categoriaDto;
@@ -40,22 +44,17 @@ public class UrlComposer extends ProcessDataAbstract implements IFUrlComposer {
 	@Autowired 
 	private PaisDTO paisDto;
 
-	public UrlComposer() {
-		super();
-	}
-	
 	public List<UrlDTO> replaceWildcardCharacter(final String strDidPais, 
 			final String strDidCategoria, 
 			final String strNomProducto,
 			final String strEmpresas,
-			final List<SelectoresCssDTO> listTodosSelectoresCss,
-			final Map<String,EmpresaDTO> mapEmpresas) 
+			final List<SelectoresCssDTO> listTodosSelectoresCss) 
 			throws IOException {
 		
 		paisDto.setDid(NumberUtils.toInt(strDidPais));		
 		categoriaDto.setDid(NumberUtils.toInt(strDidCategoria));
 		
-		List<UrlDTO> pListResultadoDto  = urlImpl.obtenerUrlsPorIdEmpresa(paisDto, categoriaDto, strEmpresas);
+		List<UrlDTO> pListResultadoDto  = ifUrlImpl.obtenerUrlsPorIdEmpresa(paisDto, categoriaDto, strEmpresas);
 		
 		String productoTratadoAux = tratarProducto(strNomProducto);
 		
@@ -70,22 +69,22 @@ public class UrlComposer extends ProcessDataAbstract implements IFUrlComposer {
 				String productoTratado = StringUtils.EMPTY;	
 				
 				if(urlDto.getBolActivo().booleanValue()) {
-					if(mapEmpresas.get(EROSKI).getDid().equals(urlDto.getDidEmpresa())) {
-						productoTratado = reemplazarCaracteresEroski(strNomProducto);
+					if(ifProcessDataEroski.get_DID() == urlDto.getDidEmpresa()) {
+						productoTratado = ifProcessDataEroski.reemplazarCaracteres(strNomProducto);
 						productoTratado = tratarProducto(productoTratado);
-					} else if(mapEmpresas.get(SIMPLY).getDid().equals(urlDto.getDidEmpresa())) {
-						productoTratado = reeplazarCaracteresSimply(strNomProducto);
+					} else if(ifProcessDataSimply.get_DID() == urlDto.getDidEmpresa()) {
+						productoTratado = ifProcessDataSimply.reemplazarCaracteres(strNomProducto);
 						productoTratado = tratarProducto(productoTratado);
-					} else if(mapEmpresas.get(CONDIS).getDid().equals(urlDto.getDidEmpresa())) {
-						productoTratado = reeplazarTildesCondis(strNomProducto);
-						productoTratado = reeplazarCaracteresCondis(productoTratado);
+					} else if(getIFProcessDataCondis().get_DID() == urlDto.getDidEmpresa()) {
+						productoTratado = getIFProcessDataCondis().eliminarTildesProducto(strNomProducto);
+						productoTratado = getIFProcessDataCondis().reemplazarCaracteres(productoTratado);
 						productoTratado = tratarProducto(productoTratado);
 					} else {
 						productoTratado = productoTratadoAux;
 					}
 					
 					String urlAux = urlDto.getNomUrl();
-					urlAux = urlAux.replace(WILDCARD, productoTratado);
+					urlAux = urlAux.replace("{1}", productoTratado);
 					urlDto.setNomUrl(urlAux);
 					listUrlDto.add(urlDto);
 					

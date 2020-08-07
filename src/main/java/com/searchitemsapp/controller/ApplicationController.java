@@ -17,8 +17,6 @@ import com.searchitemsapp.services.IFServiceFctory;
 @RestController
 public class ApplicationController {
 	
-	private static final String LISTA_PRODUCTOS = "LISTA_PRODUCTOS";
-	
 	@Autowired
 	private IFServiceFctory serviceFactory;
 	
@@ -41,7 +39,7 @@ public class ApplicationController {
 		if(isParams) {
 		
 			return serviceFactory
-					.getService(LISTA_PRODUCTOS)
+					.getService("LISTA_PRODUCTOS")
 					.service(didPais, didCategoria, 
 							ordenacion, producto, empresas);
 		} else {

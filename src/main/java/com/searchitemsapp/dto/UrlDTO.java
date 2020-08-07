@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
  */
 @Data @NoArgsConstructor @AllArgsConstructor
 @Component
-public class UrlDTO implements IFdto {
+public class UrlDTO {
 
 	private Integer did;
 	private Boolean bolActivo;

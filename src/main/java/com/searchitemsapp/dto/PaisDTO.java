@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
  */
 @Data @NoArgsConstructor @AllArgsConstructor
 @Component
-public class PaisDTO implements IFdto {
+public class PaisDTO {
 	
 	private Integer did;
 	private Boolean bolActivo;
