@@ -262,7 +262,7 @@ public abstract class ProcessDataAbstract {
 			response = connection.execute();
 		}
 
-		if(!bDynScrap && Objects.nonNull(mapLoginPageCookies)) {
+		if(Objects.nonNull(mapLoginPageCookies)) {
 			connection.cookies(mapLoginPageCookies);
 		}
 		
@@ -280,8 +280,10 @@ public abstract class ProcessDataAbstract {
 		StringBuilder stringBuilder = new StringBuilder(10);
 		
 		Arrays.asList(nomProdSeparado).stream()
-		.filter(x -> !x.toUpperCase().equals(x))
-		.forEach(x -> {	stringBuilder.append(x).append(StringUtils.SPACE); });
+		.filter(palabra -> !palabra.toUpperCase().equals(palabra))
+		.forEach(palabra -> { 
+			stringBuilder.append(palabra).append(StringUtils.SPACE); 
+		});
 		
 		return stringBuilder.toString();
 	}	

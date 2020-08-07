@@ -101,13 +101,6 @@ public class TbSiaCategoriasEmpresa implements Serializable {
 		return tbSiaEmpresa;
 	}
 
-	public TbSiaEmpresa removeTbSiaEmpresa(TbSiaEmpresa tbSiaEmpresa) {
-		this.tbSiaEmpresas.remove(tbSiaEmpresa);
-		tbSiaEmpresa.setTbSiaCategoriasEmpresa(null);
-
-		return tbSiaEmpresa;
-	}
-
 	public List<TbSiaMarcas> getTbSiaMarcas() {
 		return this.tbSiaMarcas;
 	}
@@ -121,17 +114,12 @@ public class TbSiaCategoriasEmpresa implements Serializable {
 		return tbSiaMarca;
 	}
 
-	public TbSiaMarcas removeTbSiaMarca(TbSiaMarcas tbSiaMarca) {
-		getTbSiaMarcas().remove(tbSiaMarca);
-		return tbSiaMarca;
-	}
-
-	public List<TbSiaNomProducto> getTbSiaNomProductos() {
-		return this.tbSiaNomProductos;
-	}
-
 	public void setTbSiaNomProductos(List<TbSiaNomProducto> tbSiaNomProductos) {
 		this.tbSiaNomProductos = tbSiaNomProductos;
+	}
+	
+	public List<TbSiaNomProducto> getTbSiaNomProductos() {
+		return this.tbSiaNomProductos;
 	}
 
 	public TbSiaNomProducto addTbSiaNomProducto(TbSiaNomProducto tbSiaNomProducto) {
@@ -148,4 +136,15 @@ public class TbSiaCategoriasEmpresa implements Serializable {
 		return tbSiaNomProducto;
 	}
 
+	public TbSiaEmpresa removeTbSiaEmpresa(TbSiaEmpresa tbSiaEmpresa) {
+		this.tbSiaEmpresas.remove(tbSiaEmpresa);
+		tbSiaEmpresa.setTbSiaCategoriasEmpresa(null);
+
+		return tbSiaEmpresa;
+	}
+	
+	public TbSiaMarcas removeTbSiaMarca(TbSiaMarcas tbSiaMarca) {
+		getTbSiaMarcas().remove(tbSiaMarca);
+		return tbSiaMarca;
+	}
 }

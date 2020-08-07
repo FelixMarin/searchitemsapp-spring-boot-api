@@ -26,6 +26,11 @@ public class ProcessDataECI implements IFProcessDataECI {
 	private Environment env;
 
 	@Override
+	public int get_DID() {
+		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.eci"));
+	}
+
+	@Override
 	public List<String> getListaUrls(final Document document, 
 			final UrlDTO urlDto) throws MalformedURLException {
 
@@ -56,10 +61,5 @@ public class ProcessDataECI implements IFProcessDataECI {
 		}	
 		
 		return listaUrls;
-	}
-
-	@Override
-	public int get_DID() {
-		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.eci"));
 	}
 }

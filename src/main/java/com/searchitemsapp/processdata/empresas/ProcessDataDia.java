@@ -18,15 +18,6 @@ import com.searchitemsapp.dto.UrlDTO;
 
 import lombok.NoArgsConstructor;
 
-
-
-/**
- * Módulo de scraping especifico diseñado para la 
- * extracción de datos del sitio web de Dia.
- * 
- * @author Felix Marin Ramirez
- *
- */
 @Component
 @NoArgsConstructor
 public class ProcessDataDia implements IFProcessDataDIA {
@@ -41,11 +32,11 @@ public class ProcessDataDia implements IFProcessDataDIA {
 					throws MalformedURLException {
 		
 		String urlBase = urlDto.getNomUrl();
-		String selectorPaginacion = urlDto.getSelectores().getSelPaginacion();	
+		List<String> liSelectorAtr = Lists.newArrayList();
 		int numresultados = NumberUtils.toInt(env.getProperty("flow.value.paginacion.url.dia"));
+		String selectorPaginacion = urlDto.getSelectores().getSelPaginacion();	
 
 		StringTokenizer st = new StringTokenizer(selectorPaginacion, "|");
-		List<String> liSelectorAtr = Lists.newArrayList();
 
 		while (st.hasMoreTokens()) {
 			liSelectorAtr.add(st.nextToken());

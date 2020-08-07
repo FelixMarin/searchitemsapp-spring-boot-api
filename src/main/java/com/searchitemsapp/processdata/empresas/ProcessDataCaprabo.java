@@ -20,6 +20,10 @@ public class ProcessDataCaprabo implements IFProcessDataEmpresas {
 	
 	@Autowired
 	private Environment env;
+	
+	public int get_DID() {
+		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.caprabo"));
+	}
 
 	@Override
 	public List<String> getListaUrls(final Document document, final UrlDTO urlDto)
@@ -31,9 +35,4 @@ public class ProcessDataCaprabo implements IFProcessDataEmpresas {
 		
 		return listaUrls;
 	}
-	
-	public int get_DID() {
-		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.caprabo"));
-	}
-
 }
