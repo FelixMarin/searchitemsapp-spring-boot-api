@@ -6,7 +6,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +33,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Scope("prototype")
-public class ProcessDataModule extends ProcessDataAbstract implements Callable<List<IFProcessPrice>> {
+public class ProcessDataModule extends ProcessDataAbstract implements IFProcessDataModule {
 	
 	private static final String SEPARADOR_URL = "%20";
 
