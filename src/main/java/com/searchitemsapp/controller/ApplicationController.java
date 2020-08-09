@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.searchitemsapp.services.IFServiceFctory;
+import com.searchitemsapp.services.IFApplicationService;
 
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 @RestController
 public class ApplicationController {
 	
 	@Autowired
-	private IFServiceFctory serviceFactory;
+	private IFApplicationService ifApplicationService;
 	
 	@Autowired
 	private ListaProductosValidator validator;
@@ -38,9 +38,7 @@ public class ApplicationController {
 		
 		if(isParams) {
 		
-			return serviceFactory
-					.getService("LISTA_PRODUCTOS")
-					.service(didPais, didCategoria, 
+			return ifApplicationService.service(didPais, didCategoria, 
 							ordenacion, producto, empresas);
 		} else {
 

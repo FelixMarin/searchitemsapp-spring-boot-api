@@ -35,8 +35,10 @@ import com.searchitemsapp.processdata.empresas.IFProcessDataCondis;
 import com.searchitemsapp.processdata.empresas.IFProcessDataDIA;
 import com.searchitemsapp.processdata.empresas.IFProcessDataECI;
 import com.searchitemsapp.processdata.empresas.IFProcessDataEmpresasFactory;
+import com.searchitemsapp.processdata.empresas.IFProcessDataEroski;
 import com.searchitemsapp.processdata.empresas.IFProcessDataHipercor;
 import com.searchitemsapp.processdata.empresas.IFProcessDataMercadona;
+import com.searchitemsapp.processdata.empresas.IFProcessDataSimply;
 
 import lombok.NonNull;
 
@@ -67,6 +69,12 @@ public abstract class ProcessDataAbstract {
 	
 	@Autowired
 	private IFProcessDataDIA iFProcessDataDIA;
+	
+	@Autowired
+	private IFProcessDataEroski ifProcessDataEroski;
+	
+	@Autowired
+	private IFProcessDataSimply ifProcessDataSimply;
 	
 	@Autowired
 	private Environment env;
@@ -398,6 +406,14 @@ public abstract class ProcessDataAbstract {
 	
 	protected IFProcessDataCondis getIFProcessDataCondis() {
 		return ifProcessDataCondis;
+	}
+	
+	protected IFProcessDataEroski getIFProcessDataEroski() {
+		return ifProcessDataEroski;
+	}
+	
+	protected IFProcessDataSimply getIFProcessDataSimply() {
+		return ifProcessDataSimply;
 	}
 	
 }
