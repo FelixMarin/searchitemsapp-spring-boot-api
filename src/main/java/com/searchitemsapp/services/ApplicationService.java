@@ -25,12 +25,15 @@ import com.searchitemsapp.dto.MarcasDTO;
 import com.searchitemsapp.dto.SelectoresCssDTO;
 import com.searchitemsapp.dto.UrlDTO;
 import com.searchitemsapp.processdata.IFApplicationData;
+import com.searchitemsapp.processdata.IFProcessDataModule;
 import com.searchitemsapp.processdata.IFProcessPrice;
 import com.searchitemsapp.processdata.IFUrlComposer;
-import com.searchitemsapp.processdata.ProcessDataModule;
+
+import lombok.NoArgsConstructor;
 
 @Service("applicationService")
-public class ApplicationService implements IFService<String,String> {
+@NoArgsConstructor
+public class ApplicationService implements IFApplicationService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationService.class);  
 	
@@ -46,21 +49,12 @@ public class ApplicationService implements IFService<String,String> {
 	@Autowired
 	private IFProcessPrice ifProcessPrice;
 	
-	public ApplicationService() {
-		super();
-	}
-	
-	public String service(final String... params) {
+	public String service(final String strDidPais, final String strDidCategoria,
+			final String strTipoOrdenacion, final String strNomProducto, final String strEmpresas) {
 
 		org.apache.log4j.BasicConfigurator.configure();
 		
 		Map<Integer,Boolean> mapIsEmpresasDyn = Maps.newHashMap();
-	
-		String strDidPais = params[0];
-		String strDidCategoria = params[1];
-		String strTipoOrdenacion = params[2];
-		String strNomProducto = params[3];
-		String strEmpresas = params[4];
 		
 		List<IFProcessPrice> listIfProcessPrice = Lists.newArrayList();
 		int contador = 0;
@@ -77,10 +71,10 @@ public class ApplicationService implements IFService<String,String> {
 			Collection<UrlDTO> lResultDtoUrlsTratado = urlComposer.replaceWildcardCharacter(strDidPais, 
 					strDidCategoria, strNomProducto, strEmpresas, listTodosSelectoresCss);
 
-			Collection<ProcessDataModule> colPDMcallables = Lists.newArrayList();
+			Collection<IFProcessDataModule> colPDMcallables = Lists.newArrayList();
 		
 			lResultDtoUrlsTratado.forEach(elem -> {
-				ProcessDataModule processDataModule = applicationContext.getBean(ProcessDataModule.class);
+				IFProcessDataModule processDataModule = applicationContext.getBean(IFProcessDataModule.class);
 				
 				processDataModule.setListTodasMarcas(listTodasMarcas);
 				processDataModule.setMapDynEmpresas(mapIsEmpresasDyn);

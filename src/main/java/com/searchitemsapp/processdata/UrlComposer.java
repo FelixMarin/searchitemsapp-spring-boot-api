@@ -18,8 +18,6 @@ import com.searchitemsapp.dto.PaisDTO;
 import com.searchitemsapp.dto.SelectoresCssDTO;
 import com.searchitemsapp.dto.UrlDTO;
 import com.searchitemsapp.impl.IFUrlImpl;
-import com.searchitemsapp.processdata.empresas.IFProcessDataEroski;
-import com.searchitemsapp.processdata.empresas.IFProcessDataSimply;
 
 import lombok.NoArgsConstructor;
 
@@ -29,12 +27,6 @@ public class UrlComposer extends ProcessDataAbstract implements IFUrlComposer {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UrlComposer.class);   
 
-	@Autowired
-	private IFProcessDataEroski ifProcessDataEroski;
-	
-	@Autowired
-	private IFProcessDataSimply ifProcessDataSimply;
-	
 	@Autowired
 	private IFUrlImpl ifUrlImpl;
 	
@@ -69,11 +61,11 @@ public class UrlComposer extends ProcessDataAbstract implements IFUrlComposer {
 				String productoTratado = StringUtils.EMPTY;	
 				
 				if(urlDto.getBolActivo().booleanValue()) {
-					if(ifProcessDataEroski.get_DID() == urlDto.getDidEmpresa()) {
-						productoTratado = ifProcessDataEroski.reemplazarCaracteres(strNomProducto);
+					if(getIFProcessDataEroski().get_DID() == urlDto.getDidEmpresa()) {
+						productoTratado = getIFProcessDataEroski().reemplazarCaracteres(strNomProducto);
 						productoTratado = tratarProducto(productoTratado);
-					} else if(ifProcessDataSimply.get_DID() == urlDto.getDidEmpresa()) {
-						productoTratado = ifProcessDataSimply.reemplazarCaracteres(strNomProducto);
+					} else if(getIFProcessDataSimply().get_DID() == urlDto.getDidEmpresa()) {
+						productoTratado = getIFProcessDataSimply().reemplazarCaracteres(strNomProducto);
 						productoTratado = tratarProducto(productoTratado);
 					} else if(getIFProcessDataCondis().get_DID() == urlDto.getDidEmpresa()) {
 						productoTratado = getIFProcessDataCondis().eliminarTildesProducto(strNomProducto);
