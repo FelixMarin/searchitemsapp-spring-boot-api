@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import com.searchitemsapp.processdata.empresas.IFProcessDataConsum;
+import com.searchitemsapp.processdata.empresas.ProcessDataConsum;
 
 import lombok.NoArgsConstructor;
 
@@ -28,7 +28,7 @@ public class ProcessDataDynamic {
 	private static final String SCROLLDOWN = "window.scrollTo(0, document.body.scrollHeight);";	
 
 	@Autowired
-	private IFProcessDataConsum processdataConsum;
+	private ProcessDataConsum processdataConsum;
 	
 	@Autowired
 	private Environment env;

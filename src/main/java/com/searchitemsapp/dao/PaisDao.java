@@ -1,23 +1,12 @@
 package com.searchitemsapp.dao;
 
 import java.io.IOException;
+import java.util.List;
 
-import org.springframework.stereotype.Repository;
-
-import com.searchitemsapp.dao.repository.IFPaisRepository;
 import com.searchitemsapp.dto.PaisDTO;
-import com.searchitemsapp.entities.TbSiaPais;
 
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor
-@Repository
-public class PaisDao extends AbstractDao implements IFPaisRepository {
-
-	@Override
-	public PaisDTO findByDid(final Integer did) throws IOException {
-				
-		return getModelMapper().map(getEntityManager()
-				.find(TbSiaPais.class, did), PaisDTO.class);
-	}
+public interface PaisDao {
+	
+	abstract PaisDTO findByDid(PaisDTO nomProducto) throws IOException;
+	abstract List<PaisDTO> findAll() throws IOException;
 }

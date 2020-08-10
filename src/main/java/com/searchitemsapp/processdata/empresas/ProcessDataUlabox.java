@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
  */
 @Component
 @NoArgsConstructor
-public class ProcessDataUlabox implements IFProcessDataEmpresas {
+public class ProcessDataUlabox implements ProcessDataEmpresas {
 	
 	private static final String PATTERN = ".*… ([0-9]+)";
 	private static final String CHARSET = "…";

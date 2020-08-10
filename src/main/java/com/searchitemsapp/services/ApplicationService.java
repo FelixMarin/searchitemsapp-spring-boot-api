@@ -1,142 +1,15 @@
 package com.searchitemsapp.services;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.gson.Gson;
-import com.searchitemsapp.dto.MarcasDTO;
-import com.searchitemsapp.dto.SelectoresCssDTO;
-import com.searchitemsapp.dto.UrlDTO;
-import com.searchitemsapp.processdata.IFApplicationData;
-import com.searchitemsapp.processdata.IFProcessDataModule;
-import com.searchitemsapp.processdata.IFProcessPrice;
-import com.searchitemsapp.processdata.IFUrlComposer;
+import lombok.NonNull;
 
-import lombok.NoArgsConstructor;
 
-@Service("applicationService")
-@NoArgsConstructor
-public class ApplicationService implements IFApplicationService {
+@FunctionalInterface
+@Service
+public interface ApplicationService {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationService.class);  
-	
-	@Autowired
-	private IFApplicationData iFApplicationData;
-	
-	@Autowired
-	private IFUrlComposer urlComposer;
-	
-	@Autowired
-	private ApplicationContext applicationContext;
-	
-	@Autowired
-	private IFProcessPrice ifProcessPrice;
-	
-	public String service(final String strDidPais, final String strDidCategoria,
-			final String strTipoOrdenacion, final String strNomProducto, final String strEmpresas) {
-
-		org.apache.log4j.BasicConfigurator.configure();
-		
-		Map<Integer,Boolean> mapIsEmpresasDyn = Maps.newHashMap();
-		
-		List<IFProcessPrice> listIfProcessPrice = Lists.newArrayList();
-		int contador = 0;
-	
-		ExecutorService executorService = Executors.newCachedThreadPool();
-
-		try {
-			iFApplicationData.applicationData(mapIsEmpresasDyn);
-			List<MarcasDTO> listTodasMarcas = iFApplicationData.getListTodasMarcas();
-			
-			List<SelectoresCssDTO> listTodosSelectoresCss = iFApplicationData
-					.listSelectoresCssPorEmpresa(strEmpresas);
-			
-			Collection<UrlDTO> lResultDtoUrlsTratado = urlComposer.replaceWildcardCharacter(strDidPais, 
-					strDidCategoria, strNomProducto, strEmpresas, listTodosSelectoresCss);
-
-			Collection<IFProcessDataModule> colPDMcallables = Lists.newArrayList();
-		
-			lResultDtoUrlsTratado.forEach(elem -> {
-				IFProcessDataModule processDataModule = applicationContext.getBean(IFProcessDataModule.class);
-				
-				processDataModule.setListTodasMarcas(listTodasMarcas);
-				processDataModule.setMapDynEmpresas(mapIsEmpresasDyn);
-				processDataModule.setOrdenacion(strTipoOrdenacion);
-				processDataModule.setProducto(strNomProducto);
-				processDataModule.setUrlDto(elem);
-	
-				colPDMcallables.add(processDataModule);	
-			});
-	
-			List<Future<List<IFProcessPrice>>> listFutureListResDto = executorService.invokeAll(colPDMcallables);
-			listIfProcessPrice = executeFuture(listFutureListResDto);
-
-            if(listIfProcessPrice.isEmpty()) {            	            	
-    			return "[{\"request\": \"Error\", " 
-    					+ "\"id\" : \"-1\", "
-    					+ "\"description\": \"No hay resultados\"}]";
-            }
-
-            listIfProcessPrice = ifProcessPrice.ordenarLista(listIfProcessPrice);
-
-         	for (int i = 0; i < listIfProcessPrice.size(); i++) {
-				listIfProcessPrice.get(i).setIdentificador(++contador);
-			}
-			
-		}catch(IOException | InterruptedException | ExecutionException e) {
-			
-  			if(LOGGER.isErrorEnabled()) {
-				LOGGER.error(Thread.currentThread().getStackTrace()[1].toString(),e);
-			}
-	
-			Thread.currentThread().interrupt();	
-			
-		} finally {
-	
-			executorService.shutdown();
-		}
-
-		return new Gson().toJson(listIfProcessPrice);
-	}
-
-	private List<IFProcessPrice> executeFuture(final List<Future<List<IFProcessPrice>>> listfutureListIfProcessPrice) 
-			throws InterruptedException, ExecutionException {
-		
-		List<IFProcessPrice> listIfProcessPrice = Lists.newArrayList();
-
-		for(Future<List<IFProcessPrice>> futureListIfProcessPrice : listfutureListIfProcessPrice) {
-			
-			try {
-				if(Objects.isNull(futureListIfProcessPrice.get())) {
-					continue;
-				}
-				
-				listIfProcessPrice.addAll(futureListIfProcessPrice.get(5, TimeUnit.SECONDS));
-				
-			}catch(TimeoutException e) {
-				if(LOGGER.isErrorEnabled()) {
-					LOGGER.error(Thread.currentThread().getStackTrace()[1].toString(),e);
-				}
-			}
-		}
-		
-		return listIfProcessPrice;
-	}
+	abstract String service(@NonNull final String strDidPais, @NonNull final String strDidCategoria,
+			@NonNull final String strTipoOrdenacion, @NonNull final String strNomProducto,
+			@NonNull final String strEmpresas);
 }
