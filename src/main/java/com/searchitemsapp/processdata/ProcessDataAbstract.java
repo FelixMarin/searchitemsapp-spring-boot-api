@@ -31,14 +31,14 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dto.MarcasDTO;
 import com.searchitemsapp.dto.UrlDTO;
-import com.searchitemsapp.processdata.empresas.IFProcessDataCondis;
-import com.searchitemsapp.processdata.empresas.IFProcessDataDIA;
-import com.searchitemsapp.processdata.empresas.IFProcessDataECI;
-import com.searchitemsapp.processdata.empresas.IFProcessDataEmpresasFactory;
-import com.searchitemsapp.processdata.empresas.IFProcessDataEroski;
-import com.searchitemsapp.processdata.empresas.IFProcessDataHipercor;
-import com.searchitemsapp.processdata.empresas.IFProcessDataMercadona;
-import com.searchitemsapp.processdata.empresas.IFProcessDataSimply;
+import com.searchitemsapp.processdata.empresas.ProcessDataCondis;
+import com.searchitemsapp.processdata.empresas.ProcessDataDia;
+import com.searchitemsapp.processdata.empresas.ProcessDataEci;
+import com.searchitemsapp.processdata.empresas.ProcessDataEmpresasFactory;
+import com.searchitemsapp.processdata.empresas.ProcessDataEroski;
+import com.searchitemsapp.processdata.empresas.ProcessDataHipercor;
+import com.searchitemsapp.processdata.empresas.ProcessDataMercadona;
+import com.searchitemsapp.processdata.empresas.ProcessDataSimply;
 
 import lombok.NonNull;
 
@@ -53,28 +53,28 @@ public abstract class ProcessDataAbstract {
 	private ProcessDataDynamic procesDataDynamic;
 	
 	@Autowired
-	private IFProcessDataEmpresasFactory processDataEmpresasFactory;
+	private ProcessDataEmpresasFactory processDataEmpresasFactory;
 	
 	@Autowired
-	private IFProcessDataMercadona ifProcessDataMercadona;
+	private ProcessDataMercadona ifProcessDataMercadona;
 				
 	@Autowired
-	private IFProcessDataCondis ifProcessDataCondis;
+	private ProcessDataCondis ifProcessDataCondis;
 	
 	@Autowired
-	private IFProcessDataECI iFProcessDataECI;
+	private ProcessDataEci iFProcessDataECI;
 	
 	@Autowired
-	private IFProcessDataHipercor iFProcessDataHipercor;
+	private ProcessDataHipercor iFProcessDataHipercor;
 	
 	@Autowired
-	private IFProcessDataDIA iFProcessDataDIA;
+	private ProcessDataDia iFProcessDataDIA;
 	
 	@Autowired
-	private IFProcessDataEroski ifProcessDataEroski;
+	private ProcessDataEroski ifProcessDataEroski;
 	
 	@Autowired
-	private IFProcessDataSimply ifProcessDataSimply;
+	private ProcessDataSimply ifProcessDataSimply;
 	
 	@Autowired
 	private Environment env;
@@ -196,12 +196,12 @@ public abstract class ProcessDataAbstract {
 		
 	}
 	
-	protected IFProcessPrice fillProcessPrice(final Element elem,
+	protected ProcessPrice fillProcessPrice(final Element elem,
 			final UrlDTO urlDto, 
 			final String ordenacion) throws IOException {
 
 		int idEmpresaActual = urlDto.getDidEmpresa();
-		IFProcessPrice ifProcessPrice = new ProcessPriceModule(); 
+		ProcessPrice ifProcessPrice = new ProcessPriceModuleImpl(); 
 
 		ifProcessPrice.setImagen(elementoPorCssSelector(elem, urlDto.getSelectores().getSelImage(), urlDto));
 		ifProcessPrice.setNomProducto(elementoPorCssSelector(elem, urlDto.getSelectores().getSelProducto(), urlDto));
@@ -404,15 +404,15 @@ public abstract class ProcessDataAbstract {
 		}
 	}
 	
-	protected IFProcessDataCondis getIFProcessDataCondis() {
+	protected ProcessDataCondis getIFProcessDataCondis() {
 		return ifProcessDataCondis;
 	}
 	
-	protected IFProcessDataEroski getIFProcessDataEroski() {
+	protected ProcessDataEroski getIFProcessDataEroski() {
 		return ifProcessDataEroski;
 	}
 	
-	protected IFProcessDataSimply getIFProcessDataSimply() {
+	protected ProcessDataSimply getIFProcessDataSimply() {
 		return ifProcessDataSimply;
 	}
 	

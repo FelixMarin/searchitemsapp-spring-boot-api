@@ -35,13 +35,4 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/img/**")
         		.addResourceLocations("img/");
     }
-    
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/search/**")
-                .allowedOrigins("*")
-                .allowedHeaders("*")
-                .allowedMethods("*")
-                .allowCredentials(true);
-    }
 }
