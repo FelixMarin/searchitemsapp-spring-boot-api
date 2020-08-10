@@ -1,135 +1,20 @@
 package com.searchitemsapp.processdata;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Pattern;
+import java.util.concurrent.Callable;
 
-import org.apache.commons.lang3.StringUtils;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.searchitemsapp.dto.MarcasDTO;
 import com.searchitemsapp.dto.UrlDTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+public interface ProcessDataModule extends Callable<List<ProcessPrice>> {
 
-@Component
-@Data
-@EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor
-@AllArgsConstructor
-@Scope("prototype")
-public class ProcessDataModule extends ProcessDataAbstract implements IFProcessDataModule {
-	
-	private static final String SEPARADOR_URL = "%20";
-
-	private static Map<Integer, Map<String, String>> mapaCookies = Maps.newHashMap(); 
-	private UrlDTO urlDto; 
-	private String producto;
-	private String ordenacion;
-	private List<MarcasDTO> listTodasMarcas;
-	private Map<Integer,Boolean> mapDynEmpresas;
-	
-	@Autowired
-	private Environment env;
-
-	public  List<IFProcessPrice> checkHtmlDocument() 
-			throws IOException, URISyntaxException, InterruptedException {
-		
-		int iIdEmpresa = urlDto.getDidEmpresa();
-		List<IFProcessPrice> lResultadoDto = Lists.newArrayList();
-				
-		Map<String, String> mapLoginPageCookies = mapaCookies.get(iIdEmpresa);
-		
-    	List<Document> listDocuments = getHtmlDocument(urlDto, mapLoginPageCookies, producto, mapDynEmpresas);
-    	
-    	listDocuments.stream()
-    	.filter(document -> Objects.nonNull(document))
-    	.filter(document -> validaURL(document.baseUri(),urlDto.getNomUrl().replace(StringUtils.SPACE, SEPARADOR_URL)))        	
-    	.forEach(document -> {
-    		
-            Elements entradas = selectScrapPattern(document,
-            		urlDto.getSelectores().getScrapPattern(), 
-            		urlDto.getSelectores().getScrapNoPattern());
-            
-            entradas.stream()
-            .filter(elem -> !validaSelector(elem))
-            .forEach(elem -> {
-            	
-            	try {
-            		
-	    			IFProcessPrice ifProcessPrice = fillProcessPrice(elem, urlDto, ordenacion);
-	    			
-	    			if(validaResultado(iIdEmpresa, ifProcessPrice)) {
-	    				lResultadoDto.add(ifProcessPrice);
-	    			}
-    			
-            	}catch(IOException e) {
-            		throw new UncheckedIOException(e);
-            	}
-            });
-    	});   
-        
-        return lResultadoDto;
-	}
-
-	private boolean validaResultado(final int iIdEmpresa, 
-			final IFProcessPrice ifProcessPrice) {
-			
-		if(StringUtils.isAllEmpty(ifProcessPrice.getNomProducto()) ||
-				StringUtils.isAllEmpty(ifProcessPrice.getPrecio()) ||
-				StringUtils.isAllEmpty(ifProcessPrice.getPrecioKilo())) {
-			return Boolean.FALSE;
-		} 
-		
-		String[] arProducto = producto.split(StringUtils.SPACE);
-		Pattern patternProducto = createPatternProduct(arProducto);
-		
-		String strProducto = filtroMarca(iIdEmpresa, ifProcessPrice.getNomProducto(), listTodasMarcas);
-		
-		if(StringUtils.isAllBlank(strProducto)) {
-			return Boolean.FALSE;
-		}
-		
-		if(arProducto.length == 1 &&
-				eliminarTildes(strProducto)
-				.toLowerCase().startsWith(
-						eliminarTildes(arProducto[0].trim())
-				.toLowerCase().concat(StringUtils.SPACE))) {
-			return Boolean.TRUE;			
-		} else if(arProducto.length > 1) {			
-			
-			return patternProducto.matcher(eliminarTildes(strProducto).toUpperCase()).find();
-		} else {
-			return Boolean.FALSE;
-		}
-	}
-
-	@Override
-	public List<IFProcessPrice> call() throws IOException, URISyntaxException, InterruptedException {
-		return checkHtmlDocument();
-	}
-
-	private boolean validaURL(final String baseUri,final String url) {
-		return url.equalsIgnoreCase(baseUri);
-	}
-	
-	private boolean validaSelector(Element elem) {
-		return Objects.nonNull(elem.selectFirst(env.getProperty("flow.value.pagina.siguiente.carrefour"))) ||
-		Objects.nonNull(elem.selectFirst(env.getProperty("flow.value.pagina.acceso.popup.peso")));
-	}	
+	abstract List<ProcessPrice> call() throws IOException, URISyntaxException, InterruptedException;
+	abstract void setListTodasMarcas(List<MarcasDTO> listTodasMarcas);
+	abstract void setMapDynEmpresas(Map<Integer, Boolean> mapIsEmpresasDyn);
+	abstract void setOrdenacion(String ordenacion);
+	abstract void setProducto(String producto);
+	abstract void setUrlDto(UrlDTO urlDto);
 }
