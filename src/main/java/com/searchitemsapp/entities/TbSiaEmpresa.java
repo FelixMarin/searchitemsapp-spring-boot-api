@@ -17,8 +17,11 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.stereotype.Component;
 
+import lombok.NoArgsConstructor;
+
 @Entity
 @Component
+@NoArgsConstructor
 @Table(name="tb_sia_empresa", schema = "sia")
 @NamedQuery(name="TbSiaEmpresa.findAll", query="SELECT t FROM TbSiaEmpresa t")
 public class TbSiaEmpresa implements Serializable {
@@ -58,10 +61,6 @@ public class TbSiaEmpresa implements Serializable {
 
 	@Column(name="bol_dyn_scrap")
 	private Boolean bolDynScrap;	
-	
-	public TbSiaEmpresa() {
-		super();
-	}
 
 	public Integer getDid() {
 		return this.did;

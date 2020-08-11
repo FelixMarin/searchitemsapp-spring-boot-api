@@ -35,8 +35,6 @@ import lombok.NoArgsConstructor;
 @Scope("prototype")
 public class ProcessDataModuleImpl extends ProcessDataAbstract implements ProcessDataModule {
 	
-	private static final String SEPARADOR_URL = "%20";
-
 	private static Map<Integer, Map<String, String>> mapaCookies = Maps.newHashMap(); 
 	private UrlDTO urlDto; 
 	private String producto;
@@ -59,7 +57,6 @@ public class ProcessDataModuleImpl extends ProcessDataAbstract implements Proces
     	
     	listDocuments.stream()
     	.filter(document -> Objects.nonNull(document))
-    	.filter(document -> validaURL(document.baseUri(),urlDto.getNomUrl().replace(StringUtils.SPACE, SEPARADOR_URL)))        	
     	.forEach(document -> {
     		
             Elements entradas = selectScrapPattern(document,
@@ -122,10 +119,6 @@ public class ProcessDataModuleImpl extends ProcessDataAbstract implements Proces
 	@Override
 	public List<ProcessPrice> call() throws IOException, URISyntaxException, InterruptedException {
 		return checkHtmlDocument();
-	}
-
-	private boolean validaURL(final String baseUri,final String url) {
-		return url.equalsIgnoreCase(baseUri);
 	}
 	
 	private boolean validaSelector(Element elem) {

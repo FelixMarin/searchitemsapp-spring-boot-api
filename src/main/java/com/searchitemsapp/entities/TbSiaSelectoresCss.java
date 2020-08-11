@@ -14,8 +14,11 @@ import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
+import lombok.NoArgsConstructor;
+
 @Entity
 @Component
+@NoArgsConstructor
 @Table(name="tb_sia_selectores_css", schema = "sia")
 @NamedQuery(name="TbSiaSelectoresCss.findAll", query="SELECT t FROM TbSiaSelectoresCss t")
 public class TbSiaSelectoresCss implements Serializable {
@@ -64,13 +67,6 @@ public class TbSiaSelectoresCss implements Serializable {
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="did_url", referencedColumnName="did", nullable = false)
 	private TbSiaUrl tbSiaUrl;
-
-	/*
-	 * Constructor
-	 */
-	public TbSiaSelectoresCss() {
-		super();
-	}
 
 	public Integer getDid() {
 		return this.did;
