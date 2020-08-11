@@ -15,8 +15,11 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.stereotype.Component;
 
+import lombok.NoArgsConstructor;
+
 @Entity
 @Component
+@NoArgsConstructor
 @Table(name="tb_sia_categorias_empresas", schema = "sia")
 @NamedQuery(name="TbSiaCategoriasEmpresa.findAll", query="SELECT t FROM TbSiaCategoriasEmpresa t")
 public class TbSiaCategoriasEmpresa implements Serializable {
@@ -49,10 +52,6 @@ public class TbSiaCategoriasEmpresa implements Serializable {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="tbSiaCategoriasEmpresa")
 	private List<TbSiaNomProducto> tbSiaNomProductos;
-
-	public TbSiaCategoriasEmpresa() {
-		super();
-	}
 
 	public Integer getDid() {
 		return this.did;

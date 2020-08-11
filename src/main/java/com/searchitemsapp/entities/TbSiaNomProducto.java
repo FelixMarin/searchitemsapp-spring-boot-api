@@ -13,8 +13,11 @@ import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
+import lombok.NoArgsConstructor;
+
 @Entity
 @Component
+@NoArgsConstructor
 @Table(name="tb_sia_nom_productos", schema = "sia")
 @NamedQuery(name="TbSiaNomProducto.findAll", query="SELECT t FROM TbSiaNomProducto t")
 public class TbSiaNomProducto implements Serializable {
@@ -36,10 +39,6 @@ public class TbSiaNomProducto implements Serializable {
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="id_pais", referencedColumnName="did", nullable = false)
 	private TbSiaPais tbSiaPais;
-
-	public TbSiaNomProducto() {
-		super();
-	}
 
 	public Integer getDid() {
 		return this.did;

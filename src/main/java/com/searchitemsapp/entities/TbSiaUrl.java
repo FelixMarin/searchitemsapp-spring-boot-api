@@ -17,8 +17,11 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.stereotype.Component;
 
+import lombok.NoArgsConstructor;
+
 @Entity
 @Component
+@NoArgsConstructor
 @Table(name="tb_sia_urls", schema = "sia")
 @NamedQuery(name="TbSiaUrl.findAll", query="SELECT t FROM TbSiaUrl t")
 public class TbSiaUrl implements Serializable {
@@ -53,10 +56,6 @@ public class TbSiaUrl implements Serializable {
 	@OneToMany(mappedBy="tbSiaUrl")
 	private List<TbSiaSelectoresCss> tbSiaSelectoresCsses;	
 	
-	public TbSiaUrl() {
-		super();
-	}
-
 	public Integer getDid() {
 		return this.did;
 	}
