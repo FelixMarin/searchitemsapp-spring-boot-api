@@ -13,17 +13,16 @@ import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
+import lombok.NoArgsConstructor;
+
 @Entity
 @Component
+@NoArgsConstructor
 @Table(name="tb_sia_marcas", schema = "sia")
 @NamedQuery(name="TbSiaMarcas.findAll", query="SELECT t FROM TbSiaMarcas t")
 public class TbSiaMarcas implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public TbSiaMarcas() {
-		super();
-	}	
-	
 	@Id
 	@Column(name = "did")
 	private Integer did;
