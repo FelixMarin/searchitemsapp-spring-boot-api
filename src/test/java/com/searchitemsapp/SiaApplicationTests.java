@@ -29,7 +29,8 @@ class SiaApplicationTests {
 	@Test
 	void contextLoads() {
 		
-		String result = ac.listaProductos("101", "101", "1", "sal", "101");
+		String result = ac.listaProductos("101", "101", "1", "sal", "106");
+		result = ac.listaProductos("101", "101", "1", "sal", "101");
 		
 		assertNotNull(result);
 	}

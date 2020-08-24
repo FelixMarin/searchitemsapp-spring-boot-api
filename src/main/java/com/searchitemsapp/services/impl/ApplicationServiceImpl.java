@@ -12,6 +12,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
 import com.searchitemsapp.dto.MarcasDTO;
 import com.searchitemsapp.dto.SelectoresCssDTO;
 import com.searchitemsapp.dto.UrlDTO;
@@ -59,6 +59,10 @@ public class ApplicationServiceImpl implements ApplicationService {
 		
 		List<ProcessPrice> listIfProcessPrice = Lists.newArrayList();
 		int contador = 0;
+		
+		String jsonResult = "[{\"request\": \"Error\", " 
+				+ "\"id\" : \"-1\", "
+				+ "\"description\": \"No hay resultados\"}]";
 	
 		ExecutorService executorService = Executors.newCachedThreadPool();
 
@@ -90,9 +94,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 			listIfProcessPrice = executeFuture(listFutureListResDto);
 
             if(listIfProcessPrice.isEmpty()) {            	            	
-    			return "[{\"request\": \"Error\", " 
-    					+ "\"id\" : \"-1\", "
-    					+ "\"description\": \"No hay resultados\"}]";
+    			return jsonResult;
             }
 
             listIfProcessPrice = ifProcessPrice.ordenarLista(listIfProcessPrice);
@@ -101,6 +103,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 				listIfProcessPrice.get(i).setIdentificador(++contador);
 			}
 			
+         	jsonResult = new ObjectMapper().writeValueAsString(listIfProcessPrice);
+         	
 		}catch(IOException | InterruptedException | ExecutionException e) {
 			
   			if(LOGGER.isErrorEnabled()) {
@@ -114,7 +118,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 			executorService.shutdown();
 		}
 
-		return new Gson().toJson(listIfProcessPrice);
+		return jsonResult;
 	}
 
 	private List<ProcessPrice> executeFuture(final List<Future<List<ProcessPrice>>> listfutureListIfProcessPrice) 

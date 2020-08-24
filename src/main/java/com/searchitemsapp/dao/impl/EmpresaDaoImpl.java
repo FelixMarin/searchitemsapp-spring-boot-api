@@ -42,12 +42,12 @@ public class EmpresaDaoImpl extends AbstractDao implements EmpresaDao {
 
 	@Override
 	public EmpresaDTO findByDid(@NonNull final EmpresaDTO empresaDto) throws IOException {
-		return repository.findByDid(empresaDto.getDid());
+		return getModelMapper().map(repository.findByDid(empresaDto.getDid()), EmpresaDTO.class);
 	}
 
 	@Override
-	public List<EmpresaDTO> findByTbSia(@NonNull final EmpresaDTO empresaDto, @NonNull final CategoriaDTO categoriaDto)
-			throws IOException {
+	public List<EmpresaDTO> findByTbSia(@NonNull final EmpresaDTO empresaDto, 
+			@NonNull final CategoriaDTO categoriaDto) throws IOException {
 
 		List<EmpresaDTO> listDto = Lists.newArrayList(); 
 		

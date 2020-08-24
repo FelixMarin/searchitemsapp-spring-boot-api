@@ -18,6 +18,6 @@ import com.searchitemsapp.entities.TbSiaEmpresa;
  */
 @Component
 public interface EmpresaRepository extends JpaRepository<TbSiaEmpresa, Long>{
-	EmpresaDTO findByDid(Integer did) throws IOException;
+	TbSiaEmpresa findByDid(Integer did) throws IOException;
 	List<EmpresaDTO> findByDidAndTbSiaCategoriasEmpresa(Integer didEmpresa, Integer didCatEmpresa) throws IOException;
 }

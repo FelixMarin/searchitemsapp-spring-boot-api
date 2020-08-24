@@ -9,9 +9,12 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jettison.json.JSONException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
@@ -35,6 +38,8 @@ import lombok.NoArgsConstructor;
 @Scope("prototype")
 public class ProcessDataModuleImpl extends ProcessDataAbstract implements ProcessDataModule {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessDataModuleImpl.class); 
+	
 	private static Map<Integer, Map<String, String>> mapaCookies = Maps.newHashMap(); 
 	private UrlDTO urlDto; 
 	private String producto;
@@ -53,33 +58,41 @@ public class ProcessDataModuleImpl extends ProcessDataAbstract implements Proces
 				
 		Map<String, String> mapLoginPageCookies = mapaCookies.get(iIdEmpresa);
 		
-    	List<Document> listDocuments = getHtmlDocument(urlDto, mapLoginPageCookies, producto, mapDynEmpresas);
-    	
-    	listDocuments.stream()
-    	.filter(document -> Objects.nonNull(document))
-    	.forEach(document -> {
-    		
-            Elements entradas = selectScrapPattern(document,
-            		urlDto.getSelectores().getScrapPattern(), 
-            		urlDto.getSelectores().getScrapNoPattern());
-            
-            entradas.stream()
-            .filter(elem -> !validaSelector(elem))
-            .forEach(elem -> {
-            	
-            	try {
-            		
-	    			ProcessPrice ifProcessPrice = fillProcessPrice(elem, urlDto, ordenacion);
+		try {
+			
+	    	List<Document> listDocuments = getHtmlDocument(urlDto, mapLoginPageCookies, producto, mapDynEmpresas);
+	    	
+	    	listDocuments.stream()
+	    	.filter(document -> Objects.nonNull(document))
+	    	.forEach(document -> {
+	    		
+	            Elements entradas = selectScrapPattern(document,
+	            		urlDto.getSelectores().getScrapPattern(), 
+	            		urlDto.getSelectores().getScrapNoPattern());
+	            
+	            entradas.stream()
+	            .filter(elem -> !validaSelector(elem))
+	            .forEach(elem -> {
+	            	
+	            	try {
+	            		
+		    			ProcessPrice ifProcessPrice = fillProcessPrice(elem, urlDto, ordenacion);
+		    			
+		    			if(validaResultado(iIdEmpresa, ifProcessPrice)) {
+		    				lResultadoDto.add(ifProcessPrice);
+		    			}
 	    			
-	    			if(validaResultado(iIdEmpresa, ifProcessPrice)) {
-	    				lResultadoDto.add(ifProcessPrice);
-	    			}
-    			
-            	}catch(IOException e) {
-            		throw new UncheckedIOException(e);
-            	}
-            });
-    	});   
+	            	}catch(IOException e) {
+	            		throw new UncheckedIOException(e);
+	            	}
+	            });
+	    	});   
+    	
+		} catch(JSONException e) {
+			if(LOGGER.isErrorEnabled()) {
+				LOGGER.error(Thread.currentThread().getStackTrace()[1].toString(),e);
+			}
+    	}
         
         return lResultadoDto;
 	}
