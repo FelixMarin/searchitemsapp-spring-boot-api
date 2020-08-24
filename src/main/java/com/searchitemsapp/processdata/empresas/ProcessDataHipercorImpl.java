@@ -20,8 +20,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProcessDataHipercorImpl implements ProcessDataHipercor {
 
-	private static final String PATTERN = ".*de ([0-9]+)";
-	
 	@Autowired
 	private Environment env;
 
@@ -37,7 +35,8 @@ public class ProcessDataHipercorImpl implements ProcessDataHipercor {
 			
 		int numresultados = NumberUtils.toInt(env.getProperty("flow.value.paginacion.url.hipercor"));
 		
-		Matcher m = Pattern.compile(PATTERN).matcher(strPaginacion);		
+		Matcher m = Pattern.compile(".*de ([0-9]+)").matcher(strPaginacion);
+		
 		if(m.find()) {
 			strPaginacion=m.group(1);
 		}

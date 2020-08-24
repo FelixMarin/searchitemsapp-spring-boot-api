@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @ComponentScan("com.searchitemsapp.dao")
 public class JpaConfig {
-	
+		
 	@Autowired
 	Environment env;
 	

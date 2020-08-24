@@ -18,11 +18,15 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jettison.json.JSONException;
+import org.json.JSONObject;
+import org.json.XML;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -39,12 +43,20 @@ import com.searchitemsapp.processdata.empresas.ProcessDataEroski;
 import com.searchitemsapp.processdata.empresas.ProcessDataHipercor;
 import com.searchitemsapp.processdata.empresas.ProcessDataMercadona;
 import com.searchitemsapp.processdata.empresas.ProcessDataSimply;
+import com.searchitemsapp.processdata.empresas.lambdas.CondisTratarScript;
+import com.searchitemsapp.processdata.empresas.lambdas.MercadonaGetConnection;
+import com.searchitemsapp.processdata.empresas.lambdas.MercadonaGetDocument;
+import com.searchitemsapp.processdata.empresas.lambdas.MercadonaGetUrlAll;
 
 import lombok.NonNull;
 
 @Component
 public abstract class ProcessDataAbstract {
 	
+	private static final String ZERO_STRING = "0";
+	private static final String COMMA_STRING = ",";
+	private static final char LEFT_SLASH_CHAR = '\'';
+	private static final String SPECIALS_CHARS_STRING = "\r\n|\r|\n";
 	private static final String PROTOCOL_ACCESSOR ="://";
 	private static final String UNICODE_ENIE = "u00f1";	
 	private static final String LEFT_PARENTHESIS_0 = " (";
@@ -83,7 +95,8 @@ public abstract class ProcessDataAbstract {
 			final Map<String, String> mapLoginPageCookies,
 			final String producto,
 			final Map<Integer,Boolean> mapDynEmpresas) 
-					throws IOException, URISyntaxException, InterruptedException {
+					throws IOException, URISyntaxException, 
+					InterruptedException, JSONException {
 
     	List<Document> listDocuments = Lists.newArrayList();
     	
@@ -213,8 +226,20 @@ public abstract class ProcessDataAbstract {
 		ifProcessPrice.setNomEmpresa(urlDto.getNomEmpresa());
 
 		if(ifProcessDataMercadona.get_DID() == idEmpresaActual) {
-			ifProcessPrice.setNomUrlAllProducts(ifProcessDataMercadona.getUrlAll(ifProcessPrice));
-			ifProcessPrice.setImagen(ifProcessPrice.getImagen().replace(",", "."));
+			
+			MercadonaGetUrlAll urlAll = (processPrice) -> {
+				String productoAux = StringUtils.EMPTY;
+				
+				if(!StringUtils.isAllEmpty(processPrice.getNomProducto())) {
+					productoAux= processPrice.getNomProducto()
+						.replace(StringUtils.SPACE, "%20");
+				}
+				
+				return env.getProperty("flow.value.url.all").concat(productoAux);
+			};
+			
+			ifProcessPrice.setNomUrlAllProducts(urlAll.getUrlAll(ifProcessPrice));
+			ifProcessPrice.setImagen(ifProcessPrice.getImagen().replace(COMMA_STRING, "."));
 		}else {
 			ifProcessPrice.setNomUrlAllProducts(urlDto.getNomUrl());
 		}
@@ -242,7 +267,7 @@ public abstract class ProcessDataAbstract {
 			final int didEmpresa, final String producto,
 			final Map<String, String> mapLoginPageCookies,
 			final Map<Integer,Boolean> mapDynEmpresas) 
-					throws InterruptedException, URISyntaxException, IOException {
+					throws InterruptedException, URISyntaxException, IOException, JSONException {
 	
 		Connection connection  = null;
 		Response response = null;
@@ -253,8 +278,27 @@ public abstract class ProcessDataAbstract {
 
 		if(bDynScrap) {			
 			return Jsoup.parse(procesDataDynamic.getDynHtmlContent(strUrl, didEmpresa), url.toURI().toString());
-		} else if(isMercadona) {			
-			connection = ifProcessDataMercadona.getConnection(strUrl, producto);	
+		} else if(isMercadona) {
+			
+			MercadonaGetConnection mercadonaConnection = (stUrl,prd) -> {
+				
+				return Jsoup.connect(stUrl)
+						.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36")
+						.method(Connection.Method.POST)
+						.referrer("https://tienda.mercadona.es/")
+						.ignoreContentType(Boolean.TRUE)
+						.header("Accept-Language", "es-ES,es;q=0.8")
+						.header("Accept-Encoding", "gzip, deflate, sdch")
+						.header("Accept", "application/json")
+						.maxBodySize(0)
+						.timeout(100000)
+						.requestBody("{\"params\":\"query="
+								.concat(prd)
+								.concat("&clickAnalytics=true\"}"));
+				
+			};
+			
+			connection = mercadonaConnection.getConnection(strUrl, producto);	
 			response = connection.execute();
 		} else {			
 			connection = Jsoup.connect(strUrl)
@@ -275,7 +319,31 @@ public abstract class ProcessDataAbstract {
 		}
 		
 		if(isMercadona) {
-       		return ifProcessDataMercadona.getDocument(strUrl, response.body());
+			
+			MercadonaGetDocument document = (stUrl, body) -> {
+				
+				JSONObject json = new JSONObject(body);
+				
+				String xml = XML.toString(json);
+				
+				xml = xml.replace(".", COMMA_STRING);
+				
+				if(StringUtils.isAllEmpty(xml)) {
+					return new Document(StringUtils.EMPTY);
+				} else {
+					xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
+							.concat("<root>").concat(xml).concat("</root>");
+					xml = xml.replace("&lt;em&gt;", StringUtils.EMPTY);
+					xml = xml.replace("&lt;/em&gt;", StringUtils.EMPTY);
+				}
+				
+				Document doc = Jsoup.parse(xml, StringUtils.EMPTY, Parser.xmlParser());
+				doc.setBaseUri(stUrl);
+				
+				return doc;
+			};
+			
+       		return document.getDocument(strUrl, response.body());
        	} else {
 			return response.parse();
 		}
@@ -313,12 +381,55 @@ public abstract class ProcessDataAbstract {
 		
 		if(ifProcessDataMercadona.get_DID() == urlDto.getDidEmpresa()) {
 			
-			strResult = ifProcessDataMercadona.getResult(elem, cssSelector);
+			strResult = elem.selectFirst(cssSelector).text();
 			
 		} else if(ifProcessDataCondis.get_DID() == urlDto.getDidEmpresa() &&
 				"script".equalsIgnoreCase(lista.get(0))) {	
 			
-			strResult = ifProcessDataCondis.tratarTagScript(elem, lista.get(0));
+			CondisTratarScript tratarScript = (elemento, selectorCss) -> {
+
+				String resultado = StringUtils.EMPTY;
+				Matcher matcher;
+				
+				if(Objects.isNull(elemento) || StringUtils.isAllEmpty(cssSelector)) {
+					return resultado;
+				}
+				resultado = elem.select(selectorCss).html().replace(".", COMMA_STRING);
+				
+				if(resultado.split(SPECIALS_CHARS_STRING).length > 1) {
+					resultado = resultado.split(SPECIALS_CHARS_STRING)[1].trim();
+					
+					matcher = Pattern.compile("\\d*[,][0-9]*").matcher(resultado);
+					
+					if(matcher.find()) {
+						resultado = matcher.group(0);
+					}
+				
+				} else {
+					resultado = resultado.substring(resultado.indexOf(LEFT_SLASH_CHAR)+1, resultado.length());
+					resultado = resultado.substring(0, resultado.indexOf(LEFT_SLASH_CHAR));
+					
+					if(resultado.contains(COMMA_STRING) &&
+							resultado.substring(resultado.indexOf(COMMA_STRING), 
+									resultado.length()).length()  == 2) {
+						resultado += ZERO_STRING;
+					}else {
+						resultado = resultado.concat(",00");
+					}
+				}
+				
+				if(resultado.startsWith(COMMA_STRING)) {
+					resultado = ZERO_STRING.concat(resultado);
+				}
+				
+				if(resultado.endsWith(COMMA_STRING)) {
+					resultado = resultado.concat("00");
+				}
+				
+				return resultado;
+			};
+			
+			strResult = tratarScript.tratarTagScript(elem, lista.get(0));
 			
 		} else if(iFProcessDataECI.get_DID() == urlDto.getDidEmpresa()) {
 			

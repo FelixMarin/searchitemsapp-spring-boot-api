@@ -18,6 +18,7 @@ import com.searchitemsapp.dto.CategoriaDTO;
 import com.searchitemsapp.dto.PaisDTO;
 import com.searchitemsapp.dto.SelectoresCssDTO;
 import com.searchitemsapp.dto.UrlDTO;
+import com.searchitemsapp.processdata.empresas.lambdas.CondisEliminarTildes;
 
 import lombok.NoArgsConstructor;
 
@@ -68,8 +69,28 @@ public class UrlComposerImpl extends ProcessDataAbstract implements UrlComposer 
 						productoTratado = getIFProcessDataSimply().reemplazarCaracteres(strNomProducto);
 						productoTratado = tratarProducto(productoTratado);
 					} else if(getIFProcessDataCondis().get_DID() == urlDto.getDidEmpresa()) {
-						productoTratado = getIFProcessDataCondis().eliminarTildesProducto(strNomProducto);
-						productoTratado = getIFProcessDataCondis().reemplazarCaracteres(productoTratado);
+						
+						CondisEliminarTildes eliminarTildes = (prd) -> {
+							
+							String[] arVocales = {"a","e","i","o","u"};
+							String[] arTildes = {"á","é","í","ó","ú"};
+							
+							if(StringUtils.isAllEmpty(prd)) {
+								return prd;
+							}
+							
+							String productoAux = prd.toLowerCase();
+							
+							for (int i = 0; i < arVocales.length; i++) {
+								productoAux = productoAux.replace(arTildes[i], 
+										arVocales[i]);
+							}
+							
+							return productoAux;
+						};
+						
+						productoTratado = eliminarTildes.eliminarTildesProducto(strNomProducto);
+						productoTratado = productoTratado.replace("ñ", "%D1");
 						productoTratado = tratarProducto(productoTratado);
 					} else {
 						productoTratado = productoTratadoAux;
