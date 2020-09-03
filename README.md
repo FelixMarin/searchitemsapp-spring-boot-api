@@ -136,4 +136,4 @@ http://[url]:[port]/searchitemsapp/search?pais=101&categoria=101&ordenacion=2&pr
 ]}
 ```
 
-#### Ejemplo en [vídeo](https://youtu.be/K_4Wp0Poh2Q)
+#### Ejemplo en [vídeo](https://youtu.be/smuZhHQhij4)
