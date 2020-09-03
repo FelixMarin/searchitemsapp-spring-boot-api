@@ -5,7 +5,7 @@ Una aplicación web desarrollada en java EE, Spring Framework e Hibernate. La AP
 
 ## Herramientas
 
-- [Eclipse IDE for J2EE](https://www.eclipse.org/ide/)
+- [Spring Tools Suite](https://spring.io/tools)
 - [OpenJDK 14](https://openjdk.java.net/projects/jdk/)
 - [Spring Framework](https://spring.io/)
 - [H2](http://h2database.com/html/main.htmls)
