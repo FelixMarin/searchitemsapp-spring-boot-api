@@ -15,9 +15,6 @@ Una aplicación web desarrollada en java EE, Spring Framework e Hibernate. La AP
 ## Lenguajes
 
 - JAVA – J2EE
-- HTML
-- CSS
-- JAVASCRIPT
 - SQL
 
 ## Arquitectura
