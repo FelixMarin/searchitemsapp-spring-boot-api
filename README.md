@@ -7,7 +7,7 @@ Una aplicación web desarrollada en java EE, Spring Framework e Hibernate. La AP
 
 - [Spring Tools Suite](https://spring.io/tools)
 - [OpenJDK 14](https://openjdk.java.net/projects/jdk/)
-- [Spring Framework](https://spring.io/)
+- [Spring Boot](https://start.spring.io/)
 - [H2](http://h2database.com/html/main.htmls)
 - [Postman](https://www.postman.com/)
 - [Git](https://git-scm.com/downloads)
