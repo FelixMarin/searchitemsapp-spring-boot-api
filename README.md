@@ -5,14 +5,12 @@ Una aplicación web desarrollada en java EE, Spring Framework e Hibernate. El se
 
 ## Herramientas
 
-- [Ubuntu Server 18.04](https://ubuntu.com/download/server)
 - [Eclipse IDE for J2EE](https://www.eclipse.org/ide/)
-- [PostgresSQL](https://www.postgresql.org/)
 - [OpenJDK 14](https://openjdk.java.net/projects/jdk/)
 - [Spring Framework](https://spring.io/)
-- [Apache Tomcat 9](http://tomcat.apache.org/)
-- [SmartBear SoapUI](https://www.soapui.org/)
-- [Oracle VirtualBox](https://www.virtualbox.org/)
+- [H2](http://h2database.com/html/main.htmls)
+- [Postman](https://www.postman.com/)
+- [Git](https://git-scm.com/downloads)
 
 ## Lenguajes
 
@@ -28,7 +26,8 @@ Una aplicación web desarrollada en java EE, Spring Framework e Hibernate. El se
 
 ## Frameworks
 
-- Spring web MVC, DATA
+- Spring Boot
+- Maven
 - Hibernate
 
 ## Técnica de extracción de datos
@@ -37,21 +36,13 @@ Una aplicación web desarrollada en java EE, Spring Framework e Hibernate. El se
 
 # Preparación del Entorno
 
-## Instalación del SGBD  
-
-Se procede a [instalar PosgreSQL](https://www.digitalocean.com/community/tutorials/como-instalar-y-utilizar-postgresql-en-ubuntu-18-04-es) en el sistema operativo. Una vez instalado y configurado el SGBD, se ejecuta el script de la base de datos que se encuentra en **./BBDD/backup_sia_bbdd.sql**. Finalmente, Crear los siguientes **'Login/Grup Roles'** usados por la aplicación: 
-
-| Usuario | Permisos |
-| --- | --- |
-| pgadmin | administrador |
-| sia_select | Lectura |
 
 ## Instalación del entorno 
 El primer paso consiste en descargar el proyecto de GitHub.  
 
 ```bash
 ~$ sudo apt install git 
-~$ git clone https://github.com:/FelixMarin/searchitemsapp.git 
+~$ git clone https://github.com/FelixMarin/searchitemsapp-spring-boot-version.git 
 ```
 A continuacion, importar el proyecto en Eclipse IDE:
 
@@ -77,69 +68,17 @@ Una vez importado el proyecto, actualizar las dependencias Maven:
 2. 'Project Properties' => 'Run' => 'Maven Clean'.
 ```
 
-Se crea un el directorio **'/resources/'** en la raiz del sistema. 
+## Ejecutar la apliación
 
-Este directorio contiene los ficheros **'*.properties'**:
+Se debe ejecutar el comando "mvn clean package" para generar el jar. La aplicacion compilada se genera el directorio target dentro del directorio del código fuente de la aplicación. 
 
-```console
-   /resources/
-   |----/resources/db.properties
-   |----/resources/flow.properties
-   |----/resources/log4j.properties
-```
-
-| Properties | Descripción |
-| --- | --- |
-| **db.properties** | contiene los literales y datos de conexión a la base de datos. |
-| **flow.properties** | contiene todos los literales de la aplicación. |
-| **log4j.properties** | contiene la configuración de la libreria de registros log4j. |
-
-El fichero **flow.properties** contiene tres rutas a tener encueta. Son las rutas al ejecutabme del navegador firefox y los drivers de chrome y gecko. Hay que colocar los drivers en la ruta indicada.
+Para ejecutar la apliación se utilizará el siguiente comando:
 
 ```console
-folw.value.firefox.ejecutable.path=/usr/bin/firefox
-flow.value.google.driver.path=/usr/local/bin/drivers/chrome/chromedriver 
-flow.value.firefox.driver.path=/usr/local/bin/drivers/firefox/geckodriver
+java -jar sia-0.0.1-SNAPSHOT.jar
 ```
-
-A continuación, descargar los drivers de Firefox y Chrome y situarlos en la ruta que aparece a continuación. 
-
-```console
-/usr/local/bin/drivers/chrome/chromedriver 
-/usr/local/bin/drivers/firefox/geckodriver 
-```
-
-El siguiente paso es añadir al fichero **/etc/environmet** las siguientes variables de entorno.  
-
-| Variable de Entorno | Valor |
-| --- | --- |
-| **PROPERTIES_SIA** | "/resources" | 
-| **CATALINA_HOME** | "/[path_to]/apache-tomcat-9" | 
-| **JAVA_HOME** | "/[path_to]/java-14-openjdk-amd64" | 
-| **JRE_HOME** | "/[path_to]/java-14-openjdk-amd64" |
-
-Se crea un directorio llamado logs en la raíz de sistema para recoger los logs que va escribiendo la aplicación.  
-
-```console
-/log4j/
-|-----/log4j/daily.log
-|-----/log4j/error.log
-```
-
-[Instalar el servidor de aplicaciones Apache Tomcat 9.](https://tecnstuff.net/how-to-install-tomcat-9-on-ubuntu-18-04/) y [Vicular Tomcat a Eclipse IDE](https://www.codejava.net/servers/tomcat/how-to-add-tomcat-server-in-eclipse-ide). 
- 
-Finalmente, una vez preparado el entorno habrá que compilar el proyecto y desplegar la aplicación en el servidor Tomcat.
-
-![Instalación Apache Tomcat](https://github.com/FelixMarin/searchitemsapp/blob/v0.7.0/docimg/tomcat.png)
-
 
 ## Uso de la aplicación
-
-- **Para acceder a la interfaz gráfica de la aplicación se hará mediante el fichero index.jsp:**
-
-```console
-http://[url]:[port]/searchitemsapp/index.jsp
-```
 
 - **Formato de la URL con la que se realizará la solicitud al servicio:**
 
