@@ -2,9 +2,9 @@ package com.searchitemsapp.services;
 
 import java.util.List;
 
-import com.searchitemsapp.dto.NomProductoDTO;
+import com.searchitemsapp.dto.LiveSearchProductNameDto;
 
 public interface LiveSearchService {
 
-	public abstract List<NomProductoDTO> buscarProducto(String producto); 
+	public abstract List<LiveSearchProductNameDto> buscarProducto(String producto); 
 }

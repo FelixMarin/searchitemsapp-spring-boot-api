@@ -2,21 +2,22 @@ package com.searchitemsapp.services.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.searchitemsapp.dao.NomProductoDao;
-import com.searchitemsapp.dto.NomProductoDTO;
+import com.searchitemsapp.dao.ProductNameDao;
+import com.searchitemsapp.dto.LiveSearchProductNameDto;
 import com.searchitemsapp.services.LiveSearchService;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class LiveSearchServiceImpl implements LiveSearchService {
 	
-	@Autowired
-	private NomProductoDao ifNomProductoRepository;
+	private ProductNameDao ifNomProductoRepository;
 
 	@Override
-	public List<NomProductoDTO> buscarProducto(String product) {
+	public List<LiveSearchProductNameDto> buscarProducto(String product) {
 		return ifNomProductoRepository.findByNomProducto(product);
 	}
 }
