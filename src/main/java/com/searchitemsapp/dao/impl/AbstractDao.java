@@ -8,7 +8,7 @@ import javax.persistence.PersistenceContext;
 import org.modelmapper.ModelMapper;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.dto.UrlDTO;
+import com.searchitemsapp.dto.UrlDto;
 
 
 public abstract class AbstractDao {
@@ -26,14 +26,14 @@ public abstract class AbstractDao {
 		return MODEL_MAPPER;
 	}
 	
-	protected List<UrlDTO> toListODTO(final List<Object[]> urlList) {
+	protected List<UrlDto> toListODTO(final List<Object[]> urlList) {
 		
-		List<UrlDTO> listUrlDto = Lists.newArrayList();
+		List<UrlDto> listUrlDto = Lists.newArrayList();
 		
 		if (!urlList.isEmpty()){ 
 			
 			urlList.forEach(obj -> {
-				UrlDTO urlPDto = new UrlDTO();
+				UrlDto urlPDto = new UrlDto();
 				urlPDto.setNomUrl(String.valueOf(obj[0]));
 				urlPDto.setDidEmpresa(Integer.parseInt(String.valueOf(obj[1])));
 				urlPDto.setDid(Integer.parseInt(String.valueOf(obj[2])));

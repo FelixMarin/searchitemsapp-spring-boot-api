@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,136 +11,105 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.searchitemsapp.dto.MarcasDTO;
-import com.searchitemsapp.dto.SelectoresCssDTO;
-import com.searchitemsapp.dto.UrlDTO;
-import com.searchitemsapp.processdata.ApplicationData;
-import com.searchitemsapp.processdata.ProcessDataModule;
-import com.searchitemsapp.processdata.ProcessPrice;
-import com.searchitemsapp.processdata.UrlComposer;
+import com.searchitemsapp.business.ApplicationBusiness;
+import com.searchitemsapp.business.BrandsManager;
+import com.searchitemsapp.business.DocumentManager;
+import com.searchitemsapp.business.PatternsManager;
+import com.searchitemsapp.business.PriceManager;
+import com.searchitemsapp.business.ProductManager;
+import com.searchitemsapp.business.SelectorCssManager;
+import com.searchitemsapp.business.UrlManager;
+import com.searchitemsapp.dto.BrandsDto;
+import com.searchitemsapp.dto.CssSelectorsDto;
+import com.searchitemsapp.dto.ProductDto;
+import com.searchitemsapp.dto.UrlDto;
 import com.searchitemsapp.services.ApplicationService;
 
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Service("applicationService")
-@NoArgsConstructor
+@AllArgsConstructor
 public class ApplicationServiceImpl implements ApplicationService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationServiceImpl.class);  
 	
-	@Autowired
-	private ApplicationData iFApplicationData;
-	
-	@Autowired
-	private UrlComposer urlComposer;
-	
-	@Autowired
 	private ApplicationContext applicationContext;
+	private UrlManager urlManager;
+	private PriceManager priceManager;
+	private Environment environment;
+	private DocumentManager documentManager;
+	private BrandsManager brandsManager;
+	private PatternsManager patternsManager;
+	private ProductManager productManager;
+	private SelectorCssManager selectorCssManager;
 	
-	@Autowired
-	private ProcessPrice ifProcessPrice;
-	
-	public String service(final String strDidPais, final String strDidCategoria,
-			final String strTipoOrdenacion, final String strNomProducto, final String strEmpresas) {
+	public List<ProductDto> orderedByPriceProdutsService(Map<String,String> requestParams) {
 
 		org.apache.log4j.BasicConfigurator.configure();
 		
-		Map<Integer,Boolean> mapIsEmpresasDyn = Maps.newHashMap();
-		
-		List<ProcessPrice> listIfProcessPrice = Lists.newArrayList();
-		int contador = 0;
-		
-		String jsonResult = "[{\"request\": \"Error\", " 
-				+ "\"id\" : \"-1\", "
-				+ "\"description\": \"No hay resultados\"}]";
-	
 		ExecutorService executorService = Executors.newCachedThreadPool();
+		List<ProductDto> productList = Lists.newArrayList();
 
 		try {
-			iFApplicationData.applicationData(mapIsEmpresasDyn);
-			List<MarcasDTO> listTodasMarcas = iFApplicationData.getListTodasMarcas();
+			List<BrandsDto> listAllBrands = brandsManager.allBrandList();
 			
-			List<SelectoresCssDTO> listTodosSelectoresCss = iFApplicationData
-					.listSelectoresCssPorEmpresa(strEmpresas);
+			List<CssSelectorsDto> listAllCssSelectors = selectorCssManager
+					.selectorCssListByEnterprise(requestParams.get("ENTERPRISES"));
 			
-			Collection<UrlDTO> lResultDtoUrlsTratado = urlComposer.replaceWildcardCharacter(strDidPais, 
-					strDidCategoria, strNomProducto, strEmpresas, listTodosSelectoresCss);
+			Collection<UrlDto> collectionOfUrlDto = urlManager
+					.replaceUrlWildcard(requestParams, listAllCssSelectors);
 
-			Collection<ProcessDataModule> colPDMcallables = Lists.newArrayList();
+			Collection<ApplicationBusiness> colPDMcallables = Lists.newArrayList();
 		
-			lResultDtoUrlsTratado.forEach(elem -> {
-				ProcessDataModule processDataModule = applicationContext.getBean(ProcessDataModule.class);
+			collectionOfUrlDto.forEach(urlDto -> {
 				
-				processDataModule.setListTodasMarcas(listTodasMarcas);
-				processDataModule.setMapDynEmpresas(mapIsEmpresasDyn);
-				processDataModule.setOrdenacion(strTipoOrdenacion);
-				processDataModule.setProducto(strNomProducto);
-				processDataModule.setUrlDto(elem);
+				ApplicationBusiness processDataModule = applicationContext.getBean(ApplicationBusiness.class);
+				
+				processDataModule.setUrlDto(urlDto);
+				processDataModule.setRequestParams(requestParams);
+				processDataModule.setListAllBrands(listAllBrands);
+				processDataModule.setEnvironment(environment);
+				processDataModule.setDocumentManager(documentManager);
+				processDataModule.setPatternsManager(patternsManager);
+				processDataModule.setProductManager(productManager);
+				processDataModule.setSelectorCssManager(selectorCssManager);
 	
 				colPDMcallables.add(processDataModule);	
 			});
 	
-			List<Future<List<ProcessPrice>>> listFutureListResDto = executorService.invokeAll(colPDMcallables);
-			listIfProcessPrice = executeFuture(listFutureListResDto);
-
-            if(listIfProcessPrice.isEmpty()) {            	            	
-    			return jsonResult;
-            }
-
-            listIfProcessPrice = ifProcessPrice.ordenarLista(listIfProcessPrice);
-
-         	for (int i = 0; i < listIfProcessPrice.size(); i++) {
-				listIfProcessPrice.get(i).setIdentificador(++contador);
-			}
+			List<Future<List<ProductDto>>> listFutureListResDto = executorService.invokeAll(colPDMcallables);
+			List<ProductDto> listIfProcessPrice = Lists.newArrayList();
 			
-         	jsonResult = new ObjectMapper().writeValueAsString(listIfProcessPrice);
+			listFutureListResDto.forEach(elem -> {
+					try {
+						listIfProcessPrice.addAll(elem.get(5, TimeUnit.SECONDS));
+					} catch (InterruptedException | ExecutionException | TimeoutException e) {
+						LOGGER.error(Thread.currentThread().getStackTrace()[1].toString() + ":" + e.getMessage(),e);
+					}
+				});
+
+			productList = priceManager.ordenarLista(listIfProcessPrice);
+
+         	for (int i = 0; i < productList.size(); i++) {
+				productList.get(i).setIdentificador(i+1);
+			}
          	
-		}catch(IOException | InterruptedException | ExecutionException e) {
+		}catch(IOException | InterruptedException e) {	
 			
-  			if(LOGGER.isErrorEnabled()) {
-				LOGGER.error(Thread.currentThread().getStackTrace()[1].toString(),e);
-			}
-	
-			Thread.currentThread().interrupt();	
+			LOGGER.error(Thread.currentThread().getStackTrace()[1].toString() + ":" + e.getLocalizedMessage(),e);
+			Thread.currentThread().interrupt();				
 			
-		} finally {
-	
-			executorService.shutdown();
+		} finally {			
+				executorService.shutdown();
 		}
 
-		return jsonResult;
-	}
-
-	private List<ProcessPrice> executeFuture(final List<Future<List<ProcessPrice>>> listfutureListIfProcessPrice) 
-			throws InterruptedException, ExecutionException {
-		
-		List<ProcessPrice> listIfProcessPrice = Lists.newArrayList();
-
-		for(Future<List<ProcessPrice>> futureListIfProcessPrice : listfutureListIfProcessPrice) {
-			
-			try {
-				if(Objects.isNull(futureListIfProcessPrice.get())) {
-					continue;
-				}
-				
-				listIfProcessPrice.addAll(futureListIfProcessPrice.get(5, TimeUnit.SECONDS));
-				
-			}catch(TimeoutException e) {
-				if(LOGGER.isErrorEnabled()) {
-					LOGGER.error(Thread.currentThread().getStackTrace()[1].toString(),e);
-				}
-			}
-		}
-		
-		return listIfProcessPrice;
+		return productList;
 	}
 }

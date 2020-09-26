@@ -1,15 +1,16 @@
 package com.searchitemsapp.services;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
-import lombok.NonNull;
+import com.searchitemsapp.dto.ProductDto;
 
 
 @FunctionalInterface
 @Service
 public interface ApplicationService {
 	
-	abstract String service(@NonNull final String strDidPais, @NonNull final String strDidCategoria,
-			@NonNull final String strTipoOrdenacion, @NonNull final String strNomProducto,
-			@NonNull final String strEmpresas);
+	abstract List<ProductDto> orderedByPriceProdutsService(Map<String,String> requestParams);
 }

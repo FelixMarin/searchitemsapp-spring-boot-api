@@ -1,8 +1,8 @@
 package com.searchitemsapp.controller;
 
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Propagation;
@@ -18,52 +18,45 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.searchitemsapp.dto.NomProductoDTO;
+import com.google.common.collect.Maps;
+import com.searchitemsapp.dto.LiveSearchProductNameDto;
+import com.searchitemsapp.dto.ProductDto;
 import com.searchitemsapp.services.ApplicationService;
 import com.searchitemsapp.services.LiveSearchService;
 
+import lombok.AllArgsConstructor;
+
 @Transactional(propagation = Propagation.REQUIRES_NEW)
+@AllArgsConstructor
 @RestController
 public class ApplicationController {
 	
-	@Autowired
-	private ApplicationService ifApplicationService;
-	
-	@Autowired
-	LiveSearchService lvs;
-	
-	@Autowired
-	private ListaProductosValidator validator;
-	
+	private ApplicationService applicationService;
+	private LiveSearchService liveSearchService;
+
 	@GetMapping(value = "/search", produces={MediaType.APPLICATION_JSON_VALUE})
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
-	public @ResponseBody String listaProductos(@RequestBody 
-				@RequestParam(value = "pais", defaultValue = "101") String didPais,
-				@RequestParam(value = "categoria", defaultValue = "101") String didCategoria,
-				@RequestParam(value = "ordenacion", defaultValue = "1") String ordenacion, 
-				@RequestParam(value = "producto") @Validated String producto, 
-				@RequestParam(value = "empresas") @Validated String empresas) {
-	
-		boolean isParams = validator.isEmpresa(empresas) &&	
-		validator.isOrdenacion(ordenacion) &&	
-		validator.isNumeric(didPais, didCategoria) &&
-		validator.isParams(didPais, didCategoria, ordenacion, producto, empresas);
+	public @ResponseBody ResponseEntity<List<ProductDto>> listaProductos(@RequestBody 
+				@RequestParam(value = "pais", defaultValue = "101") String countryId,
+				@RequestParam(value = "categoria", defaultValue = "101") String categoryId,
+				@RequestParam(value = "ordenacion", defaultValue = "1") String sort, 
+				@RequestParam(value = "producto") @Validated String product, 
+				@RequestParam(value = "empresas") @Validated String pipedEnterprises) {
+			
+		Map<String,String> requestParams = Maps.newHashMap();
 		
-		if(isParams) {
+		requestParams.put("COUNTRY_ID", countryId);
+		requestParams.put("CATEGORY_ID", categoryId);
+		requestParams.put("SORT", sort);
+		requestParams.put("PRODUCT_NAME", product);
+		requestParams.put("ENTERPRISES", pipedEnterprises);
 		
-			return ifApplicationService.service(didPais, didCategoria, 
-							ordenacion, producto, empresas);
-		} else {
-
-			return "[{\"request\": \"Error\", "
-					+ "\"id\" : \"-1\", "
-					+ "\"description\": \"Invalid Input Data\"}]";
-		}
+		return ResponseEntity.ok(applicationService.orderedByPriceProdutsService(requestParams));
 	}
 	
 	@RequestMapping(value = "/product/{producto}", method = RequestMethod.GET)
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
-	public ResponseEntity<List<NomProductoDTO>> getProducto(@PathVariable("producto") final String prod) {
-		return ResponseEntity.ok(lvs.buscarProducto(prod));
+	public ResponseEntity<List<LiveSearchProductNameDto>> getProducto(@PathVariable("producto") final String prod) {
+		return ResponseEntity.ok(liveSearchService.buscarProducto(prod));
 	}
 }

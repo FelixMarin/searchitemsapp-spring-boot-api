@@ -5,13 +5,13 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
-import com.searchitemsapp.dto.UrlDTO;
+import com.searchitemsapp.dto.UrlDto;
 import com.searchitemsapp.entities.TbSiaUrl;
 
 @Component
 public interface  UrlRepository  extends JpaRepository<TbSiaUrl, Long>{
 	
-	UrlDTO findByDid(Integer did)  throws IOException;
-	List<UrlDTO> findByDidAndDesUrl(Integer didPais, String didCategoria) throws IOException;
-	List<UrlDTO> findByDidAndNomUrl(Integer didPais, String didCategoria) throws IOException;
+	UrlDto findByDid(Integer did)  throws IOException;
+	List<UrlDto> findByDidAndDesUrl(Integer didPais, String didCategoria) throws IOException;
+	List<UrlDto> findByDidAndNomUrl(Integer didPais, String didCategoria) throws IOException;
 }

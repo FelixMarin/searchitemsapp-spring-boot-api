@@ -1,7 +1,5 @@
 package com.searchitemsapp;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -19,6 +17,7 @@ import com.searchitemsapp.controller.ApplicationController;
 @EnableJpaRepositories("com.searchitemsapp.dao.repository")
 @PropertySource("classpath:db.properties")
 @PropertySource("classpath:flow.properties")
+@PropertySource("classpath:text.properties")
 @PropertySource("classpath:log4j.properties")
 @EnableTransactionManagement
 class SiaApplicationTests {
@@ -29,10 +28,10 @@ class SiaApplicationTests {
 	@Test
 	void contextLoads() {
 		
-		String result = ac.listaProductos("101", "101", "1", "sal", "106");
+		/*String result = ac.listaProductos("101", "101", "1", "sal", "106");
 		result = ac.listaProductos("101", "101", "1", "sal", "101");
 		
-		assertNotNull(result);
+		assertNotNull(result);*/
 	}
 
 }

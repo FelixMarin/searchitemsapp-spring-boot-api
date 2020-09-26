@@ -8,46 +8,42 @@ import java.util.StringTokenizer;
 
 import javax.persistence.Query;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dao.UrlDao;
 import com.searchitemsapp.dao.repository.UrlRepository;
-import com.searchitemsapp.dto.CategoriaDTO;
-import com.searchitemsapp.dto.PaisDTO;
-import com.searchitemsapp.dto.UrlDTO;
+import com.searchitemsapp.dto.CategoryDto;
+import com.searchitemsapp.dto.CountryDto;
+import com.searchitemsapp.dto.UrlDto;
 import com.searchitemsapp.entities.TbSiaUrl;
 
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @SuppressWarnings("unchecked")
 @Component
-@NoArgsConstructor
+@AllArgsConstructor
 public class UrlDaoImpl extends AbstractDao implements UrlDao {
 	
 	private static final String COMA = ",";
 	private static final String ALL = "ALL";
 
-	@Autowired
 	private UrlRepository ifUrlRepository;
-	
-	@Autowired
 	private Environment env;
 	
-	public List<UrlDTO> obtenerUrls(PaisDTO paisDto, CategoriaDTO categoriaDto) throws IOException {
+	public List<UrlDto> obtenerUrls(CountryDto paisDto, CategoryDto categoriaDto) throws IOException {
 			
 		return findByDidAndDesUrl(paisDto.getDid(), String.valueOf(categoriaDto.getDid()));
 	}
 	
-	public List<UrlDTO> obtenerUrlsLogin(PaisDTO paisDto, CategoriaDTO categoriaDto) throws IOException {
+	public List<UrlDto> obtenerUrlsLogin(CountryDto paisDto, CategoryDto categoriaDto) throws IOException {
 			
 		return findByDidAndNomUrl(paisDto.getDid(), String.valueOf(categoriaDto.getDid()));
 	}
 	
-	public List<UrlDTO> obtenerUrlsPorIdEmpresa(final PaisDTO paisDto, 
-			final CategoriaDTO categoriaDto,
+	public List<UrlDto> obtenerUrlsPorIdEmpresa(final CountryDto paisDto, 
+			final CategoryDto categoriaDto,
 			final String idsEmpresas) 
 			throws IOException {
 		
@@ -60,9 +56,9 @@ public class UrlDaoImpl extends AbstractDao implements UrlDao {
 		}
 		
 		String[] arIdsEpresas = tokenizeString(strIdsEmpresas, COMA);
-		List<UrlDTO> lsIdsEmpresas = Lists.newArrayList();
+		List<UrlDto> lsIdsEmpresas = Lists.newArrayList();
 				
-		List<UrlDTO> listUrlDTO = findByDidAndDesUrl(paisDto.getDid(), String.valueOf(categoriaDto.getDid()));
+		List<UrlDto> listUrlDTO = findByDidAndDesUrl(paisDto.getDid(), String.valueOf(categoriaDto.getDid()));
 		
 		if(Objects.isNull(listUrlDTO)) {
 			return lsIdsEmpresas;
@@ -92,15 +88,15 @@ public class UrlDaoImpl extends AbstractDao implements UrlDao {
 	}
 
 	@Override
-	public UrlDTO findByDid(final UrlDTO urlDTO) throws IOException {
+	public UrlDto findByDid(final UrlDto urlDTO) throws IOException {
 		return ifUrlRepository.findByDid(urlDTO.getDid());
 	}
 	
 	@Override
-	public List<UrlDTO> findByDidAndDesUrl(final Integer didPais, 
+	public List<UrlDto> findByDidAndDesUrl(final Integer didPais, 
 			final String didCategoria) throws IOException {
 
-		List<UrlDTO> listDto = Lists.newArrayList(); 
+		List<UrlDto> listDto = Lists.newArrayList(); 
 		
 		Query q = getEntityManager().createNativeQuery(env
 				.getProperty("flow.value.url.select.url.by.pais.categoria"));	
@@ -108,21 +104,21 @@ public class UrlDaoImpl extends AbstractDao implements UrlDao {
 		q.setParameter(env.getProperty("flow.value.empresa.didCategoria.key"), Integer.parseInt(didCategoria));
 		q.setParameter(env.getProperty("flow.value.categoria.didPais.key"), didPais);
 		
-		List<UrlDTO> listUrlDto = toListODTO(q.getResultList());
+		List<UrlDto> listUrlDto = toListODTO(q.getResultList());
 		
 		listUrlDto.forEach(elem -> listDto
-				.add(getModelMapper().map(elem, UrlDTO.class)));
+				.add(getModelMapper().map(elem, UrlDto.class)));
 		
 		return listDto;
 	}
 
 	@Override
-	public List<UrlDTO> findByDidAndNomUrl(
+	public List<UrlDto> findByDidAndNomUrl(
 			final Integer didPais, 
 			final String didCategoria) 
 					throws IOException {
 
-		List<UrlDTO> listDto = Lists.newArrayList(); 
+		List<UrlDto> listDto = Lists.newArrayList(); 
 		
 		Query q = getEntityManager().createNativeQuery(env
 				.getProperty("flow.value.url.select.url.by.bollogin"));
@@ -133,7 +129,7 @@ public class UrlDaoImpl extends AbstractDao implements UrlDao {
 		List<TbSiaUrl> liEntities = (q.getResultList());
 		
 		liEntities.forEach(elem -> listDto
-				.add(getModelMapper().map(elem, UrlDTO.class)));
+				.add(getModelMapper().map(elem, UrlDto.class)));
 		
 		return listDto;
 	}
