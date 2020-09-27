@@ -16,7 +16,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import com.searchitemsapp.business.DynamicWebManager;
+import com.searchitemsapp.business.DynamicWebProcessing;
 import com.searchitemsapp.business.enterprises.Enterprise;
 import com.searchitemsapp.business.enterprises.factory.EnterpriseFactory;
 
@@ -24,14 +24,15 @@ import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class DynamicWebManagerImpl implements DynamicWebManager {
+public class DynamicWebProcessingImpl implements DynamicWebProcessing {
 	
 	private Environment environment;
 	private EnterpriseFactory enterpriseFactory;
 	
-	public String getDynHtmlContent(String strUrl, int enterpriseId) throws InterruptedException {
+	@Override
+	public String getDynamicHtmlContent(String externalProductURL, int enterpriseId) throws InterruptedException {
 		
-		String strResultado;	
+		String pageSource;	
 		Enterprise enterprise = enterpriseFactory.getEnterpriseData(enterpriseId);
 		
 		System.getProperties().setProperty(getADriver(0), 
@@ -39,10 +40,10 @@ public class DynamicWebManagerImpl implements DynamicWebManager {
 		
 		WebDriver webDriver = initWebDriver(0);
 		cleanWindows(webDriver);
-		strResultado = enterprise.getHtmlContent(webDriver, strUrl);			
+		pageSource = enterprise.getHtmlContent(webDriver, externalProductURL);			
 		cleanWindows(webDriver);
 		 
-		return strResultado;
+		return pageSource;
 	}
 		
 	private WebDriver initWebDriver(int selector) {

@@ -3,10 +3,12 @@ package com.searchitemsapp.dto;
 import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor
+@Builder
 @Component
 public class CategoryDto {
 
@@ -16,6 +18,6 @@ public class CategoryDto {
 	private String nomCatEmpresa;	
 	private EnterpriseDto empresas;
 	private BrandsDto marcas;
-	private LiveSearchProductNameDto productos;
+	private LiveSearchDto productos;
 
 }

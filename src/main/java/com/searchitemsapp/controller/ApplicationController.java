@@ -1,7 +1,6 @@
 package com.searchitemsapp.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.collect.Maps;
-import com.searchitemsapp.dto.LiveSearchProductNameDto;
+import com.searchitemsapp.dto.LiveSearchDto;
 import com.searchitemsapp.dto.ProductDto;
+import com.searchitemsapp.dto.SearchedParamsDto;
 import com.searchitemsapp.services.ApplicationService;
 import com.searchitemsapp.services.LiveSearchService;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 @AllArgsConstructor
@@ -37,26 +37,25 @@ public class ApplicationController {
 	@GetMapping(value = "/search", produces={MediaType.APPLICATION_JSON_VALUE})
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	public @ResponseBody ResponseEntity<List<ProductDto>> listaProductos(@RequestBody 
-				@RequestParam(value = "pais", defaultValue = "101") String countryId,
-				@RequestParam(value = "categoria", defaultValue = "101") String categoryId,
-				@RequestParam(value = "ordenacion", defaultValue = "1") String sort, 
-				@RequestParam(value = "producto") @Validated String product, 
-				@RequestParam(value = "empresas") @Validated String pipedEnterprises) {
+				@RequestParam(value = "conutry", defaultValue = "101") String countryId,
+				@RequestParam(value = "category", defaultValue = "101") String categoryId,
+				@RequestParam(value = "sort", defaultValue = "1") String sort, 
+				@RequestParam(value = "product") @Validated @NonNull String product, 
+				@RequestParam(value = "pipedenterprises") @Validated @NonNull String pipedEnterprises) {
 			
-		Map<String,String> requestParams = Maps.newHashMap();
-		
-		requestParams.put("COUNTRY_ID", countryId);
-		requestParams.put("CATEGORY_ID", categoryId);
-		requestParams.put("SORT", sort);
-		requestParams.put("PRODUCT_NAME", product);
-		requestParams.put("ENTERPRISES", pipedEnterprises);
-		
-		return ResponseEntity.ok(applicationService.orderedByPriceProdutsService(requestParams));
+		return ResponseEntity.ok(applicationService.orderedByPriceProduts(
+				SearchedParamsDto.builder()
+					.countryId(countryId)
+					.categoryId(categoryId)
+					.sort(sort)
+					.product(product)
+					.pipedEnterprises(pipedEnterprises)
+					.build()));
 	}
 	
 	@RequestMapping(value = "/product/{producto}", method = RequestMethod.GET)
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
-	public ResponseEntity<List<LiveSearchProductNameDto>> getProducto(@PathVariable("producto") final String prod) {
+	public ResponseEntity<List<LiveSearchDto>> getProducto(@PathVariable("producto") final String prod) {
 		return ResponseEntity.ok(liveSearchService.buscarProducto(prod));
 	}
 }

@@ -27,24 +27,17 @@ class EnterpriseDaoImplTest {
 
 	@Test
 	void testFindByDid()  throws IOException {
-		
-		EnterpriseDto empresaDto = new EnterpriseDto();
-		empresaDto.setDid(101);
-		
-		EnterpriseDto empresaDtoResult = empresaDaoImpl.findByDid(empresaDto);
-		
+			
+		EnterpriseDto empresaDtoResult = empresaDaoImpl.findByDid(EnterpriseDto.builder().did(101).build());
 		assertEquals("MERCADONA", empresaDtoResult.getNomEmpresa());
 	}
 
 	@Test
 	void testFindByTbSia()  throws IOException {
-		EnterpriseDto empresaDto = new EnterpriseDto();
-		CategoryDto categoriaDto = new CategoryDto();
 		
-		empresaDto.setDid(101);
-		categoriaDto.setDid(101);
-		
-		List<EnterpriseDto> listaEmpresasDto = empresaDaoImpl.findByTbSia(empresaDto, categoriaDto);
+		List<EnterpriseDto> listaEmpresasDto = empresaDaoImpl.findByTbSia(
+				EnterpriseDto.builder().did(101).build(), 
+				CategoryDto.builder().did(101).build());
 		
 		assertEquals(1, listaEmpresasDto.size());
 		assertEquals("MERCADONA", listaEmpresasDto.get(0).getNomEmpresa());

@@ -3,7 +3,6 @@ package com.searchitemsapp.services.impl;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,17 +17,17 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.ApplicationBusiness;
-import com.searchitemsapp.business.BrandsManager;
-import com.searchitemsapp.business.DocumentManager;
-import com.searchitemsapp.business.PatternsManager;
-import com.searchitemsapp.business.PriceManager;
-import com.searchitemsapp.business.ProductManager;
-import com.searchitemsapp.business.SelectorCssManager;
-import com.searchitemsapp.business.UrlManager;
-import com.searchitemsapp.dto.BrandsDto;
+import com.searchitemsapp.business.Brands;
+import com.searchitemsapp.business.Documents;
+import com.searchitemsapp.business.Patterns;
+import com.searchitemsapp.business.Prices;
+import com.searchitemsapp.business.ProcessProducts;
+import com.searchitemsapp.business.Products;
+import com.searchitemsapp.business.SelectorsCss;
+import com.searchitemsapp.business.Urls;
 import com.searchitemsapp.dto.CssSelectorsDto;
 import com.searchitemsapp.dto.ProductDto;
+import com.searchitemsapp.dto.SearchedParamsDto;
 import com.searchitemsapp.dto.UrlDto;
 import com.searchitemsapp.services.ApplicationService;
 
@@ -41,50 +40,48 @@ public class ApplicationServiceImpl implements ApplicationService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationServiceImpl.class);  
 	
 	private ApplicationContext applicationContext;
-	private UrlManager urlManager;
-	private PriceManager priceManager;
+	private Urls urls;
+	private Prices prices;
 	private Environment environment;
-	private DocumentManager documentManager;
-	private BrandsManager brandsManager;
-	private PatternsManager patternsManager;
-	private ProductManager productManager;
-	private SelectorCssManager selectorCssManager;
+	private Documents documents;
+	private Brands brands;
+	private Patterns patterns;
+	private Products products;
+	private SelectorsCss selectorCss;
 	
-	public List<ProductDto> orderedByPriceProdutsService(Map<String,String> requestParams) {
+	public List<ProductDto> orderedByPriceProduts(SearchedParamsDto searchedParamsDto) {
 
 		org.apache.log4j.BasicConfigurator.configure();
 		
 		ExecutorService executorService = Executors.newCachedThreadPool();
-		List<ProductDto> productList = Lists.newArrayList();
+		List<ProductDto> productListAsResult = Lists.newArrayList();
 
 		try {
-			List<BrandsDto> listAllBrands = brandsManager.allBrandList();
+			List<CssSelectorsDto> listAllCssSelectors = selectorCss
+					.selectorCssListByEnterprise(searchedParamsDto.getPipedEnterprises());
 			
-			List<CssSelectorsDto> listAllCssSelectors = selectorCssManager
-					.selectorCssListByEnterprise(requestParams.get("ENTERPRISES"));
-			
-			Collection<UrlDto> collectionOfUrlDto = urlManager
-					.replaceUrlWildcard(requestParams, listAllCssSelectors);
+			Collection<UrlDto> urlDtoCollection = urls
+					.replaceUrlWildcard(searchedParamsDto, listAllCssSelectors);
 
-			Collection<ApplicationBusiness> colPDMcallables = Lists.newArrayList();
+			Collection<ProcessProducts> applicationBusinessCallables = Lists.newArrayList();
 		
-			collectionOfUrlDto.forEach(urlDto -> {
+			urlDtoCollection.forEach(urlDto -> {
 				
-				ApplicationBusiness processDataModule = applicationContext.getBean(ApplicationBusiness.class);
+				ProcessProducts processProducts = applicationContext.getBean(ProcessProducts.class);
 				
-				processDataModule.setUrlDto(urlDto);
-				processDataModule.setRequestParams(requestParams);
-				processDataModule.setListAllBrands(listAllBrands);
-				processDataModule.setEnvironment(environment);
-				processDataModule.setDocumentManager(documentManager);
-				processDataModule.setPatternsManager(patternsManager);
-				processDataModule.setProductManager(productManager);
-				processDataModule.setSelectorCssManager(selectorCssManager);
+				processProducts.setUrlDto(urlDto);
+				processProducts.setProductsInParametersDto(searchedParamsDto);
+				processProducts.setBrands(brands);
+				processProducts.setEnvironment(environment);
+				processProducts.setDocumentManager(documents);
+				processProducts.setPatternsManager(patterns);
+				processProducts.setProductManager(products);
+				processProducts.setSelectorCssManager(selectorCss);
 	
-				colPDMcallables.add(processDataModule);	
+				applicationBusinessCallables.add(processProducts);	
 			});
 	
-			List<Future<List<ProductDto>>> listFutureListResDto = executorService.invokeAll(colPDMcallables);
+			List<Future<List<ProductDto>>> listFutureListResDto = executorService.invokeAll(applicationBusinessCallables);
 			List<ProductDto> listIfProcessPrice = Lists.newArrayList();
 			
 			listFutureListResDto.forEach(elem -> {
@@ -95,10 +92,10 @@ public class ApplicationServiceImpl implements ApplicationService {
 					}
 				});
 
-			productList = priceManager.ordenarLista(listIfProcessPrice);
+			productListAsResult = prices.sortList(listIfProcessPrice);
 
-         	for (int i = 0; i < productList.size(); i++) {
-				productList.get(i).setIdentificador(i+1);
+         	for (int i = 0; i < productListAsResult.size(); i++) {
+				productListAsResult.get(i).setIdentificador(i+1);
 			}
          	
 		}catch(IOException | InterruptedException e) {	
@@ -110,6 +107,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 				executorService.shutdown();
 		}
 
-		return productList;
+		return productListAsResult;
 	}
 }

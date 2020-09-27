@@ -33,18 +33,18 @@ public abstract class AbstractDao {
 		if (!urlList.isEmpty()){ 
 			
 			urlList.forEach(obj -> {
-				UrlDto urlPDto = new UrlDto();
-				urlPDto.setNomUrl(String.valueOf(obj[0]));
-				urlPDto.setDidEmpresa(Integer.parseInt(String.valueOf(obj[1])));
-				urlPDto.setDid(Integer.parseInt(String.valueOf(obj[2])));
-				urlPDto.setBolActivo(Boolean.parseBoolean(null!=obj[3]?String.valueOf(obj[3]):null));
-				urlPDto.setNomEmpresa(String.valueOf(obj[4]));
-				urlPDto.setBolStatus(Boolean.parseBoolean(null!=obj[5]?String.valueOf(obj[5]):null));
-				urlPDto.setBolLogin(Boolean.parseBoolean(null!=obj[6]?String.valueOf(obj[6]):null));
-				urlPDto.setDesUrl(String.valueOf(obj[7]));
-				listUrlDto.add(urlPDto);				
+				
+				listUrlDto.add(UrlDto.builder().nomUrl(String.valueOf(obj[0]))
+						.didEmpresa(Integer.parseInt(String.valueOf(obj[1])))
+						.did(Integer.parseInt(String.valueOf(obj[2])))
+						.bolActivo(Boolean.parseBoolean(null!=obj[3]?String.valueOf(obj[3]):null))
+						.nomEmpresa(String.valueOf(obj[4]))
+						.bolStatus(Boolean.parseBoolean(null!=obj[5]?String.valueOf(obj[5]):null))
+						.bolLogin(Boolean.parseBoolean(null!=obj[6]?String.valueOf(obj[6]):null))
+						.desUrl(String.valueOf(obj[7])).build());				
 			});
 		}
+		
 		return listUrlDto;
 	}
 }
