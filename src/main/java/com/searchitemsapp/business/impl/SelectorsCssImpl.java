@@ -99,7 +99,8 @@ public class SelectorsCssImpl implements SelectorsCss {
 			cssSelectorList.add(st.nextToken());
 		}
 		
-		Enterprise enterprise = enterpriseFactory.getEnterpriseData(urlDto.getDidEmpresa());
+		Enterprise enterprise = enterpriseFactory.getInstance(urlDto.getDidEmpresa());
+		
 		String textExtracted = enterprise.selectorTextExtractor(documentElement, cssSelectorList, cssSelector);
 		
 		return cleanProductTextExtractedFromCssSelector(textExtracted, urlDto.getNomUrl());

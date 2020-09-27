@@ -31,7 +31,7 @@ public class UrlsImpl implements Urls {
 	private UrlDao urlDao;
 	private CategoryDto categoryDto;
 	private CountryDto countryDto;
-	private SelectorsCss selectorsCss;
+	private SelectorsCss selectorsCss; 
 	
 	public List<UrlDto> replaceUrlWildcard(SearchedParamsDto productsInParametersDto,
 			final List<CssSelectorsDto> listAllCssSelector) 
@@ -50,7 +50,7 @@ public class UrlsImpl implements Urls {
 				urlDto.setSelectores(selectorsCss
 						.addCssSelectors(urlDto, listAllCssSelector));
 				
-				Enterprise enterprise = enterpriseFactory.getEnterpriseData(urlDto.getDidEmpresa());
+				Enterprise enterprise = enterpriseFactory.getInstance(urlDto.getDidEmpresa());
 				String refinedProductName = enterprise.reemplazarCaracteres(productsInParametersDto.getProduct());
 				refinedProductName = products.manageProductName(refinedProductName);
 								
