@@ -1,7 +1,10 @@
 package com.searchitemsapp.business.enterprises.factory;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.Maps;
 import com.searchitemsapp.business.enterprises.Enterprise;
 import com.searchitemsapp.business.enterprises.impl.AlcampoImpl;
 import com.searchitemsapp.business.enterprises.impl.CapraboImpl;
@@ -23,6 +26,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ProcessDataEnterpriseFactoryImpl implements EnterpriseFactory {
 	
+	
 	private AlcampoImpl alcampo;
 	private CapraboImpl caprabo;
 	private CarrefourImpl carrefour;
@@ -37,38 +41,28 @@ public class ProcessDataEnterpriseFactoryImpl implements EnterpriseFactory {
 	private UlaboxImpl ulabox;
 	private LidlImpl lidl;	
 
-	public Enterprise getEnterpriseData(final int idEmpresa) {
+	private Map<Integer, Enterprise> setUp() {
 		
-		Enterprise enterprise = null;
+		Map<Integer, Enterprise> enterprises =  Maps.newHashMap();
+ 
+		enterprises.put(alcampo.get_DID(),alcampo);
+		enterprises.put(caprabo.get_DID(),caprabo);
+		enterprises.put(carrefour.get_DID(), carrefour);
+		enterprises.put(condis.get_DID(), condis);		
+		enterprises.put(dia.get_DID(), dia);
+		enterprises.put(elcorteingles.get_DID(), elcorteingles);
+		enterprises.put(eroski.get_DID(), eroski);
+		enterprises.put(hipercor.get_DID(), hipercor);
+		enterprises.put(mercadona.get_DID(), mercadona);		
+		enterprises.put(simply.get_DID(), simply);
+		enterprises.put(ulabox.get_DID(), ulabox);
+		enterprises.put(lidl.get_DID(), lidl);
+		enterprises.put(consum.get_DID(), consum);
+		
+		return enterprises;
+	}
 	
-		if(alcampo.get_DID() == idEmpresa) {
-			enterprise = alcampo;
-		} else if(caprabo.get_DID() == idEmpresa) {
-			enterprise = caprabo;
-		} else if(carrefour.get_DID() == idEmpresa) {
-			enterprise = carrefour;
-		} else if(condis.get_DID() == idEmpresa) {
-			enterprise = condis;
-		} else if(consum.get_DID() == idEmpresa) {
-			enterprise = consum;
-		} else if(dia.get_DID() == idEmpresa) {
-			enterprise = dia;
-		} else if(elcorteingles.get_DID() == idEmpresa) {
-			enterprise = elcorteingles;
-		} else if(eroski.get_DID() == idEmpresa) {
-			enterprise = eroski;
-		} else if(hipercor.get_DID() == idEmpresa) {
-			enterprise = hipercor;
-		} else if(mercadona.get_DID() == idEmpresa) {
-			enterprise = mercadona;
-		} else if(simply.get_DID() == idEmpresa) {
-			enterprise = simply;
-		} else if(ulabox.get_DID() == idEmpresa) {
-			enterprise = ulabox;
-		} else if(lidl.get_DID() == idEmpresa) {
-			enterprise = lidl;
-		}
-		
-		return enterprise;
+	public Enterprise getInstance(int enterpriseId) {
+		return this.setUp().get(enterpriseId);
 	}
 }

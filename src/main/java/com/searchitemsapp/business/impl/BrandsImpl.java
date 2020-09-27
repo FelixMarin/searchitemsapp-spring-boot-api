@@ -25,7 +25,7 @@ public class BrandsImpl implements Brands {
 	@Override
 	public String brandFilter(final int enterpriseId, final String productName, final List<BrandsDto> listAllBrands) {
 		
-		Enterprise enterprise = enterpriseFactory.getEnterpriseData(enterpriseId);
+		Enterprise enterprise = enterpriseFactory.getInstance(enterpriseId);
 		String productNameAux = enterprise.eliminarMarcaPrincipio(productName);
 
 		final String evaluatedProduct = productNameAux;
