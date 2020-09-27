@@ -78,7 +78,7 @@ public class ProductsImpl implements Products {
 				.ordenacion(Integer.parseInt(ordenacion))
 				.build();
 		
-		Enterprise enterprise = enterpriseFactory.getEnterpriseData(urlDto.getDidEmpresa());
+		Enterprise enterprise = enterpriseFactory.getInstance(urlDto.getDidEmpresa());
 		String namesOfUrlsOfAllProducts = enterprise.getAllUrlsToSearch(productDto);
 		productDto.setNomUrlAllProducts(namesOfUrlsOfAllProducts);
 			

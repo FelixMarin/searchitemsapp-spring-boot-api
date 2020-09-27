@@ -4,5 +4,5 @@ import com.searchitemsapp.business.enterprises.Enterprise;
 
 public interface EnterpriseFactory {
 
-	abstract Enterprise getEnterpriseData(final int idEmpresa);
+	abstract Enterprise getInstance(int enterpriseId);
 }

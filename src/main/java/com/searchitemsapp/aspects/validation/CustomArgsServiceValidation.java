@@ -21,7 +21,7 @@ public class CustomArgsServiceValidation {
 	
 	private ListaProductosValidator validator;
 
-    @Pointcut("execution (public String com.searchitemsapp.controller.ApplicationController.listaProductos(..))")
+    @Pointcut("execution (public String com.searchitemsapp.controller.SearchItemsController.searchItems(..))")
     public void listaProductosController() {
     }
     

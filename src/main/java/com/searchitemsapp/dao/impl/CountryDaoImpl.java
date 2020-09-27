@@ -16,20 +16,20 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CountryDaoImpl extends AbstractDao implements CountryDao {
 	
-	private CountryRepository ifPaisRepository;
+	private CountryRepository countryRepository;
 
 	@Override
-	public CountryDto findByDid(final CountryDto paisDto) throws IOException {
-		return ifPaisRepository.findByDid(paisDto.getDid());
+	public CountryDto findByDid(final CountryDto country) throws IOException {
+		return countryRepository.findByDid(country.getDid());
 	}
 
 	@Override
 	public List<CountryDto> findAll() throws IOException {
-		List<CountryDto> listDto = Lists.newArrayList();
+		List<CountryDto> countryList = Lists.newArrayList();
 
-		ifPaisRepository.findAll()
-				.forEach(elem -> listDto.add(getModelMapper().map(elem, CountryDto.class)));
+		countryRepository.findAll()
+				.forEach(country -> countryList.add(getModelMapper().map(country, CountryDto.class)));
 
-		return listDto;
+		return countryList;
 	}
 }

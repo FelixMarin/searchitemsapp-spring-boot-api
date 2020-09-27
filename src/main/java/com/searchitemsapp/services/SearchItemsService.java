@@ -10,7 +10,7 @@ import com.searchitemsapp.dto.SearchedParamsDto;
 
 @FunctionalInterface
 @Service
-public interface ApplicationService {
+public interface SearchItemsService {
 	
-	abstract List<ProductDto> orderedByPriceProduts(SearchedParamsDto listaProductosDto);
+	abstract List<ProductDto> orderedByPriceProducts(SearchedParamsDto listaProductosDto);
 }

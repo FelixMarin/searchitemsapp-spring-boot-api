@@ -29,15 +29,15 @@ import com.searchitemsapp.dto.CssSelectorsDto;
 import com.searchitemsapp.dto.ProductDto;
 import com.searchitemsapp.dto.SearchedParamsDto;
 import com.searchitemsapp.dto.UrlDto;
-import com.searchitemsapp.services.ApplicationService;
+import com.searchitemsapp.services.SearchItemsService;
 
 import lombok.AllArgsConstructor;
 
-@Service("applicationService")
+@Service("searchItemsService")
 @AllArgsConstructor
-public class ApplicationServiceImpl implements ApplicationService {
+public class SearchItemsServiceImpl implements SearchItemsService {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationServiceImpl.class);  
+	private static final Logger LOGGER = LoggerFactory.getLogger(SearchItemsServiceImpl.class);  
 	
 	private ApplicationContext applicationContext;
 	private Urls urls;
@@ -49,7 +49,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	private Products products;
 	private SelectorsCss selectorCss;
 	
-	public List<ProductDto> orderedByPriceProduts(SearchedParamsDto searchedParamsDto) {
+	public List<ProductDto> orderedByPriceProducts(SearchedParamsDto searchedParamsDto) {
 
 		org.apache.log4j.BasicConfigurator.configure();
 		

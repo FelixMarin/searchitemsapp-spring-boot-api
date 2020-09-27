@@ -35,7 +35,8 @@ public class DocumentsImpl implements Documents {
 		List<String> listUrlsResultado = Lists.newArrayList();
 		
 		listUrlsResultado.addAll(enterpriseFactory
-				.getEnterpriseData(enterpriseId).getListaUrls(document, urlDto));
+				.getInstance(enterpriseId)
+				.getListaUrls(document, urlDto));
 		
 		return listUrlsResultado;
 	}
@@ -46,7 +47,7 @@ public class DocumentsImpl implements Documents {
 					InterruptedException, JSONException {
 
     	List<Document> listDocuments = Lists.newArrayList();    	
-		Enterprise enterprise = enterpriseFactory.getEnterpriseData(urlDto.getDidEmpresa());			
+		Enterprise enterprise = enterpriseFactory.getInstance(urlDto.getDidEmpresa());			
     	
     	Document document = getDocument(urlDto.getNomUrl(), enterprise.get_DID(), product);
 
@@ -67,7 +68,7 @@ public class DocumentsImpl implements Documents {
 			int enterpriseId, String requestProductName) 
 					throws InterruptedException, URISyntaxException, IOException, JSONException {
 	
-		Enterprise enterprise = enterpriseFactory.getEnterpriseData(enterpriseId);
+		Enterprise enterprise = enterpriseFactory.getInstance(enterpriseId);
 
 		if(enterprise.isDynamic()) {
 			

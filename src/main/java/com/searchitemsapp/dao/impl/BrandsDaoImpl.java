@@ -16,12 +16,12 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class BrandsDaoImpl extends AbstractDao implements BrandsDao {
 	
-	private BrandsRepository ifMarcasRepository;
+	private BrandsRepository brandsRepository;
 
 	public List<BrandsDto> findAll() throws IOException {
 		List<BrandsDto> listDto = Lists.newArrayList();
 
-		ifMarcasRepository.findAll()
+		brandsRepository.findAll()
 				.forEach(elem -> listDto.add(getModelMapper().map(elem, BrandsDto.class)));
 
 		return listDto;
@@ -29,6 +29,6 @@ public class BrandsDaoImpl extends AbstractDao implements BrandsDao {
 	
 	@Override
 	public BrandsDto findByDid(final BrandsDto marcasDTO) throws IOException {
-		return ifMarcasRepository.findByDid(marcasDTO.getDid());		
+		return brandsRepository.findByDid(marcasDTO.getDid());		
 	}
 }

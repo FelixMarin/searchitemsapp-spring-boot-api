@@ -33,7 +33,7 @@ public class DynamicWebProcessingImpl implements DynamicWebProcessing {
 	public String getDynamicHtmlContent(String externalProductURL, int enterpriseId) throws InterruptedException {
 		
 		String pageSource;	
-		Enterprise enterprise = enterpriseFactory.getEnterpriseData(enterpriseId);
+		Enterprise enterprise = enterpriseFactory.getInstance(enterpriseId);
 		
 		System.getProperties().setProperty(getADriver(0), 
 				environment.getProperty("flow.value.firefox.driver.path"));
