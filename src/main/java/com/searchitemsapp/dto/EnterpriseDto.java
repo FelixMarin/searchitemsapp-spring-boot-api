@@ -3,10 +3,12 @@ package com.searchitemsapp.dto;
 import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor
+@Builder
 @Component
 public class EnterpriseDto {
 
@@ -21,5 +23,4 @@ public class EnterpriseDto {
 	private String nomPais;
 	private CssSelectorsDto selectores;
 	private UrlDto urls;
-
 }

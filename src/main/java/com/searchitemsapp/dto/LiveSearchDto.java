@@ -8,10 +8,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor
-@Component @Builder
-public class ErrorJsonResponseDto {
+@Builder
+@Component
+public class LiveSearchDto {
 
-	private String resquest;
-	private Integer id;
-	private String description;
+	private Integer did;
+	private String nomProducto;
+	
 }

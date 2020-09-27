@@ -3,6 +3,7 @@ package com.searchitemsapp.dto;
 import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data @NoArgsConstructor @AllArgsConstructor
+@Builder
 @Component
 public class CountryDto {
 	
@@ -28,6 +30,6 @@ public class CountryDto {
 	private String nomPais;
 	private EnterpriseDto empresas;
 	private BrandsDto marcas;
-	private LiveSearchProductNameDto productos;
+	private LiveSearchDto productos;
 	
 }

@@ -11,14 +11,15 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.PatternsManager;
+import com.searchitemsapp.business.Patterns;
 
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class PatternsManagerImpl implements PatternsManager {
+public class PatternsImpl implements Patterns {
 
+	@Override
 	public Elements selectScrapPattern(final Document document,
 			final String strScrapPattern, final String strScrapNotPattern) {
 
@@ -33,29 +34,30 @@ public class PatternsManagerImpl implements PatternsManager {
         return documentElements;
 	}
 	
-	public Pattern createPatternProduct(final String[] arProducto) {
+	@Override
+	public Pattern createPatternProduct(final String[] wordsProduct) {
 
-		List<String> tokens = Lists.newArrayList();
+		List<String> wordsList = Lists.newArrayList();
 		
-		List<String> listProducto = Arrays.asList(arProducto);  
-		listProducto.forEach(elem -> tokens.add(elem.toUpperCase()));
+		List<String> wordsProductList = Arrays.asList(wordsProduct);  
+		wordsProductList.forEach(singleWord -> wordsList.add(singleWord.toUpperCase()));
 		
-		StringBuilder stringBuilder = new StringBuilder(10);
+		StringBuilder patternBuilder = new StringBuilder(10);
 		
-		stringBuilder.append("(");
+		patternBuilder.append("(");
 		
-		tokens.forEach(e -> stringBuilder.append(".*").append(e));
+		wordsList.forEach(singleWord -> patternBuilder.append(".*").append(singleWord));
 		
-		stringBuilder.append(")");
+		patternBuilder.append(")");
 		
-		Collections.reverse(tokens);
+		Collections.reverse(wordsList);
 		
-		stringBuilder.append("|(");
+		patternBuilder.append("|(");
 		
-		tokens.forEach(e -> stringBuilder.append(".*").append(e));
+		wordsList.forEach(singleWord -> patternBuilder.append(".*").append(singleWord));
 
-		stringBuilder.append(")");
+		patternBuilder.append(")");
 		
-		return Pattern.compile(stringBuilder.toString());
+		return Pattern.compile(patternBuilder.toString());
 	}
 }

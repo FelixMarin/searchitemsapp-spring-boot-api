@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import org.codehaus.jettison.json.JSONException;
@@ -15,13 +14,14 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.ApplicationBusiness;
-import com.searchitemsapp.business.DocumentManager;
-import com.searchitemsapp.business.PatternsManager;
-import com.searchitemsapp.business.ProductManager;
-import com.searchitemsapp.business.SelectorCssManager;
-import com.searchitemsapp.dto.BrandsDto;
+import com.searchitemsapp.business.Brands;
+import com.searchitemsapp.business.Documents;
+import com.searchitemsapp.business.Patterns;
+import com.searchitemsapp.business.ProcessProducts;
+import com.searchitemsapp.business.Products;
+import com.searchitemsapp.business.SelectorsCss;
 import com.searchitemsapp.dto.ProductDto;
+import com.searchitemsapp.dto.SearchedParamsDto;
 import com.searchitemsapp.dto.UrlDto;
 
 import lombok.Data;
@@ -31,25 +31,23 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Scope("prototype")
-public class ApplicationBusinessImpl implements ApplicationBusiness {
-	
-	private static final String PRODUCT_NAME = "PRODUCT_NAME";
+public class ProcessProductsImpl implements ProcessProducts {
 	
 	private UrlDto urlDto; 
-	private Map<String,String> requestParams;
-	private List<BrandsDto> listAllBrands;
+	private SearchedParamsDto productsInParametersDto;
+	private Brands brands;
 	private Environment environment;
-	private DocumentManager documentManager;
-	private PatternsManager patternsManager;
-	private ProductManager productManager;
-	private SelectorCssManager selectorCssManager;
+	private Documents documentManager;
+	private Patterns patternsManager;
+	private Products productManager;
+	private SelectorsCss selectorCssManager;
 
-	public  List<ProductDto> checkHtmlDocument() 
+	private  List<ProductDto> generateProductList() 
 			throws IOException, URISyntaxException, InterruptedException, JSONException {
 		
 		List<ProductDto> productListAsResult = Lists.newArrayList();
 				
-    	List<Document> documentList = documentManager.getHtmlDocument(urlDto, requestParams.get(PRODUCT_NAME));
+    	List<Document> documentList = documentManager.getHtmlDocument(urlDto, productsInParametersDto.getProduct());
     	
     	documentList.stream()
 	    	.filter(document -> Objects.nonNull(document))
@@ -60,15 +58,15 @@ public class ApplicationBusinessImpl implements ApplicationBusiness {
 	            		urlDto.getSelectores().getScrapNoPattern());
 	            
 	            documentElements.stream()
-		            .filter(element -> !selectorCssManager.validaSelector(element))
+		            .filter(element -> !selectorCssManager.validateSelector(element))
 		            .forEach(element -> {
 		            	
 		            	try {
 		            		
-		            		ProductDto productDto = productManager.addElementsToProducts(element, urlDto, requestParams.get("SORT"));
+		            		ProductDto productDto = productManager.addElementsToProducts(element, urlDto, productsInParametersDto.getSort());
 			    			
-			    			if(productManager.checkProduct(requestParams.get(PRODUCT_NAME), 
-			    					urlDto.getDidEmpresa(), productDto, patternsManager, listAllBrands)) {
+			    			if(productManager.checkProduct(productsInParametersDto.getProduct(), 
+			    					urlDto.getDidEmpresa(), productDto, patternsManager, brands)) {
 			    				productListAsResult.add(productDto);
 			    			}
 		    			
@@ -83,6 +81,6 @@ public class ApplicationBusinessImpl implements ApplicationBusiness {
 
 	@Override
 	public List<ProductDto> call() throws IOException, URISyntaxException, InterruptedException, JSONException {
-		return checkHtmlDocument();
+		return generateProductList();
 	}
 }

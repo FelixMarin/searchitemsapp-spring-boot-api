@@ -10,12 +10,12 @@ import com.searchitemsapp.dto.UrlDto;
 
 import lombok.NonNull;
 
-public interface SelectorCssManager {
+public interface SelectorsCss {
 	
 	abstract List<CssSelectorsDto> selectorCssListByEnterprise(final String strDidEmpresas);
-	abstract boolean validaSelector(Element elem);
-	abstract CssSelectorsDto cargaSelectoresCss(UrlDto urlDTO, List<CssSelectorsDto> listTodosElementNodes);
-	abstract String elementoPorCssSelector(@NonNull Element documentElement, 
+	abstract boolean validateSelector(Element elem);
+	abstract CssSelectorsDto addCssSelectors(UrlDto urlDTO, List<CssSelectorsDto> listTodosElementNodes);
+	abstract String elementByCssSelector(@NonNull Element documentElement, 
 			@NonNull String cssSelector,
 			@NonNull UrlDto urlDto) throws MalformedURLException;
 	

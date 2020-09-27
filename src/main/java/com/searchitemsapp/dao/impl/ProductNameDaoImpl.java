@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dao.ProductNameDao;
 import com.searchitemsapp.dao.repository.ProductNameRepository;
-import com.searchitemsapp.dto.LiveSearchProductNameDto;
+import com.searchitemsapp.dto.LiveSearchDto;
 import com.searchitemsapp.entities.TbSiaNomProducto;
 
 import lombok.AllArgsConstructor;
@@ -25,25 +25,25 @@ public class ProductNameDaoImpl extends AbstractDao  implements ProductNameDao {
 	private Environment env;
 
 	@Override
-	public LiveSearchProductNameDto findByDid(LiveSearchProductNameDto nomProducto) throws IOException {		
+	public LiveSearchDto findByDid(LiveSearchDto nomProducto) throws IOException {		
 		return getModelMapper().map(ifNomProductoRepository
-				.findById(nomProducto.getDid().longValue()), LiveSearchProductNameDto.class);
+				.findById(nomProducto.getDid().longValue()), LiveSearchDto.class);
 	}
 
 	@Override
-	public List<LiveSearchProductNameDto> findAll() throws IOException {
+	public List<LiveSearchDto> findAll() throws IOException {
 		
-		List<LiveSearchProductNameDto> listDto = Lists.newArrayList();
+		List<LiveSearchDto> listDto = Lists.newArrayList();
 				
 				ifNomProductoRepository.findAll().forEach(elem -> listDto
-						.add(getModelMapper().map(elem, LiveSearchProductNameDto.class)));
+						.add(getModelMapper().map(elem, LiveSearchDto.class)));
 		
 		return listDto;
 	}
 	
-	public List<LiveSearchProductNameDto> findByNomProducto(String product) {
+	public List<LiveSearchDto> findByNomProducto(String product) {
 
-		List<LiveSearchProductNameDto> listDto = Lists.newArrayList(); 
+		List<LiveSearchDto> listDto = Lists.newArrayList(); 
 
 		String nativeQuery = env.getProperty("flow.value.select.native.producto.by.nombre");
 		
@@ -52,7 +52,7 @@ public class ProductNameDaoImpl extends AbstractDao  implements ProductNameDao {
 		List<TbSiaNomProducto> liEntities = (q.getResultList());
 		
 		liEntities.forEach(elem -> listDto
-				.add(getModelMapper().map(elem, LiveSearchProductNameDto.class)));
+				.add(getModelMapper().map(elem, LiveSearchDto.class)));
 		
 		return listDto;
 		

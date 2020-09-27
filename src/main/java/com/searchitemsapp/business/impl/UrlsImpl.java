@@ -3,59 +3,59 @@ package com.searchitemsapp.business.impl;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.ProductManager;
-import com.searchitemsapp.business.SelectorCssManager;
-import com.searchitemsapp.business.UrlManager;
+import com.searchitemsapp.business.Products;
+import com.searchitemsapp.business.SelectorsCss;
+import com.searchitemsapp.business.Urls;
 import com.searchitemsapp.business.enterprises.Enterprise;
 import com.searchitemsapp.business.enterprises.factory.EnterpriseFactory;
 import com.searchitemsapp.dao.UrlDao;
 import com.searchitemsapp.dto.CategoryDto;
 import com.searchitemsapp.dto.CountryDto;
 import com.searchitemsapp.dto.CssSelectorsDto;
+import com.searchitemsapp.dto.SearchedParamsDto;
 import com.searchitemsapp.dto.UrlDto;
 
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class UrlManagerImpl implements UrlManager {
+public class UrlsImpl implements Urls {
 	
-	private ProductManager productManager;
+	private Products products;
 	private EnterpriseFactory enterpriseFactory;
 	private UrlDao urlDao;
 	private CategoryDto categoryDto;
 	private CountryDto countryDto;
-	private SelectorCssManager selectorCssManager;
+	private SelectorsCss selectorsCss;
 	
-	public List<UrlDto> replaceUrlWildcard(Map<String,String> requestParams,
+	public List<UrlDto> replaceUrlWildcard(SearchedParamsDto productsInParametersDto,
 			final List<CssSelectorsDto> listAllCssSelector) 
 			throws IOException {
 		
-		countryDto.setDid(NumberUtils.toInt(requestParams.get("COUNTRY_ID")));		
-		categoryDto.setDid(NumberUtils.toInt(requestParams.get("CATEGORY_ID")));
+		countryDto.setDid(NumberUtils.toInt(productsInParametersDto.getCountryId()));		
+		categoryDto.setDid(NumberUtils.toInt(productsInParametersDto.getCategoryId()));
 		
-		List<UrlDto> listUrlDto  = urlDao.obtenerUrlsPorIdEmpresa(countryDto, categoryDto, requestParams.get("ENTERPRISES"));
+		List<UrlDto> listUrlDto  = urlDao.obtenerUrlsPorIdEmpresa(countryDto, categoryDto, productsInParametersDto.getPipedEnterprises());
 		
 		List<UrlDto> listResultUrlDto = Lists.newArrayList();
 	
 		listUrlDto.forEach(urlDto -> {
 			
 			try {			
-				urlDto.setSelectores(selectorCssManager
-						.cargaSelectoresCss(urlDto, listAllCssSelector));
+				urlDto.setSelectores(selectorsCss
+						.addCssSelectors(urlDto, listAllCssSelector));
 				
 				Enterprise enterprise = enterpriseFactory.getEnterpriseData(urlDto.getDidEmpresa());
-				String productoTratado = enterprise.reemplazarCaracteres(requestParams.get("PRODUCT_NAME"));
-				productoTratado = productManager.tratarProducto(productoTratado);
+				String refinedProductName = enterprise.reemplazarCaracteres(productsInParametersDto.getProduct());
+				refinedProductName = products.manageProductName(refinedProductName);
 								
 				String urlAux = urlDto.getNomUrl();
-				urlAux = urlAux.replace("{1}", productoTratado);
+				urlAux = urlAux.replace("{1}", refinedProductName);
 				urlDto.setNomUrl(urlAux);
 				listResultUrlDto.add(urlDto);
 			}catch(IOException e) {
