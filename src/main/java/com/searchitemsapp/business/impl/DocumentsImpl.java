@@ -13,7 +13,7 @@ import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.DocumentManager;
+import com.searchitemsapp.business.Documents;
 import com.searchitemsapp.business.enterprises.Enterprise;
 import com.searchitemsapp.business.enterprises.factory.EnterpriseFactory;
 import com.searchitemsapp.dto.UrlDto;
@@ -22,11 +22,25 @@ import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class DocumentManagerImpl implements DocumentManager {
+public class DocumentsImpl implements Documents {
 	
 	private EnterpriseFactory enterpriseFactory;
-	private DynamicWebManagerImpl procesDataDynamic;
+	private DynamicWebProcessingImpl dynamicWebProcessingImpl;
 	
+	@Override
+	public List<String> urlsPaginacion(final Document document, 
+			final UrlDto urlDto, final int enterpriseId) 
+					throws MalformedURLException {
+		
+		List<String> listUrlsResultado = Lists.newArrayList();
+		
+		listUrlsResultado.addAll(enterpriseFactory
+				.getEnterpriseData(enterpriseId).getListaUrls(document, urlDto));
+		
+		return listUrlsResultado;
+	}
+	
+	@Override
 	public List<Document> getHtmlDocument(final UrlDto urlDto, final String product) 
 					throws IOException, URISyntaxException, 
 					InterruptedException, JSONException {
@@ -57,25 +71,13 @@ public class DocumentManagerImpl implements DocumentManager {
 
 		if(enterprise.isDynamic()) {
 			
-			String dynamicContent = procesDataDynamic.getDynHtmlContent(externalProductURL, enterpriseId);
+			String dynamicContent = dynamicWebProcessingImpl.getDynamicHtmlContent(externalProductURL, enterpriseId);
 			String externalProductoURI = new URL(externalProductURL).toURI().toString();
 			
 			return Jsoup.parse(dynamicContent, externalProductoURI);
 		}
 		
-		Response response = enterprise.getJsoupConnection(externalProductURL, requestProductName).execute();
-		return enterprise.getJsoupDocument(response, externalProductURL);
-	}
-	
-	public List<String> urlsPaginacion(final Document document, 
-			final UrlDto urlDto, final int idEmpresa) 
-					throws MalformedURLException {
-		
-		List<String> listUrlsResultado = Lists.newArrayList();
-		
-		listUrlsResultado.addAll(enterpriseFactory
-				.getEnterpriseData(idEmpresa).getListaUrls(document, urlDto));
-		
-		return listUrlsResultado;
+		Response httpResponse = enterprise.getJsoupConnection(externalProductURL, requestProductName).execute();
+		return enterprise.getJsoupDocument(httpResponse, externalProductURL);
 	}
 }

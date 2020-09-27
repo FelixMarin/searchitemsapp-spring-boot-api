@@ -62,31 +62,30 @@ public class MercadonaImpl implements Enterprise {
 	}
 
 	@Override
-	public Document getJsoupDocument(Response response, String url) throws IOException {
+	public Document getJsoupDocument(Response httpResponse, String externalProductURL) throws IOException {
 		
-		if (StringUtils.isAllEmpty(response.body())) {
+		if (StringUtils.isAllEmpty(httpResponse.body())) {
 			return new Document(StringUtils.EMPTY);
 		}
 		
 		Document responseDocument = null;
 		
 		try {
-			JSONObject json = new JSONObject(response.body());
+			JSONObject jsonDocumentBody = new JSONObject(httpResponse.body());
 
-			String xml = XML.toString(json);
-	
-			xml = xml.replace(".", ",");
-	
-			if (StringUtils.isAllEmpty(xml)) {
+			String xmlDocumentBody = XML.toString(jsonDocumentBody);
+			
+			if (StringUtils.isAllEmpty(xmlDocumentBody)) {
 				return new Document(StringUtils.EMPTY);
-			} else {
-				xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>".concat("<root>").concat(xml).concat("</root>");
-				xml = xml.replace("&lt;em&gt;", StringUtils.EMPTY);
-				xml = xml.replace("&lt;/em&gt;", StringUtils.EMPTY);
 			}
 	
-			responseDocument = Jsoup.parse(xml, StringUtils.EMPTY, Parser.xmlParser());
-			responseDocument.setBaseUri(url);
+			xmlDocumentBody = xmlDocumentBody.replace(".", ",");	
+			xmlDocumentBody = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>".concat("<root>").concat(xmlDocumentBody).concat("</root>");
+			xmlDocumentBody = xmlDocumentBody.replace("&lt;em&gt;", StringUtils.EMPTY);
+			xmlDocumentBody = xmlDocumentBody.replace("&lt;/em&gt;", StringUtils.EMPTY);
+	
+			responseDocument = Jsoup.parse(xmlDocumentBody, StringUtils.EMPTY, Parser.xmlParser());
+			responseDocument.setBaseUri(externalProductURL);
 		
 		} catch(org.json.JSONException e) {
 			LOGGER.warn("Can't process body " + Thread.currentThread().getStackTrace()[1].toString());
@@ -97,14 +96,10 @@ public class MercadonaImpl implements Enterprise {
 	
 	@Override
 	public String getAllUrlsToSearch(ProductDto productDto) {
-		String productoAux = StringUtils.EMPTY;
 		
-		if(!StringUtils.isAllEmpty(productDto.getNomProducto())) {
-			productoAux= productDto.getNomProducto()
-				.replace(StringUtils.SPACE, "%20");
-		}
-		
+		String productoAux= productDto.getNomProducto().replace(StringUtils.SPACE, "%20");		
 		productDto.setImagen(productDto.getImagen().replace(",", "."));
+		
 		return environment.getProperty("flow.value.url.all").concat(productoAux);
 	}
 	

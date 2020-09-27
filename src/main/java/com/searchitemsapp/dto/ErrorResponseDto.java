@@ -7,14 +7,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data 
-@NoArgsConstructor 
-@Builder
-@AllArgsConstructor
-@Component
-public class OrderDto {
-	
-	private String categoria;
-	private String producto;
+@Data @NoArgsConstructor @AllArgsConstructor
+@Component @Builder
+public class ErrorResponseDto {
 
+	private String resquest;
+	private Integer id;
+	private String description;
 }

@@ -10,7 +10,7 @@ import org.jsoup.nodes.Document;
 
 import com.searchitemsapp.dto.UrlDto;
 
-public interface DocumentManager {
+public interface Documents {
 
 	abstract public List<Document> getHtmlDocument(final UrlDto urlDto, final String producto) 
 					throws IOException, URISyntaxException, 

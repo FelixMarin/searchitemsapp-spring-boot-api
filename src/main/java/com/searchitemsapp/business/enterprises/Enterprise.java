@@ -43,8 +43,8 @@ public interface Enterprise {
 				.timeout(100000);
 	}
 	
-	default Document getJsoupDocument(Response response, String url) throws IOException {
-		return response.parse();
+	default Document getJsoupDocument(Response httpResponse, String externalProductURL) throws IOException {
+		return httpResponse.parse();
 	}
 	
 	default boolean isDynamic() {
@@ -88,5 +88,6 @@ public interface Enterprise {
 			return documentElement.select(cssSelector).text();
 		}
 	}
+
 	
 }

@@ -15,7 +15,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.SelectorCssManager;
+import com.searchitemsapp.business.SelectorsCss;
 import com.searchitemsapp.business.enterprises.Enterprise;
 import com.searchitemsapp.business.enterprises.factory.EnterpriseFactory;
 import com.searchitemsapp.dao.CssSelectorsDao;
@@ -28,62 +28,67 @@ import lombok.NonNull;
 
 @Component
 @AllArgsConstructor
-public class SelectorCssManagerImpl implements SelectorCssManager {
+public class SelectorsCssImpl implements SelectorsCss {
 	
 	private CssSelectorsDao cssSelectorsDao;
 	private Environment environment;
-	private EnterpriseFactory entityFactory;
+	private EnterpriseFactory enterpriseFactory;
 
+	@Override
 	public List<CssSelectorsDto> selectorCssListByEnterprise(
-			final String didEmpresas) {
+			final String enterpriseId) {
 
 		String enterprisesIdSepearatedByCommas;
 		
-		if("ALL".equalsIgnoreCase(didEmpresas)) {
+		if("ALL".equalsIgnoreCase(enterpriseId)) {
 			enterprisesIdSepearatedByCommas = environment.getProperty("flow.value.all.id.empresa");
 		} else {
-			enterprisesIdSepearatedByCommas = didEmpresas;
+			enterprisesIdSepearatedByCommas = enterpriseId;
 		}
 		
-		StringTokenizer st = new StringTokenizer(enterprisesIdSepearatedByCommas, ","); 			
-		List<Integer> listaAux = Lists.newArrayList();
+		StringTokenizer tokenizer = new StringTokenizer(enterprisesIdSepearatedByCommas, ","); 			
+		List<Integer> enterpriseIdsList = Lists.newArrayList();
 		
-		while (st.hasMoreElements()) {
-			listaAux.add(Integer.parseInt(String.valueOf(st.nextElement())));
+		while (tokenizer.hasMoreElements()) {
+			enterpriseIdsList.add(Integer.parseInt(String.valueOf(tokenizer.nextElement())));
 			
 		}
 		
-		List<CssSelectorsDto> listaSelectoresResultado = Lists.newArrayList();
+		List<CssSelectorsDto> cssSelectorDtoList = Lists.newArrayList();
 		
-		listaAux.forEach(didEmpresa -> {
+		enterpriseIdsList.forEach(enterpriseIdLocal -> {
 			
-			try {
-				 EnterpriseDto empresaDto = new EnterpriseDto();
-				empresaDto.setDid(didEmpresa);			
-				List<CssSelectorsDto> lsel = cssSelectorsDao.findByTbSia(new CssSelectorsDto(), empresaDto);
-				listaSelectoresResultado.addAll(lsel);
+			try {	
+				
+				cssSelectorDtoList.addAll(
+						cssSelectorsDao.findByTbSia(
+								CssSelectorsDto.builder().build(), 
+								EnterpriseDto.builder().did(enterpriseIdLocal).build()));
+			
 			}catch(IOException e) {
 				throw new UncheckedIOException(e);
 			}
 			
 		});
 		
-		return listaSelectoresResultado;
+		return cssSelectorDtoList;
 	}
 	
-	public boolean validaSelector(Element elem) {
-		return Objects.nonNull(elem.selectFirst(environment.getProperty("flow.value.pagina.siguiente.carrefour"))) ||
-		Objects.nonNull(elem.selectFirst(environment.getProperty("flow.value.pagina.acceso.popup.peso")));
+	@Override
+	public boolean validateSelector(Element documentElement) {
+		return Objects.nonNull(documentElement.selectFirst(environment.getProperty("flow.value.pagina.siguiente.carrefour"))) ||
+		Objects.nonNull(documentElement.selectFirst(environment.getProperty("flow.value.pagina.acceso.popup.peso")));
 	}
 	
-	public CssSelectorsDto cargaSelectoresCss(UrlDto urlDTO, List<CssSelectorsDto> listTodosElementNodes) {
+	@Override
+	public CssSelectorsDto addCssSelectors(UrlDto urlDTO, List<CssSelectorsDto> cssSelectorList) {
 		
-		return listTodosElementNodes
+		return cssSelectorList
 				.stream().filter(x -> x.getDidEmpresa().equals(urlDTO.getDidEmpresa()))
 				.collect(Collectors.toList()).get(0);
 	}
 	
-	public String elementoPorCssSelector(@NonNull Element documentElement, 
+	public String elementByCssSelector(@NonNull Element documentElement, 
 			@NonNull String cssSelector,
 			@NonNull UrlDto urlDto) throws MalformedURLException {
 				
@@ -94,7 +99,7 @@ public class SelectorCssManagerImpl implements SelectorCssManager {
 			cssSelectorList.add(st.nextToken());
 		}
 		
-		Enterprise enterprise = entityFactory.getEnterpriseData(urlDto.getDidEmpresa());
+		Enterprise enterprise = enterpriseFactory.getEnterpriseData(urlDto.getDidEmpresa());
 		String textExtracted = enterprise.selectorTextExtractor(documentElement, cssSelectorList, cssSelector);
 		
 		return cleanProductTextExtractedFromCssSelector(textExtracted, urlDto.getNomUrl());

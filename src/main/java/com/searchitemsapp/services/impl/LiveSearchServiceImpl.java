@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.searchitemsapp.dao.ProductNameDao;
-import com.searchitemsapp.dto.LiveSearchProductNameDto;
+import com.searchitemsapp.dto.LiveSearchDto;
 import com.searchitemsapp.services.LiveSearchService;
 
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ public class LiveSearchServiceImpl implements LiveSearchService {
 	private ProductNameDao ifNomProductoRepository;
 
 	@Override
-	public List<LiveSearchProductNameDto> buscarProducto(String product) {
+	public List<LiveSearchDto> buscarProducto(String product) {
 		return ifNomProductoRepository.findByNomProducto(product);
 	}
 }

@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.searchitemsapp.dto.BrandsDto;
 
-public interface BrandsManager {
+public interface Brands {
 
-	abstract public String filtroMarca(final int iIdEmpresa, final String nomProducto, final List<BrandsDto> listTodasMarcas);
+	abstract public String brandFilter(final int iIdEmpresa, final String nomProducto, final List<BrandsDto> listTodasMarcas);
 	abstract public List<BrandsDto> allBrandList() throws IOException;
 }
