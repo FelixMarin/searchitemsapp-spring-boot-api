@@ -28,4 +28,6 @@ public class ProductDto {
 	private String desUrl;
 	private String nomUrlAllProducts;
 	private Integer ordenacion;
+	
+	
 }

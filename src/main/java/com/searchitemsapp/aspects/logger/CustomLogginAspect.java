@@ -13,7 +13,7 @@ public class CustomLogginAspect {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Before("execution(public String com.searchitemsapp.services.impl.SearchItemsServiceImpl.orderedByPriceProducts(..))")
+    @Before("execution(public String com.searchitemsapp.services.SearchItemsService.orderedByPriceProducts(..))")
     public void logMethodAcceptionEntityAnnotatedBean(JoinPoint joinPoint) {
         LOGGER.debug("****LoggingAspect.logAroundAllMethods() : " + joinPoint.getSignature().getName() + ": After Method Execution");
     }

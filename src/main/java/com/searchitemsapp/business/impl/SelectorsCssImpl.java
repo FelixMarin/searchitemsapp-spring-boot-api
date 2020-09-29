@@ -31,6 +31,8 @@ import lombok.NonNull;
 @AllArgsConstructor
 public class SelectorsCssImpl implements SelectorsCss {
 	
+	private static final String REGEX = "[()]";
+	private static final String HTTPS = "https:";
 	private CssSelectorsDao cssSelectorsDao;
 	private Environment environment;
 	private CompaniesGroup companiesGroup;
@@ -79,10 +81,10 @@ public class SelectorsCssImpl implements SelectorsCss {
 	}
 	
 	@Override
-	public CssSelectorsDto addCssSelectors(UrlDto urlDTO, List<CssSelectorsDto> cssSelectorList) {
+	public CssSelectorsDto addCssSelectors(UrlDto urlDTO, List<CssSelectorsDto> cssSelectors) {
 		
-		return cssSelectorList
-				.stream().filter(x -> x.getDidEmpresa().equals(urlDTO.getDidEmpresa()))
+		return cssSelectors
+				.stream().filter(cssSelector -> cssSelector.getDidEmpresa().equals(urlDTO.getDidEmpresa()))
 				.collect(Collectors.toList()).get(0);
 	}
 	
@@ -107,25 +109,25 @@ public class SelectorsCssImpl implements SelectorsCss {
 	private String cleanProductTextExtractedFromCssSelector(@NonNull final String textProduct, 
 			String strUrl) throws MalformedURLException {
 		
-		String textProductFiltered = textProduct.replaceAll("[()]", StringUtils.EMPTY);			
-		String caracteres = StringUtils.EMPTY;
+		String textProductFiltered = textProduct.replaceAll(REGEX, StringUtils.EMPTY);			
+		String urlName = StringUtils.EMPTY;
 		
-		if(Objects.nonNull(textProductFiltered) && textProductFiltered.trim().startsWith("//")) {
-			caracteres = "https:".concat(textProductFiltered);
-		} else if(Objects.nonNull(textProductFiltered) && textProductFiltered.trim().startsWith("/")) {
+		if(Objects.nonNull(textProductFiltered) && textProductFiltered.trim().startsWith(Constants.DOUBLE_SLASH.getValue())) {
+			urlName = HTTPS.concat(textProductFiltered);
+		} else if(Objects.nonNull(textProductFiltered) && textProductFiltered.trim().startsWith(Constants.SLASH.getValue())) {
 			URL url = new URL(strUrl);
 			String companyUrl = url.getProtocol().concat(Constants.PROTOCOL_ACCESSOR.getValue()).concat(url.getHost());
-			caracteres = companyUrl.concat(textProductFiltered); 
+			urlName = companyUrl.concat(textProductFiltered); 
 		} else if(Objects.nonNull(textProductFiltered)){
-			caracteres = textProductFiltered;
+			urlName = textProductFiltered;
 		}
 		 
-		String resultado = caracteres.replaceAll("\\(", StringUtils.EMPTY);
+		String resultado = urlName.replaceAll("\\(", StringUtils.EMPTY);
 		resultado = resultado.replaceAll("\\)", StringUtils.EMPTY);
 		
 		resultado = resultado.replace("€", " eur");
 		resultado = resultado.replace("Kilo", "kg");
-		resultado = resultado.replace(" / ", "/");
+		resultado = resultado.replace(" / ", Constants.SLASH.getValue());
 		resultado = resultado.replace(" \"", "\"");
 		 
 		return resultado;

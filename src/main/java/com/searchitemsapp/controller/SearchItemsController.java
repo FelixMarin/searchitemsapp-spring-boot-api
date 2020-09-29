@@ -1,7 +1,6 @@
 package com.searchitemsapp.controller;
 
-import java.util.List;
-
+import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Propagation;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.searchitemsapp.dto.ProductDto;
 import com.searchitemsapp.dto.SearchItemsParamsDto;
 import com.searchitemsapp.services.SearchItemsService;
 
@@ -30,20 +28,24 @@ public class SearchItemsController {
 
 	@GetMapping(value = "/search", produces={MediaType.APPLICATION_JSON_VALUE})
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
-	public @ResponseBody ResponseEntity<List<ProductDto>> searchItems(@RequestBody 
+	public @ResponseBody ResponseEntity<String> searchItems(@RequestBody 
 				@RequestParam(value = "country", defaultValue = "101") String countryId,
 				@RequestParam(value = "category", defaultValue = "101") String categoryId,
 				@RequestParam(value = "sort", defaultValue = "1") String sort, 
 				@RequestParam(value = "product") @Validated @NonNull String product, 
 				@RequestParam(value = "pipedcompanies") @Validated @NonNull String pipedCompanies) {
-			
-		return ResponseEntity.ok(searchItemsService.orderedByPriceProducts(
-				SearchItemsParamsDto.builder()
-					.countryId(countryId)
-					.categoryId(categoryId)
-					.sort(sort)
-					.product(product)
-					.pipedEnterprises(pipedCompanies)
-					.build()));
+		
+		SearchItemsParamsDto parameters = SearchItemsParamsDto.builder()
+				.countryId(countryId)
+				.categoryId(categoryId)
+				.sort(sort)
+				.product(product)
+				.pipedEnterprises(pipedCompanies)
+				.build();
+		
+		JSONObject entities = new JSONObject();
+		entities.put("products", searchItemsService.orderedByPriceProducts(parameters));
+		
+		return ResponseEntity.ok(entities.toString());
 	}
 }

@@ -19,6 +19,7 @@ import com.searchitemsapp.business.enterprises.Company;
 import com.searchitemsapp.business.enterprises.factory.CompaniesGroup;
 import com.searchitemsapp.dto.ProductDto;
 import com.searchitemsapp.dto.UrlDto;
+import com.searchitemsapp.resources.Constants;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -50,15 +51,17 @@ public class ProductsImpl implements Products {
 	@Override
 	public String removeTildes(final String accentedWord) {
 		
-		if(accentedWord.indexOf('\u00f1') != -1) {
-			return accentedWord;
+		if(accentedWord.indexOf('\u00f1') == -1) {
+			
+			String wordWithoutTildes = accentedWord.replace(Constants.ENIE_MAY.getValue(), Constants.ENIE_U_HEX.getValue());
+			wordWithoutTildes = Normalizer.normalize(wordWithoutTildes.toLowerCase(), Normalizer.Form.NFD);
+			wordWithoutTildes = wordWithoutTildes.replaceAll("[\\p{InCombiningDiacriticalMarks}]", StringUtils.EMPTY);
+			wordWithoutTildes = wordWithoutTildes.replace(Constants.ENIE_U_HEX.getValue(),  Constants.ENIE_MIN.getValue());
+			return Normalizer.normalize(wordWithoutTildes, Normalizer.Form.NFC);
+			
 		}
 		
-		String wordWithoutTildes = accentedWord.replace("Ñ", "u00f1");
-		wordWithoutTildes = Normalizer.normalize(wordWithoutTildes.toLowerCase(), Normalizer.Form.NFD);
-		wordWithoutTildes = wordWithoutTildes.replaceAll("[\\p{InCombiningDiacriticalMarks}]", StringUtils.EMPTY);
-		wordWithoutTildes = wordWithoutTildes.replace("u00f1",  "ñ");
-		return Normalizer.normalize(wordWithoutTildes, Normalizer.Form.NFC);
+		return accentedWord;
 	}
 	
 	@Override
@@ -91,7 +94,7 @@ public class ProductsImpl implements Products {
 		String tratedProduct=addCharacters(productName, Character.MIN_VALUE, 0, 0);
 		tratedProduct=addCharacters(tratedProduct, Character.MIN_VALUE, 0, 1);
 		
-		Matcher matcher = Pattern.compile("(\\%|\\$00)").matcher(tratedProduct);
+		Matcher matcher = Pattern.compile(Constants.REGEX_DOLAR_PERCENT.getValue()).matcher(tratedProduct);
 		
 		if(matcher.find()) {
 			return tratedProduct;

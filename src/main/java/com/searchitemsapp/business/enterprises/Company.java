@@ -26,6 +26,7 @@ import com.searchitemsapp.resources.Constants;
  */
 public interface Company {
 
+
 	abstract List<String> getUrls(final Document document, final UrlDto urlDto) throws MalformedURLException;
 	
 	default Connection getJsoupConnection(String externalProductURL, String requestProductName) throws MalformedURLException {
@@ -35,11 +36,11 @@ public interface Company {
 		return Jsoup.connect(externalProductURL)
 				.userAgent(Constants.USER_AGENT.getValue())
 				.method(Connection.Method.GET)
-				.referrer(url.getProtocol().concat(Constants.PROTOCOL_ACCESSOR.getValue()).concat(url.getHost().concat("/")))
+				.referrer(url.getProtocol().concat(Constants.PROTOCOL_ACCESSOR.getValue()).concat(url.getHost().concat(Constants.SLASH.getValue())))
 				.ignoreContentType(Boolean.TRUE)
-				.header("Accept-Language", "es-ES,es;q=0.8")
-				.header("Accept-Encoding", "gzip, deflate, sdch")
-				.header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+				.header(Constants.ACCEPT_LANGUAGE.getValue(), Constants.ES_ES.getValue())
+				.header(Constants.ACCEPT_ENCODING.getValue(), Constants.GZIP_DEFLATE_SDCH.getValue())
+				.header(Constants.ACCEPT.getValue(), Constants.TEXT_HTML_APPLICATION.getValue())
 				.maxBodySize(0)
 				.timeout(100000);
 	}
