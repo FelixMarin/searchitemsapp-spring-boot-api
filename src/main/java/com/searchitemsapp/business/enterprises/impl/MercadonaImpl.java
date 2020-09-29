@@ -54,9 +54,10 @@ public class MercadonaImpl implements Company {
 	public Connection getJsoupConnection(String externalProductURL, String requestProductName) {
 
 		return Jsoup.connect(externalProductURL).userAgent(Constants.USER_AGENT.getValue())
-				.method(Connection.Method.POST).referrer("https://tienda.mercadona.es/").ignoreContentType(Boolean.TRUE)
-				.header("Accept-Language", "es-ES,es;q=0.8").header("Accept-Encoding", "gzip, deflate, sdch")
-				.header("Accept", "application/json").maxBodySize(0).timeout(100000)
+				.method(Connection.Method.POST).referrer(environment.getProperty("flow.value.url.mercadona")).ignoreContentType(Boolean.TRUE)
+				.header(Constants.ACCEPT_LANGUAGE.getValue(), Constants.ES_ES.getValue())
+				.header(Constants.ACCEPT_ENCODING.getValue(), Constants.GZIP_DEFLATE_SDCH.getValue())
+				.header(Constants.ACCEPT.getValue(), Constants.APPLICATION_JSON.getValue()).maxBodySize(0).timeout(100000)
 				.requestBody("{\"params\":\"query=".concat(requestProductName).concat("&clickAnalytics=true\"}"));
 
 	}
@@ -97,7 +98,7 @@ public class MercadonaImpl implements Company {
 	@Override
 	public String getAllUrlsToSearch(ProductDto productDto) {
 		
-		String productoAux= productDto.getNomProducto().replace(StringUtils.SPACE, "%20");		
+		String productoAux= productDto.getNomProducto().replace(StringUtils.SPACE, Constants.SPACE_URL.getValue());		
 		productDto.setImagen(productDto.getImagen().replace(Constants.COMMA.getValue(), Constants.DOT.getValue()));
 		
 		return environment.getProperty("flow.value.url.all").concat(productoAux);

@@ -49,7 +49,9 @@ public class HipercorImpl implements Company {
 		urls.add(urlBase);
 	
 		for (int i = 2; i <= intPaginacion; i++) {
-			urls.add(urlBase.replace("/1/", "/".concat(String.valueOf(i).concat("/"))));
+			urls.add(urlBase.replace("/1/", Constants.SLASH.getValue(
+					).concat(String.valueOf(i)
+							.concat(Constants.SLASH.getValue()))));
 		}
 		
 		if(resultLength > 0 && resultLength <= urls.size()) {

@@ -54,7 +54,9 @@ public class ElCorteInglesImpl implements Company {
 		listaUrls.add(urlBase);
 
 		for (int i = 2; i <= intPaginacion; i++) {
-			listaUrls.add(urlBase.replace("/1/", "/".concat(String.valueOf(i).concat("/"))));
+			listaUrls.add(urlBase.replace("/1/", Constants.SLASH.getValue(
+					).concat(String.valueOf(i)
+							.concat(Constants.SLASH.getValue()))));
 		}
 
 		if(numresultados > 0 && numresultados <= listaUrls.size()) {

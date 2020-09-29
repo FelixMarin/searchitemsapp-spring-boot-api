@@ -18,6 +18,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SimplyImpl implements Company {
 	
+	private static final String AMPERSAND_FIN_EQUALS_TEN = "&fin=10";
+	private static final String EQUALS_ONE_AMPERSAND = "=1&";
+	private static final String AMPERSAND_FIN_EQUALS = "&fin=";
 	private Environment environment;
 
 	@Override
@@ -37,12 +40,12 @@ public class SimplyImpl implements Company {
 		
 		for (int i = 2; i <= maxNumberOfUrls; i++) {
 			
-			urlAux = urlBase.replace("=1&", "=".concat(String.valueOf(i).concat("&")));
+			urlAux = urlBase.replace(EQUALS_ONE_AMPERSAND, Constants.EQUALS.getValue().concat(String.valueOf(i).concat(Constants.AMPERSAND.getValue())));
 			
 			if(i == 2) {
-				urlAux = urlAux.replace("&fin=10", "&fin=" + itemsToShow);
+				urlAux = urlAux.replace(AMPERSAND_FIN_EQUALS_TEN, AMPERSAND_FIN_EQUALS + itemsToShow);
 			} else {
-				urlAux = urlAux.replace("&fin=10", "&fin=" + itemsToShow*increment++);
+				urlAux = urlAux.replace(AMPERSAND_FIN_EQUALS_TEN, AMPERSAND_FIN_EQUALS + itemsToShow*increment++);
 			}
 			
 			listaUrls.add(urlAux);
@@ -58,7 +61,7 @@ public class SimplyImpl implements Company {
 	@Override
 	public String reemplazarCaracteres(final String producto) {
 		return producto.replace(Constants.ENIE_MIN.getValue(), 
-				Constants.ENIE_URL.getValue());
+				Constants.ENIE_URL_F.getValue());
 	}
 
 	@Override

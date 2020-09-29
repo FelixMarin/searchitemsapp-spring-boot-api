@@ -19,10 +19,11 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class EroskiImpl implements Company {
 	
-	private static final String[] ARRAY_TILDES_EROSKI = {"$00e1","$00e9","$00ed","$00f3","$00fa"};
+	private static final String EQUALS_ZERO_AMPERSAND = "=0&";
+	private static final String[] ARRAY_TILDES = {"$00e1","$00e9","$00ed","$00f3","$00fa"};
 	private static final String[] ARRAY_TILDES_NORMALES_MIN = {"á","é","í","ó","ú"};
 	
-	private Environment env;
+	private Environment environment;
 
 	@Override
 	public List<String> getUrls(final Document document, final UrlDto urlDto) 
@@ -30,13 +31,13 @@ public class EroskiImpl implements Company {
 		
 		String urlBase = urlDto.getNomUrl();
 	
-		int relsultLength = NumberUtils.toInt(env.getProperty("flow.value.paginacion.url.eroski"));
+		int relsultLength = NumberUtils.toInt(environment.getProperty("flow.value.paginacion.url.eroski"));
 	
 		List<String> urls = Lists.newArrayList();
 		urls.add(urlBase);
 
 		for (int i = 1; i <= 20; i++) {
-			urls.add(urlBase.replace("=0&", "=".concat(String.valueOf(i).concat("&"))));
+			urls.add(urlBase.replace(EQUALS_ZERO_AMPERSAND, Constants.EQUALS.getValue().concat(String.valueOf(i).concat(Constants.AMPERSAND.getValue()))));
 		}
 	
 		if(relsultLength > 0 && relsultLength <= urls.size()) {
@@ -52,9 +53,9 @@ public class EroskiImpl implements Company {
 		String productoTratado = productName
 				.replace(Constants.ENIE_MIN.getValue(), Constants.ENIE_EROSKI.getValue());
 		
-		for (int i = 0; i < ARRAY_TILDES_EROSKI.length; i++) {
+		for (int i = 0; i < ARRAY_TILDES.length; i++) {
 			productoTratado = productoTratado
-					.replace(ARRAY_TILDES_NORMALES_MIN[i], ARRAY_TILDES_EROSKI[i]);
+					.replace(ARRAY_TILDES_NORMALES_MIN[i], ARRAY_TILDES[i]);
 		}
 		
 		return productoTratado;
@@ -62,6 +63,6 @@ public class EroskiImpl implements Company {
 
 	@Override
 	public int get_DID() {
-		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.eroski"));
+		return NumberUtils.toInt(environment.getProperty("flow.value.did.empresa.eroski"));
 	}
 }

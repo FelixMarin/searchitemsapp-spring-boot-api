@@ -24,6 +24,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CondisImpl implements Company {
 	
+	private static final String SCRIPT = "script";
 	private static final char LEFT_SLASH_CHAR = '\'';
 	private static final String SPECIALS_CHARS_STRING = "\r\n|\r|\n";
 	
@@ -63,7 +64,7 @@ public class CondisImpl implements Company {
 					arVocales[i]);
 		}
 		
-		productoAux = productoAux.replace(Constants.ENIE_MIN.getValue(), "%D1");
+		productoAux = productoAux.replace(Constants.ENIE_MIN.getValue(), Constants.ENIE_URL_D.getValue());
 		
 		return productoAux;
 	}
@@ -74,7 +75,7 @@ public class CondisImpl implements Company {
 		
 		int selectorsListSize = cssSelectorList.size();
 		
-		if("script".equalsIgnoreCase(cssSelectorList.get(0))) {
+		if(SCRIPT.equalsIgnoreCase(cssSelectorList.get(0))) {
 
 			String resultado = StringUtils.EMPTY;
 			Matcher matcher;
@@ -104,7 +105,7 @@ public class CondisImpl implements Company {
 								resultado.length()).length()  == 2) {
 					resultado += Constants.ZERO.getValue();
 				}else {
-					resultado = resultado.concat(",00");
+					resultado = resultado.concat(Constants.COMMA_DECIMALS_EXTENSION.getValue());
 				}
 			}
 			
@@ -113,7 +114,7 @@ public class CondisImpl implements Company {
 			}
 			
 			if(resultado.endsWith(Constants.COMMA.getValue())) {
-				resultado = resultado.concat("00");
+				resultado = resultado.concat(Constants.DOUBLE_ZERO.getValue());
 			}
 			
 			return resultado;

@@ -19,6 +19,7 @@ import com.searchitemsapp.dto.CountryDto;
 import com.searchitemsapp.dto.CssSelectorsDto;
 import com.searchitemsapp.dto.SearchItemsParamsDto;
 import com.searchitemsapp.dto.UrlDto;
+import com.searchitemsapp.resources.Constants;
 
 import lombok.AllArgsConstructor;
 
@@ -53,9 +54,9 @@ public class UrlsImpl implements Urls {
 				Company company = companiesGroup.getInstance(urlDto.getDidEmpresa());
 				String refinedProductName = company.reemplazarCaracteres(productsInParametersDto.getProduct());
 				refinedProductName = products.manageProductName(refinedProductName);
-								
+
 				String urlAux = urlDto.getNomUrl();
-				urlAux = urlAux.replace("{1}", refinedProductName);
+				urlAux = urlAux.replace(Constants.WILDCARD.getValue(), refinedProductName);
 				urlDto.setNomUrl(urlAux);
 				listResultUrlDto.add(urlDto);
 			}catch(IOException e) {
