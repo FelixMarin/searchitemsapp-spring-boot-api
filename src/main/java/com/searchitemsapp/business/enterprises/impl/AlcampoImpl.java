@@ -13,51 +13,48 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.enterprises.Enterprise;
+import com.searchitemsapp.business.enterprises.Company;
 import com.searchitemsapp.dto.UrlDto;
+import com.searchitemsapp.resources.Constants;
 
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class AlcampoImpl implements Enterprise {
+public class AlcampoImpl implements Company {
 	
-	
-	private static final String PATTERN = ".*&page=([0-9]+)";
-	private static final String ZERO_STRING = "0";
-	
-	private Environment env;
+	private Environment environment;
 	
 	@Override
-	public List<String> getListaUrls(Document document, UrlDto urlDto) 
+	public List<String> getUrls(Document document, UrlDto urlDto) 
 			throws MalformedURLException {
 		
 		String urlBase = urlDto.getNomUrl();
 		
-		String selectorPaginacion = urlDto.getSelectores().getSelPaginacion();	
-		String strPaginacion = ZERO_STRING;
+		String paginationSelector = urlDto.getSelectores().getSelPaginacion();	
+		String strPaginacion = Constants.ZERO.getValue();
 			
-		int numresultados = NumberUtils.toInt(env.getProperty("flow.value.paginacion.url.alcampo"));
+		int numresultados = NumberUtils.toInt(environment.getProperty("flow.value.paginacion.url.alcampo"));
 		
-		List<String> liSelectorAtr = Lists.newArrayList();
+		List<String> selectors = Lists.newArrayList();
 		
-		StringTokenizer st = new StringTokenizer(selectorPaginacion,"|");  
+		StringTokenizer tokenizer = new StringTokenizer(paginationSelector, Constants.PIPE.getValue());  
 		
-		while (st.hasMoreTokens()) {  
-			liSelectorAtr.add(st.nextToken());
+		while (tokenizer.hasMoreTokens()) {  
+			selectors.add(tokenizer.nextToken());
 		}
 		
-		Elements elements = document.select(liSelectorAtr.get(0));
-		List<String> listaUrls = Lists.newArrayList();
+		Elements elements = document.select(selectors.get(0));
+		List<String> urls = Lists.newArrayList();
 		
 		if(elements.isEmpty()) {
-			listaUrls.add(urlBase);
-			return listaUrls;
+			urls.add(urlBase);
+			return urls;
 		}
 		
-		String ultimoElemento = elements.get(elements.size()-1).attr(liSelectorAtr.get(1));
+		String lastElement = elements.get(elements.size()-1).attr(selectors.get(1));
 		
-		Matcher m = Pattern.compile(PATTERN).matcher(ultimoElemento);
+		Matcher m = Pattern.compile(Constants.PAGE_REGEX.getValue()).matcher(lastElement);
 		
 		if(m.find()) {
 			strPaginacion=m.group(1);
@@ -66,17 +63,17 @@ public class AlcampoImpl implements Enterprise {
 		int intPaginacion = NumberUtils.toInt(strPaginacion.trim());
 		
 		for (int i = 2; i <= intPaginacion; i++) {
-			listaUrls.add(urlBase.replace("&page=1", "&page=".concat(String.valueOf(i))));
+			urls.add(urlBase.replace("&page=1", "&page=".concat(String.valueOf(i))));
 		}
 		
-		if(numresultados > 0 && numresultados <= listaUrls.size()) {
-			listaUrls = listaUrls.subList(0, numresultados);
+		if(numresultados > 0 && numresultados <= urls.size()) {
+			urls = urls.subList(0, numresultados);
 		}		
 		
-		return listaUrls;
+		return urls;
 	}
 	
 	public int get_DID() {
-		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.alcampo"));
+		return NumberUtils.toInt(environment.getProperty("flow.value.did.empresa.alcampo"));
 	}
 }

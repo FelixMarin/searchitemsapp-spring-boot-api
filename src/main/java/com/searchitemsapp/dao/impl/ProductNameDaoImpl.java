@@ -21,12 +21,12 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ProductNameDaoImpl extends AbstractDao  implements ProductNameDao {
 	
-	private ProductNameRepository ifNomProductoRepository;
-	private Environment env;
+	private ProductNameRepository repository;
+	private Environment environment;
 
 	@Override
 	public LiveSearchDto findByDid(LiveSearchDto nomProducto) throws IOException {		
-		return getModelMapper().map(ifNomProductoRepository
+		return getModelMapper().map(repository
 				.findById(nomProducto.getDid().longValue()), LiveSearchDto.class);
 	}
 
@@ -35,7 +35,7 @@ public class ProductNameDaoImpl extends AbstractDao  implements ProductNameDao {
 		
 		List<LiveSearchDto> listDto = Lists.newArrayList();
 				
-				ifNomProductoRepository.findAll().forEach(elem -> listDto
+				repository.findAll().forEach(elem -> listDto
 						.add(getModelMapper().map(elem, LiveSearchDto.class)));
 		
 		return listDto;
@@ -45,7 +45,7 @@ public class ProductNameDaoImpl extends AbstractDao  implements ProductNameDao {
 
 		List<LiveSearchDto> listDto = Lists.newArrayList(); 
 
-		String nativeQuery = env.getProperty("flow.value.select.native.producto.by.nombre");
+		String nativeQuery = environment.getProperty("flow.value.select.native.producto.by.nombre");
 		
 		Query q = getEntityManager().createNativeQuery(nativeQuery.replace("#", product), TbSiaNomProducto.class);
 		

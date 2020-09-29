@@ -10,70 +10,68 @@ import org.codehaus.jettison.json.JSONException;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.searchitemsapp.business.Brands;
 import com.searchitemsapp.business.Documents;
 import com.searchitemsapp.business.Patterns;
-import com.searchitemsapp.business.ProcessProducts;
+import com.searchitemsapp.business.ProductBuilder;
 import com.searchitemsapp.business.Products;
 import com.searchitemsapp.business.SelectorsCss;
 import com.searchitemsapp.dto.ProductDto;
-import com.searchitemsapp.dto.SearchedParamsDto;
+import com.searchitemsapp.dto.SearchItemsParamsDto;
 import com.searchitemsapp.dto.UrlDto;
 
-import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Component
-@Data
+@Setter
 @NoArgsConstructor
 @Scope("prototype")
-public class ProcessProductsImpl implements ProcessProducts {
+public class ProductsBuilderImpl implements ProductBuilder {
 	
 	private UrlDto urlDto; 
-	private SearchedParamsDto productsInParametersDto;
+	private SearchItemsParamsDto productsInParametersDto;
 	private Brands brands;
-	private Environment environment;
-	private Documents documentManager;
-	private Patterns patternsManager;
-	private Products productManager;
-	private SelectorsCss selectorCssManager;
+	private Documents documents;
+	private Patterns patterns;
+	private Products products;
+	private SelectorsCss cssSelectors;
 
-	private  List<ProductDto> generateProductList() 
+	private  List<ProductDto> createProductsList() 
 			throws IOException, URISyntaxException, InterruptedException, JSONException {
 		
 		List<ProductDto> productListAsResult = Lists.newArrayList();
 				
-    	List<Document> documentList = documentManager.getHtmlDocument(urlDto, productsInParametersDto.getProduct());
+    	List<Document> documentList = documents.getHtmlDocument(urlDto, productsInParametersDto.getProduct());
     	
     	documentList.stream()
 	    	.filter(document -> Objects.nonNull(document))
 	    	.forEach(document -> {
 	    		
-	            Elements documentElements = patternsManager.selectScrapPattern(document,
+	            Elements documentElements = patterns.selectScrapPattern(document,
 	            		urlDto.getSelectores().getScrapPattern(), 
 	            		urlDto.getSelectores().getScrapNoPattern());
 	            
 	            documentElements.stream()
-		            .filter(element -> !selectorCssManager.validateSelector(element))
+		            .filter(element -> !cssSelectors.validateSelector(element))
 		            .forEach(element -> {
 		            	
-		            	try {
+		            	try { 
 		            		
-		            		ProductDto productDto = productManager.addElementsToProducts(element, urlDto, productsInParametersDto.getSort());
+		            		ProductDto productDto = products.addElementsToProducts(element, urlDto, productsInParametersDto.getSort());
 			    			
-			    			if(productManager.checkProduct(productsInParametersDto.getProduct(), 
-			    					urlDto.getDidEmpresa(), productDto, patternsManager, brands)) {
+			    			if(products.checkProduct(productsInParametersDto.getProduct(), 
+			    					urlDto.getDidEmpresa(), productDto, patterns, brands)) {
 			    				productListAsResult.add(productDto);
 			    			}
 		    			
 		            	}catch(IOException e) {
 		            		throw new UncheckedIOException(e);
 		            	}
-		            });
+		           });
 	    	});  
         
         return productListAsResult;
@@ -81,6 +79,6 @@ public class ProcessProductsImpl implements ProcessProducts {
 
 	@Override
 	public List<ProductDto> call() throws IOException, URISyntaxException, InterruptedException, JSONException {
-		return generateProductList();
+		return createProductsList();
 	}
 }

@@ -12,11 +12,11 @@ import com.searchitemsapp.dto.UrlDto;
 
 public interface Documents {
 
-	abstract public List<Document> getHtmlDocument(final UrlDto urlDto, final String producto) 
+	abstract public List<Document> getHtmlDocument(final UrlDto urlDto, final String productName) 
 					throws IOException, URISyntaxException, 
 					InterruptedException, JSONException;
 	
 	abstract List<String> urlsPaginacion(final Document document, 
-			final UrlDto urlDto, final int idEmpresa) 
+			final UrlDto urlDto, final int companyId) 
 					throws MalformedURLException;
 }

@@ -13,49 +13,48 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.enterprises.Enterprise;
+import com.searchitemsapp.business.enterprises.Company;
 import com.searchitemsapp.dto.UrlDto;
+import com.searchitemsapp.resources.Constants;
 
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class CarrefourImpl implements Enterprise {
+public class CarrefourImpl implements Company {
 	
-	private static final String PROTOCOL_ACCESSOR ="://";
-	
-	private Environment env;
+	private Environment environment;
 
 	@Override
-	public List<String> getListaUrls(final Document document, 
+	public List<String> getUrls(final Document document, 
 			final UrlDto urlDto) throws MalformedURLException {
 		
 		String urlBase = urlDto.getNomUrl();
 		
-		String selectorPaginacion = urlDto.getSelectores().getSelPaginacion();	
+		String paginationSelector = urlDto.getSelectores().getSelPaginacion();	
 		
-		int numresultados = NumberUtils.toInt(env.getProperty("flow.value.paginacion.url.carrefour"));
+		int numresultados = NumberUtils.toInt(environment.getProperty("flow.value.paginacion.url.carrefour"));
 		
-		StringTokenizer st = new StringTokenizer(selectorPaginacion,"|");  
+		StringTokenizer tokenizer = new StringTokenizer(paginationSelector, Constants.PIPE.getValue());  
 		
-		List<String> liSelectorAtr = Lists.newArrayList();
+		List<String> selectors = Lists.newArrayList();
 		
-		while (st.hasMoreTokens()) {  
-			liSelectorAtr.add(st.nextToken());
+		while (tokenizer.hasMoreTokens()) {  
+			selectors.add(tokenizer.nextToken());
 		}
 			
 		List<String> listaUrls = Lists.newArrayList();
 		
-		Elements elements = document.select(liSelectorAtr.get(0));
+		Elements elements = document.select(selectors.get(0));
 		
 		listaUrls.add(urlBase);
 		
 		URL url = new URL(urlBase);
 		String strUrlEmpresa = url.getProtocol()
-				.concat(PROTOCOL_ACCESSOR).concat(url.getHost());
+				.concat(Constants.PROTOCOL_ACCESSOR.getValue()).concat(url.getHost());
 		
 		for (Element element : elements) {
-			listaUrls.add(strUrlEmpresa.concat(element.attr(liSelectorAtr.get(1))));
+			listaUrls.add(strUrlEmpresa.concat(element.attr(selectors.get(1))));
 		}
 		
 		if(numresultados > 0 && numresultados <= listaUrls.size()) {
@@ -66,6 +65,6 @@ public class CarrefourImpl implements Enterprise {
 	}
 	
 	public int get_DID() {
-		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.carrefour"));
+		return NumberUtils.toInt(environment.getProperty("flow.value.did.empresa.carrefour"));
 	}
 }

@@ -14,24 +14,23 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.enterprises.Enterprise;
+import com.searchitemsapp.business.enterprises.Company;
 import com.searchitemsapp.dto.UrlDto;
+import com.searchitemsapp.resources.Constants;
 
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class CondisImpl implements Enterprise {
+public class CondisImpl implements Company {
 	
-	private static final String ZERO_STRING = "0";
-	private static final String COMMA_STRING = ",";
 	private static final char LEFT_SLASH_CHAR = '\'';
 	private static final String SPECIALS_CHARS_STRING = "\r\n|\r|\n";
 	
 	private Environment environment;
 	
 	@Override
-	public List<String> getListaUrls(final Document document, 
+	public List<String> getUrls(final Document document, 
 			final UrlDto urlDto)
 					throws MalformedURLException {
 		
@@ -64,7 +63,7 @@ public class CondisImpl implements Enterprise {
 					arVocales[i]);
 		}
 		
-		productoAux = productoAux.replace("ñ", "%D1");
+		productoAux = productoAux.replace(Constants.ENIE_MIN.getValue(), "%D1");
 		
 		return productoAux;
 	}
@@ -84,7 +83,8 @@ public class CondisImpl implements Enterprise {
 				return resultado;
 			}
 			
-			resultado = documentElement.select(cssSelector).html().replace(".", COMMA_STRING);
+			resultado = documentElement.select(cssSelector).html()
+					.replace(Constants.DOT.getValue(), Constants.COMMA.getValue());
 			
 			if(resultado.split(SPECIALS_CHARS_STRING).length > 1) {
 				resultado = resultado.split(SPECIALS_CHARS_STRING)[1].trim();
@@ -99,20 +99,20 @@ public class CondisImpl implements Enterprise {
 				resultado = resultado.substring(resultado.indexOf(LEFT_SLASH_CHAR)+1, resultado.length());
 				resultado = resultado.substring(0, resultado.indexOf(LEFT_SLASH_CHAR));
 				
-				if(resultado.contains(COMMA_STRING) &&
-						resultado.substring(resultado.indexOf(COMMA_STRING), 
+				if(resultado.contains(Constants.COMMA.getValue()) &&
+						resultado.substring(resultado.indexOf(Constants.COMMA.getValue()), 
 								resultado.length()).length()  == 2) {
-					resultado += ZERO_STRING;
+					resultado += Constants.ZERO.getValue();
 				}else {
 					resultado = resultado.concat(",00");
 				}
 			}
 			
-			if(resultado.startsWith(COMMA_STRING)) {
-				resultado = ZERO_STRING.concat(resultado);
+			if(resultado.startsWith(Constants.COMMA.getValue())) {
+				resultado = Constants.ZERO.getValue().concat(resultado);
 			}
 			
-			if(resultado.endsWith(COMMA_STRING)) {
+			if(resultado.endsWith(Constants.COMMA.getValue())) {
 				resultado = resultado.concat("00");
 			}
 			

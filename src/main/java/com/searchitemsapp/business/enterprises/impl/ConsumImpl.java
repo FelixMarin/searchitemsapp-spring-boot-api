@@ -19,21 +19,21 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.enterprises.Enterprise;
+import com.searchitemsapp.business.enterprises.Company;
 import com.searchitemsapp.dto.UrlDto;
 
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class ConsumImpl implements Enterprise {
+public class ConsumImpl implements Company {
 	
 	private static final String SCROLL_INTO_VIEW = "arguments[0].scrollIntoView(true)";
 	
 	private Environment environment;
 
 	@Override
-	public List<String> getListaUrls(Document document, UrlDto urlDto)
+	public List<String> getUrls(Document document, UrlDto urlDto)
 			throws MalformedURLException {
 
 		String urlBase = urlDto.getNomUrl();

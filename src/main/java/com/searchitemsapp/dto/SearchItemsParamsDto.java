@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data @NoArgsConstructor @AllArgsConstructor
 @Builder
 @Component
-public class SearchedParamsDto {
+public class SearchItemsParamsDto {
 
 	private String countryId;
 	private String categoryId;

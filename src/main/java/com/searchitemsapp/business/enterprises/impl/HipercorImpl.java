@@ -13,64 +13,65 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.enterprises.Enterprise;
+import com.searchitemsapp.business.enterprises.Company;
 import com.searchitemsapp.dto.UrlDto;
+import com.searchitemsapp.resources.Constants;
 
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class HipercorImpl implements Enterprise {
+public class HipercorImpl implements Company {
 
-	private Environment env;
+	private Environment environment;
 
 	@Override
-	public List<String> getListaUrls(final Document document, 
+	public List<String> getUrls(final Document document, 
 			final UrlDto urlDto) throws MalformedURLException {
 		
 		String urlBase = urlDto.getNomUrl();
 		
-		String selectorPaginacion = urlDto.getSelectores().getSelPaginacion();	
+		String paginationSelector = urlDto.getSelectores().getSelPaginacion();	
 		
-		String strPaginacion = document.select(selectorPaginacion).text();
+		String pagination = document.select(paginationSelector).text();
 			
-		int numresultados = NumberUtils.toInt(env.getProperty("flow.value.paginacion.url.hipercor"));
+		int resultLength = NumberUtils.toInt(environment.getProperty("flow.value.paginacion.url.hipercor"));
 		
-		Matcher m = Pattern.compile(".*de ([0-9]+)").matcher(strPaginacion);
+		Matcher m = Pattern.compile(Constants.FROM_TO_ECI.getValue()).matcher(pagination);
 		
 		if(m.find()) {
-			strPaginacion=m.group(1);
+			pagination=m.group(1);
 		}
 		
-		int intPaginacion = NumberUtils.toInt(strPaginacion.trim());
+		int intPaginacion = NumberUtils.toInt(pagination.trim());
 		
-		List<String> listaUrls = Lists.newArrayList();
-		listaUrls.add(urlBase);
+		List<String> urls = Lists.newArrayList();
+		urls.add(urlBase);
 	
 		for (int i = 2; i <= intPaginacion; i++) {
-			listaUrls.add(urlBase.replace("/1/", "/".concat(String.valueOf(i).concat("/"))));
+			urls.add(urlBase.replace("/1/", "/".concat(String.valueOf(i).concat("/"))));
 		}
 		
-		if(numresultados > 0 && numresultados <= listaUrls.size()) {
-			listaUrls = listaUrls.subList(0, numresultados);
+		if(resultLength > 0 && resultLength <= urls.size()) {
+			urls = urls.subList(0, resultLength);
 		}		
 		
-		return listaUrls;
+		return urls;
 	}
 
 	@Override
 	public int get_DID() {
-		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.hipercor"));
+		return NumberUtils.toInt(environment.getProperty("flow.value.did.empresa.hipercor"));
 	}
 	
 	@Override
-	public String eliminarMarcaPrincipio(String productName) {
+	public String removeInitialBrand(String productName) {
 
-		String[] nomProdSeparado = productName.trim().split(StringUtils.SPACE);
+		String[] splitedProductName = productName.trim().split(StringUtils.SPACE);
 
 		StringBuilder stringBuilder = new StringBuilder(10);
 
-		Arrays.asList(nomProdSeparado).stream().filter(palabra -> !palabra.toUpperCase().equals(palabra))
+		Arrays.asList(splitedProductName).stream().filter(palabra -> !palabra.toUpperCase().equals(palabra))
 				.forEach(palabra -> {
 					stringBuilder.append(palabra).append(StringUtils.SPACE);
 				});

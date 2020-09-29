@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.searchitemsapp.dto.ProductDto;
-import com.searchitemsapp.dto.SearchedParamsDto;
+import com.searchitemsapp.dto.SearchItemsParamsDto;
 import com.searchitemsapp.services.SearchItemsService;
 
 import lombok.AllArgsConstructor;
@@ -35,15 +35,15 @@ public class SearchItemsController {
 				@RequestParam(value = "category", defaultValue = "101") String categoryId,
 				@RequestParam(value = "sort", defaultValue = "1") String sort, 
 				@RequestParam(value = "product") @Validated @NonNull String product, 
-				@RequestParam(value = "pipedenterprises") @Validated @NonNull String pipedEnterprises) {
+				@RequestParam(value = "pipedcompanies") @Validated @NonNull String pipedCompanies) {
 			
 		return ResponseEntity.ok(searchItemsService.orderedByPriceProducts(
-				SearchedParamsDto.builder()
+				SearchItemsParamsDto.builder()
 					.countryId(countryId)
 					.categoryId(categoryId)
 					.sort(sort)
 					.product(product)
-					.pipedEnterprises(pipedEnterprises)
+					.pipedEnterprises(pipedCompanies)
 					.build()));
 	}
 }

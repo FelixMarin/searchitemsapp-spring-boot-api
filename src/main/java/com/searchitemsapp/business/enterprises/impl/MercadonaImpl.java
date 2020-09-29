@@ -20,22 +20,23 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.enterprises.Enterprise;
+import com.searchitemsapp.business.enterprises.Company;
 import com.searchitemsapp.dto.ProductDto;
 import com.searchitemsapp.dto.UrlDto;
+import com.searchitemsapp.resources.Constants;
 
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class MercadonaImpl implements Enterprise {
+public class MercadonaImpl implements Company {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MercadonaImpl.class);  
 	
 	private Environment environment;
 
 	@Override
-	public List<String> getListaUrls(final Document document, final UrlDto urlDto) throws MalformedURLException {
+	public List<String> getUrls(final Document document, final UrlDto urlDto) throws MalformedURLException {
 
 		String urlBase = urlDto.getNomUrl();
 
@@ -52,8 +53,7 @@ public class MercadonaImpl implements Enterprise {
 	@Override
 	public Connection getJsoupConnection(String externalProductURL, String requestProductName) {
 
-		return Jsoup.connect(externalProductURL).userAgent(
-				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36")
+		return Jsoup.connect(externalProductURL).userAgent(Constants.USER_AGENT.getValue())
 				.method(Connection.Method.POST).referrer("https://tienda.mercadona.es/").ignoreContentType(Boolean.TRUE)
 				.header("Accept-Language", "es-ES,es;q=0.8").header("Accept-Encoding", "gzip, deflate, sdch")
 				.header("Accept", "application/json").maxBodySize(0).timeout(100000)
@@ -79,7 +79,7 @@ public class MercadonaImpl implements Enterprise {
 				return new Document(StringUtils.EMPTY);
 			}
 	
-			xmlDocumentBody = xmlDocumentBody.replace(".", ",");	
+			xmlDocumentBody = xmlDocumentBody.replace(Constants.DOT.getValue(), Constants.COMMA.getValue());	
 			xmlDocumentBody = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>".concat("<root>").concat(xmlDocumentBody).concat("</root>");
 			xmlDocumentBody = xmlDocumentBody.replace("&lt;em&gt;", StringUtils.EMPTY);
 			xmlDocumentBody = xmlDocumentBody.replace("&lt;/em&gt;", StringUtils.EMPTY);
@@ -98,7 +98,7 @@ public class MercadonaImpl implements Enterprise {
 	public String getAllUrlsToSearch(ProductDto productDto) {
 		
 		String productoAux= productDto.getNomProducto().replace(StringUtils.SPACE, "%20");		
-		productDto.setImagen(productDto.getImagen().replace(",", "."));
+		productDto.setImagen(productDto.getImagen().replace(Constants.COMMA.getValue(), Constants.DOT.getValue()));
 		
 		return environment.getProperty("flow.value.url.all").concat(productoAux);
 	}

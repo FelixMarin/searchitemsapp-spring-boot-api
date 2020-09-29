@@ -28,7 +28,7 @@ public class CountryDto {
 	private Boolean bolActivo;
 	private String desPais;
 	private String nomPais;
-	private EnterpriseDto empresas;
+	private CompanyDto empresas;
 	private BrandsDto marcas;
 	private LiveSearchDto productos;
 	

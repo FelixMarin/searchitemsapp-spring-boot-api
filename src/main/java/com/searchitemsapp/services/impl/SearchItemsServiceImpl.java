@@ -13,7 +13,6 @@ import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
@@ -21,13 +20,13 @@ import com.searchitemsapp.business.Brands;
 import com.searchitemsapp.business.Documents;
 import com.searchitemsapp.business.Patterns;
 import com.searchitemsapp.business.Prices;
-import com.searchitemsapp.business.ProcessProducts;
+import com.searchitemsapp.business.ProductBuilder;
 import com.searchitemsapp.business.Products;
 import com.searchitemsapp.business.SelectorsCss;
 import com.searchitemsapp.business.Urls;
 import com.searchitemsapp.dto.CssSelectorsDto;
 import com.searchitemsapp.dto.ProductDto;
-import com.searchitemsapp.dto.SearchedParamsDto;
+import com.searchitemsapp.dto.SearchItemsParamsDto;
 import com.searchitemsapp.dto.UrlDto;
 import com.searchitemsapp.services.SearchItemsService;
 
@@ -42,19 +41,18 @@ public class SearchItemsServiceImpl implements SearchItemsService {
 	private ApplicationContext applicationContext;
 	private Urls urls;
 	private Prices prices;
-	private Environment environment;
 	private Documents documents;
 	private Brands brands;
 	private Patterns patterns;
 	private Products products;
 	private SelectorsCss selectorCss;
 	
-	public List<ProductDto> orderedByPriceProducts(SearchedParamsDto searchedParamsDto) {
+	public List<ProductDto> orderedByPriceProducts(SearchItemsParamsDto searchedParamsDto) {
 
 		org.apache.log4j.BasicConfigurator.configure();
 		
 		ExecutorService executorService = Executors.newCachedThreadPool();
-		List<ProductDto> productListAsResult = Lists.newArrayList();
+		List<ProductDto> productsResult = Lists.newArrayList();
 
 		try {
 			List<CssSelectorsDto> listAllCssSelectors = selectorCss
@@ -63,50 +61,45 @@ public class SearchItemsServiceImpl implements SearchItemsService {
 			Collection<UrlDto> urlDtoCollection = urls
 					.replaceUrlWildcard(searchedParamsDto, listAllCssSelectors);
 
-			Collection<ProcessProducts> applicationBusinessCallables = Lists.newArrayList();
+			Collection<ProductBuilder> callables = Lists.newArrayList();
 		
 			urlDtoCollection.forEach(urlDto -> {
 				
-				ProcessProducts processProducts = applicationContext.getBean(ProcessProducts.class);
+				ProductBuilder productCore = applicationContext.getBean(ProductBuilder.class);
 				
-				processProducts.setUrlDto(urlDto);
-				processProducts.setProductsInParametersDto(searchedParamsDto);
-				processProducts.setBrands(brands);
-				processProducts.setEnvironment(environment);
-				processProducts.setDocumentManager(documents);
-				processProducts.setPatternsManager(patterns);
-				processProducts.setProductManager(products);
-				processProducts.setSelectorCssManager(selectorCss);
+				productCore.setUrlDto(urlDto);
+				productCore.setProductsInParametersDto(searchedParamsDto);
+				productCore.setBrands(brands);
+				productCore.setDocuments(documents);
+				productCore.setPatterns(patterns);
+				productCore.setProducts(products);
+				productCore.setCssSelectors(selectorCss);
 	
-				applicationBusinessCallables.add(processProducts);	
+				callables.add(productCore);	
 			});
 	
-			List<Future<List<ProductDto>>> listFutureListResDto = executorService.invokeAll(applicationBusinessCallables);
-			List<ProductDto> listIfProcessPrice = Lists.newArrayList();
+			List<Future<List<ProductDto>>> productFutures = executorService.invokeAll(callables);
+			List<ProductDto> products = Lists.newArrayList();
 			
-			listFutureListResDto.forEach(elem -> {
+			productFutures.forEach(future -> {
 					try {
-						listIfProcessPrice.addAll(elem.get(5, TimeUnit.SECONDS));
+						products.addAll(future.get(5, TimeUnit.SECONDS));
 					} catch (InterruptedException | ExecutionException | TimeoutException e) {
-						LOGGER.error(Thread.currentThread().getStackTrace()[1].toString() + ":" + e.getMessage(),e);
+						LOGGER.error(e.getMessage(),e);
 					}
 				});
 
-			productListAsResult = prices.sortList(listIfProcessPrice);
-
-         	for (int i = 0; i < productListAsResult.size(); i++) {
-				productListAsResult.get(i).setIdentificador(i+1);
-			}
+			productsResult = prices.sortProductsByPrice(products);
          	
 		}catch(IOException | InterruptedException e) {	
 			
-			LOGGER.error(Thread.currentThread().getStackTrace()[1].toString() + ":" + e.getLocalizedMessage(),e);
+			LOGGER.error(e.getLocalizedMessage(),e);
 			Thread.currentThread().interrupt();				
 			
 		} finally {			
 				executorService.shutdown();
 		}
 
-		return productListAsResult;
+		return productsResult;
 	}
 }

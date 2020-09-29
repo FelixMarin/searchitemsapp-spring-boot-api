@@ -8,8 +8,8 @@ import org.jsoup.select.Elements;
 public interface Patterns {
 	
 	abstract public Elements selectScrapPattern(final Document document,
-			final String strScrapPattern, final String strScrapNotPattern);
+			final String scrapPattern, final String scrapNotPattern);
 	
-	abstract public Pattern createPatternProduct(final String[] arProducto);
+	abstract public Pattern createPatternProduct(final String[] productsArray);
 
 }

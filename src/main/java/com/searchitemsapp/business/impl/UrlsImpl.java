@@ -11,13 +11,13 @@ import com.google.common.collect.Lists;
 import com.searchitemsapp.business.Products;
 import com.searchitemsapp.business.SelectorsCss;
 import com.searchitemsapp.business.Urls;
-import com.searchitemsapp.business.enterprises.Enterprise;
-import com.searchitemsapp.business.enterprises.factory.EnterpriseFactory;
+import com.searchitemsapp.business.enterprises.Company;
+import com.searchitemsapp.business.enterprises.factory.CompaniesGroup;
 import com.searchitemsapp.dao.UrlDao;
 import com.searchitemsapp.dto.CategoryDto;
 import com.searchitemsapp.dto.CountryDto;
 import com.searchitemsapp.dto.CssSelectorsDto;
-import com.searchitemsapp.dto.SearchedParamsDto;
+import com.searchitemsapp.dto.SearchItemsParamsDto;
 import com.searchitemsapp.dto.UrlDto;
 
 import lombok.AllArgsConstructor;
@@ -27,13 +27,13 @@ import lombok.AllArgsConstructor;
 public class UrlsImpl implements Urls {
 	
 	private Products products;
-	private EnterpriseFactory enterpriseFactory;
+	private CompaniesGroup companiesGroup;
 	private UrlDao urlDao;
 	private CategoryDto categoryDto;
 	private CountryDto countryDto;
 	private SelectorsCss selectorsCss; 
 	
-	public List<UrlDto> replaceUrlWildcard(SearchedParamsDto productsInParametersDto,
+	public List<UrlDto> replaceUrlWildcard(SearchItemsParamsDto productsInParametersDto,
 			final List<CssSelectorsDto> listAllCssSelector) 
 			throws IOException {
 		
@@ -50,8 +50,8 @@ public class UrlsImpl implements Urls {
 				urlDto.setSelectores(selectorsCss
 						.addCssSelectors(urlDto, listAllCssSelector));
 				
-				Enterprise enterprise = enterpriseFactory.getInstance(urlDto.getDidEmpresa());
-				String refinedProductName = enterprise.reemplazarCaracteres(productsInParametersDto.getProduct());
+				Company company = companiesGroup.getInstance(urlDto.getDidEmpresa());
+				String refinedProductName = company.reemplazarCaracteres(productsInParametersDto.getProduct());
 				refinedProductName = products.manageProductName(refinedProductName);
 								
 				String urlAux = urlDto.getNomUrl();

@@ -21,10 +21,10 @@ public class ProductDto {
 	private String imagen;
 	private String precio;
 	private String nomUrl;
-	private Integer didUrl;
-	private Boolean bolActivo;
-	private Boolean bolStatus;
-	private Boolean bolLogin;	
+	private volatile transient Integer didUrl;
+	private volatile transient Boolean bolActivo;
+	private volatile transient Boolean bolStatus;
+	private volatile transient Boolean bolLogin;	
 	private String desUrl;
 	private String nomUrlAllProducts;
 	private Integer ordenacion;

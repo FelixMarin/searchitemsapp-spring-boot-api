@@ -10,33 +10,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.searchitemsapp.dto.CategoryDto;
-import com.searchitemsapp.dto.EnterpriseDto;
+import com.searchitemsapp.dto.CompanyDto;
 
 @SpringBootTest
-class EnterpriseDaoImplTest {
+class CompanyDaoImplTest {
 	
 	   @Autowired
-	    private EnterpriseDaoImpl empresaDaoImpl;
+	    private CompanyDaoImpl empresaDaoImpl;
 	
 	@Test
 	void testFindAll() throws IOException {
 		
-			List<EnterpriseDto> listaEmpresasDto = empresaDaoImpl.findAll();		
+			List<CompanyDto> listaEmpresasDto = empresaDaoImpl.findAll();		
 			assertEquals(15, listaEmpresasDto.size());
 	}
 
 	@Test
 	void testFindByDid()  throws IOException {
 			
-		EnterpriseDto empresaDtoResult = empresaDaoImpl.findByDid(EnterpriseDto.builder().did(101).build());
+		CompanyDto empresaDtoResult = empresaDaoImpl.findByDid(CompanyDto.builder().did(101).build());
 		assertEquals("MERCADONA", empresaDtoResult.getNomEmpresa());
 	}
 
 	@Test
 	void testFindByTbSia()  throws IOException {
 		
-		List<EnterpriseDto> listaEmpresasDto = empresaDaoImpl.findByTbSia(
-				EnterpriseDto.builder().did(101).build(), 
+		List<CompanyDto> listaEmpresasDto = empresaDaoImpl.findByTbSia(
+				CompanyDto.builder().did(101).build(), 
 				CategoryDto.builder().did(101).build());
 		
 		assertEquals(1, listaEmpresasDto.size());

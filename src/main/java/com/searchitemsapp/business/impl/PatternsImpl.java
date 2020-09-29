@@ -24,7 +24,7 @@ public class PatternsImpl implements Patterns {
 			final String strScrapPattern, final String strScrapNotPattern) {
 
 		Elements documentElements;
-
+ 
         if(Objects.isNull(strScrapNotPattern)) {
         	documentElements = document.select(strScrapPattern);
         } else {

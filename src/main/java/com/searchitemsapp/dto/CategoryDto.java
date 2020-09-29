@@ -16,7 +16,7 @@ public class CategoryDto {
 	private Boolean bolActivo;
 	private String desCatEmpresa;
 	private String nomCatEmpresa;	
-	private EnterpriseDto empresas;
+	private CompanyDto empresas;
 	private BrandsDto marcas;
 	private LiveSearchDto productos;
 

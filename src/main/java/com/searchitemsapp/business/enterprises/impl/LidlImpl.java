@@ -9,19 +9,19 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.enterprises.Enterprise;
+import com.searchitemsapp.business.enterprises.Company;
 import com.searchitemsapp.dto.UrlDto;
 
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class LidlImpl implements Enterprise {
+public class LidlImpl implements Company {
 
 	private Environment env;
 	
 	@Override
-	public List<String> getListaUrls(final Document document, final UrlDto urlDto)
+	public List<String> getUrls(final Document document, final UrlDto urlDto)
 				throws MalformedURLException {
 		
 		String urlBase = urlDto.getNomUrl();		

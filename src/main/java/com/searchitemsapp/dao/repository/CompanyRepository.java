@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
-import com.searchitemsapp.dto.EnterpriseDto;
+import com.searchitemsapp.dto.CompanyDto;
 import com.searchitemsapp.entities.TbSiaEmpresa;
 
 /**
@@ -17,7 +17,7 @@ import com.searchitemsapp.entities.TbSiaEmpresa;
  *
  */
 @Component
-public interface EnterpriseRepository extends JpaRepository<TbSiaEmpresa, Long>{
+public interface CompanyRepository extends JpaRepository<TbSiaEmpresa, Long>{
 	TbSiaEmpresa findByDid(Integer did) throws IOException;
-	List<EnterpriseDto> findByDidAndTbSiaCategoriasEmpresa(Integer didEmpresa, Integer didCatEmpresa) throws IOException;
+	List<CompanyDto> findByDidAndTbSiaCategoriasEmpresa(Integer didEmpresa, Integer didCatEmpresa) throws IOException;
 }

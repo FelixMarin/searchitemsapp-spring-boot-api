@@ -25,7 +25,7 @@ public class CustomArgsServiceValidation {
     public void listaProductosController() {
     }
     
-    @Before("listaProductosController()")
+    @Before("execution (public String com.searchitemsapp.controller.SearchItemsController.searchItems(..))")
     public void validateInputAgrsInService(JoinPoint jp) throws IllegalArgumentException {
        
     	Signature signature = jp.getSignature();

@@ -17,8 +17,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.searchitemsapp.business.DynamicWebProcessing;
-import com.searchitemsapp.business.enterprises.Enterprise;
-import com.searchitemsapp.business.enterprises.factory.EnterpriseFactory;
+import com.searchitemsapp.business.enterprises.Company;
+import com.searchitemsapp.business.enterprises.factory.CompaniesGroup;
 
 import lombok.AllArgsConstructor;
 
@@ -27,20 +27,20 @@ import lombok.AllArgsConstructor;
 public class DynamicWebProcessingImpl implements DynamicWebProcessing {
 	
 	private Environment environment;
-	private EnterpriseFactory enterpriseFactory;
+	private CompaniesGroup companiesGroup;
 	
 	@Override
-	public String getDynamicHtmlContent(String externalProductURL, int enterpriseId) throws InterruptedException {
+	public String getDynamicHtmlContent(String externalProductURL, int companyId) throws InterruptedException {
 		
 		String pageSource;	
-		Enterprise enterprise = enterpriseFactory.getInstance(enterpriseId);
+		Company company = companiesGroup.getInstance(companyId);
 		
 		System.getProperties().setProperty(getADriver(0), 
 				environment.getProperty("flow.value.firefox.driver.path"));
 		
 		WebDriver webDriver = initWebDriver(0);
 		cleanWindows(webDriver);
-		pageSource = enterprise.getHtmlContent(webDriver, externalProductURL);			
+		pageSource = company.getHtmlContent(webDriver, externalProductURL);			
 		cleanWindows(webDriver);
 		 
 		return pageSource;

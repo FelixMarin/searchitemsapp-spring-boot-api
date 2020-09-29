@@ -14,10 +14,10 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class LiveSearchServiceImpl implements LiveSearchService {
 	
-	private ProductNameDao ifNomProductoRepository;
+	private ProductNameDao productNameDao;
 
 	@Override
 	public List<LiveSearchDto> buscarProducto(String product) {
-		return ifNomProductoRepository.findByNomProducto(product);
+		return productNameDao.findByNomProducto(product);
 	}
 }

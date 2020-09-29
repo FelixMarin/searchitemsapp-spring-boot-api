@@ -11,15 +11,15 @@ import lombok.NonNull;
 
 public interface Products {
 	
-	abstract boolean checkProduct(String requestProducName, int enterpriseId, 
+	abstract boolean checkProduct(String requestProducName, int companyId, 
 			ProductDto productDto, Patterns elementPatterns, 
 			Brands brands) throws IOException;
 	
-	abstract String removeTildes(final String cadena);
+	abstract String removeTildes(final String productName);
 	
-	abstract String manageProductName(final String producto) throws IOException;
+	abstract String manageProductName(final String productName) throws IOException;
 	
-	abstract ProductDto addElementsToProducts(@NonNull Element elem,
+	abstract ProductDto addElementsToProducts(@NonNull Element documentElement,
 			@NonNull UrlDto urlDto, 
-			@NonNull String ordenacion) throws IOException;
+			@NonNull String sort) throws IOException;
 }

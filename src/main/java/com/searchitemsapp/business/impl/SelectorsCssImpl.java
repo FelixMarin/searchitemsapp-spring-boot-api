@@ -16,12 +16,13 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.searchitemsapp.business.SelectorsCss;
-import com.searchitemsapp.business.enterprises.Enterprise;
-import com.searchitemsapp.business.enterprises.factory.EnterpriseFactory;
+import com.searchitemsapp.business.enterprises.Company;
+import com.searchitemsapp.business.enterprises.factory.CompaniesGroup;
 import com.searchitemsapp.dao.CssSelectorsDao;
 import com.searchitemsapp.dto.CssSelectorsDto;
-import com.searchitemsapp.dto.EnterpriseDto;
+import com.searchitemsapp.dto.CompanyDto;
 import com.searchitemsapp.dto.UrlDto;
+import com.searchitemsapp.resources.Constants;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -32,43 +33,40 @@ public class SelectorsCssImpl implements SelectorsCss {
 	
 	private CssSelectorsDao cssSelectorsDao;
 	private Environment environment;
-	private EnterpriseFactory enterpriseFactory;
+	private CompaniesGroup companiesGroup;
 
 	@Override
 	public List<CssSelectorsDto> selectorCssListByEnterprise(
-			final String enterpriseId) {
+			final String companyId) {
 
-		String enterprisesIdSepearatedByCommas;
+		String companiesIdSepearatedByCommas;
 		
-		if("ALL".equalsIgnoreCase(enterpriseId)) {
-			enterprisesIdSepearatedByCommas = environment.getProperty("flow.value.all.id.empresa");
+		if(Constants.ALL.getValue().equalsIgnoreCase(companyId)) {
+			companiesIdSepearatedByCommas = environment.getProperty("flow.value.all.id.empresa");
 		} else {
-			enterprisesIdSepearatedByCommas = enterpriseId;
+			companiesIdSepearatedByCommas = companyId;
 		}
 		
-		StringTokenizer tokenizer = new StringTokenizer(enterprisesIdSepearatedByCommas, ","); 			
-		List<Integer> enterpriseIdsList = Lists.newArrayList();
+		StringTokenizer tokenizer = new StringTokenizer(companiesIdSepearatedByCommas, Constants.COMMA.getValue()); 			
+		List<Integer> companiesIds = Lists.newArrayList();
 		
 		while (tokenizer.hasMoreElements()) {
-			enterpriseIdsList.add(Integer.parseInt(String.valueOf(tokenizer.nextElement())));
-			
+			companiesIds.add(Integer.parseInt(String.valueOf(tokenizer.nextElement())));
 		}
 		
 		List<CssSelectorsDto> cssSelectorDtoList = Lists.newArrayList();
 		
-		enterpriseIdsList.forEach(enterpriseIdLocal -> {
+		companiesIds.forEach(innerCompanyId -> {
 			
 			try {	
-				
 				cssSelectorDtoList.addAll(
 						cssSelectorsDao.findByTbSia(
 								CssSelectorsDto.builder().build(), 
-								EnterpriseDto.builder().did(enterpriseIdLocal).build()));
+								CompanyDto.builder().did(innerCompanyId).build()));
 			
 			}catch(IOException e) {
 				throw new UncheckedIOException(e);
 			}
-			
 		});
 		
 		return cssSelectorDtoList;
@@ -93,15 +91,15 @@ public class SelectorsCssImpl implements SelectorsCss {
 			@NonNull UrlDto urlDto) throws MalformedURLException {
 				
 		List<String> cssSelectorList = Lists.newArrayList();		
-		StringTokenizer st = new StringTokenizer(cssSelector,"|");  
+		StringTokenizer st = new StringTokenizer(cssSelector, Constants.PIPE.getValue());  
 		
 		while (st.hasMoreTokens()) {  
 			cssSelectorList.add(st.nextToken());
 		}
 		
-		Enterprise enterprise = enterpriseFactory.getInstance(urlDto.getDidEmpresa());
+		Company company = companiesGroup.getInstance(urlDto.getDidEmpresa());
 		
-		String textExtracted = enterprise.selectorTextExtractor(documentElement, cssSelectorList, cssSelector);
+		String textExtracted = company.selectorTextExtractor(documentElement, cssSelectorList, cssSelector);
 		
 		return cleanProductTextExtractedFromCssSelector(textExtracted, urlDto.getNomUrl());
 	}
@@ -109,15 +107,15 @@ public class SelectorsCssImpl implements SelectorsCss {
 	private String cleanProductTextExtractedFromCssSelector(@NonNull final String textProduct, 
 			String strUrl) throws MalformedURLException {
 		
-		String textProductFiltered = textProduct.replaceAll("[()]", "");			
+		String textProductFiltered = textProduct.replaceAll("[()]", StringUtils.EMPTY);			
 		String caracteres = StringUtils.EMPTY;
 		
 		if(Objects.nonNull(textProductFiltered) && textProductFiltered.trim().startsWith("//")) {
 			caracteres = "https:".concat(textProductFiltered);
 		} else if(Objects.nonNull(textProductFiltered) && textProductFiltered.trim().startsWith("/")) {
 			URL url = new URL(strUrl);
-			String enterpriseUrl = url.getProtocol().concat("://").concat(url.getHost());
-			caracteres = enterpriseUrl.concat(textProductFiltered); 
+			String companyUrl = url.getProtocol().concat(Constants.PROTOCOL_ACCESSOR.getValue()).concat(url.getHost());
+			caracteres = companyUrl.concat(textProductFiltered); 
 		} else if(Objects.nonNull(textProductFiltered)){
 			caracteres = textProductFiltered;
 		}
