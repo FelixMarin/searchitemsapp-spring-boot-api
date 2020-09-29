@@ -2,8 +2,6 @@ package com.searchitemsapp.controller;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import com.searchitemsapp.dto.ProductDto;
 
 @SpringBootTest
 @ActiveProfiles("test") 
@@ -36,7 +32,7 @@ class SearchItemsControllerTest {
 	@Test
 	void statusCodeOkTest() {
 		
-		/*ResponseEntity<List<ProductDto>> result = ac.searchItems("101", "101", "1", "sal", "101");
+		ResponseEntity<String> result = ac.searchItems("101", "101", "1", "sal", "101");
 		assertEquals(result.getStatusCode(), HttpStatus.OK);
 		
 		result = ac.searchItems(null, null, null, "sal", "103");
@@ -49,7 +45,7 @@ class SearchItemsControllerTest {
 		assertEquals(result.getStatusCode(), HttpStatus.OK);
 		
 		result = ac.searchItems("101", null, null, "sal", "106");
-		assertEquals(result.getStatusCode(), HttpStatus.OK);*/
+		assertEquals(result.getStatusCode(), HttpStatus.OK);
 	}
 	
 	@Test
