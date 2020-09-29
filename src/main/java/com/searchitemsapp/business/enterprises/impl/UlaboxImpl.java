@@ -12,8 +12,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.enterprises.Enterprise;
+import com.searchitemsapp.business.enterprises.Company;
 import com.searchitemsapp.dto.UrlDto;
+import com.searchitemsapp.resources.Constants;
 
 import lombok.AllArgsConstructor;
 
@@ -23,56 +24,53 @@ import lombok.AllArgsConstructor;
  */
 @Component
 @AllArgsConstructor
-public class UlaboxImpl implements Enterprise {
+public class UlaboxImpl implements Company {
 	
-	private static final String PATTERN = ".*… ([0-9]+)";
-	private static final String CHARSET = "…";
-	
-	private Environment env;
+	private Environment environment;
 
 	@Override
-	public List<String> getListaUrls(final Document document, 
+	public List<String> getUrls(final Document document, 
 			final UrlDto urlDto) throws MalformedURLException {
 	
 		String urlBase = urlDto.getNomUrl();
 	
-		List<String> listaUrls = Lists.newArrayList();
-		listaUrls.add(urlBase);
+		List<String> urls = Lists.newArrayList();
+		urls.add(urlBase);
 
-		String selectorPaginacion = urlDto.getSelectores().getSelPaginacion();		
-		String strPaginacion = document.select(selectorPaginacion).text();
+		String paginationSelector = urlDto.getSelectores().getSelPaginacion();		
+		String pagination = document.select(paginationSelector).text();
 
-		int numresultados = NumberUtils.toInt(env.getProperty("flow.value.paginacion.url.ulabox"));
+		int resultLength = NumberUtils.toInt(environment.getProperty("flow.value.paginacion.url.ulabox"));
 
-		if(!StringUtils.isAllEmpty(strPaginacion)) {
+		if(!StringUtils.isAllEmpty(pagination)) {
 	
-			if(strPaginacion.contains(CHARSET)) {
+			if(pagination.contains(Constants.TREE_DOTS.getValue())) {
 				
-				Matcher m = Pattern.compile(PATTERN).matcher(strPaginacion);
+				Matcher m = Pattern.compile(Constants.NUMERIC_REGEX.getValue()).matcher(pagination);
 				
 				if(m.find()) {
-					strPaginacion=m.group(1);
+					pagination=m.group(1);
 				}
 				
 			} else {
-				strPaginacion = strPaginacion.substring(strPaginacion.length()-1, strPaginacion.length());
+				pagination = pagination.substring(pagination.length()-1, pagination.length());
 			}
 
-			int intPaginacion = NumberUtils.toInt(strPaginacion.trim());
+			int intPaginacion = NumberUtils.toInt(pagination.trim());
 
 			for (int i = 2; i <= intPaginacion; i++) {
-				listaUrls.add(urlBase.concat("&p=") + i);
+				urls.add(urlBase.concat("&p=") + i);
 			}	
 
-			if(numresultados > 0 && numresultados <= listaUrls.size()) {
-				listaUrls = listaUrls.subList(0, numresultados);
+			if(resultLength > 0 && resultLength <= urls.size()) {
+				urls = urls.subList(0, resultLength);
 			}
 		}
 		
-		return listaUrls;
+		return urls;
 	}
 	
 	public int get_DID() {
-		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.ulabox"));
+		return NumberUtils.toInt(environment.getProperty("flow.value.did.empresa.ulabox"));
 	}
 }

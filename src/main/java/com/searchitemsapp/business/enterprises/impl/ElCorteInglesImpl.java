@@ -14,16 +14,15 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.enterprises.Enterprise;
+import com.searchitemsapp.business.enterprises.Company;
 import com.searchitemsapp.dto.UrlDto;
+import com.searchitemsapp.resources.Constants;
 
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class ElCorteInglesImpl implements Enterprise {
-	
-	private static final String PATTERN = ".*de ([0-9]+)";
+public class ElCorteInglesImpl implements Company {
 	
 	private Environment environment;
 
@@ -33,7 +32,7 @@ public class ElCorteInglesImpl implements Enterprise {
 	}
 
 	@Override
-	public List<String> getListaUrls(final Document document, 
+	public List<String> getUrls(final Document document, 
 			final UrlDto urlDto) throws MalformedURLException {
 
 		String urlBase = urlDto.getNomUrl();
@@ -44,7 +43,7 @@ public class ElCorteInglesImpl implements Enterprise {
 
 		int numresultados = NumberUtils.toInt(environment.getProperty("flow.value.paginacion.url.eci"));
 
-		Matcher m = Pattern.compile(PATTERN).matcher(strPaginacion);	
+		Matcher m = Pattern.compile(Constants.FROM_TO_ECI.getValue()).matcher(strPaginacion);	
 		if(m.find()) {
 			strPaginacion=m.group(1);
 		}
@@ -66,7 +65,7 @@ public class ElCorteInglesImpl implements Enterprise {
 	}
 	
 	@Override
-	public String eliminarMarcaPrincipio(String productName) {
+	public String removeInitialBrand(String productName) {
 
 		String[] nomProdSeparado = productName.trim().split(StringUtils.SPACE);
 

@@ -15,8 +15,8 @@ import com.searchitemsapp.business.Brands;
 import com.searchitemsapp.business.Patterns;
 import com.searchitemsapp.business.Products;
 import com.searchitemsapp.business.SelectorsCss;
-import com.searchitemsapp.business.enterprises.Enterprise;
-import com.searchitemsapp.business.enterprises.factory.EnterpriseFactory;
+import com.searchitemsapp.business.enterprises.Company;
+import com.searchitemsapp.business.enterprises.factory.CompaniesGroup;
 import com.searchitemsapp.dto.ProductDto;
 import com.searchitemsapp.dto.UrlDto;
 
@@ -28,14 +28,14 @@ import lombok.NonNull;
 public class ProductsImpl implements Products {
 	
 	private SelectorsCss cssSelectors;
-	private EnterpriseFactory enterpriseFactory;
+	private CompaniesGroup companiesGroup;
 	
 	@Override
-	public boolean checkProduct(String requestProducName, int enterpriseId, 
+	public boolean checkProduct(String requestProducName, int companyId, 
 			ProductDto productDto, Patterns elementPatterns, 
 			Brands brands) throws IOException {
 			
-		String productName = brands.brandFilter(enterpriseId, productDto.getNomProducto(), brands.allBrandList());
+		String productName = brands.brandFilter(companyId, productDto.getNomProducto());
 		
 		if(StringUtils.isAllBlank(productName)) {
 			return Boolean.FALSE;
@@ -78,8 +78,8 @@ public class ProductsImpl implements Products {
 				.ordenacion(Integer.parseInt(ordenacion))
 				.build();
 		
-		Enterprise enterprise = enterpriseFactory.getInstance(urlDto.getDidEmpresa());
-		String namesOfUrlsOfAllProducts = enterprise.getAllUrlsToSearch(productDto);
+		Company company = companiesGroup.getInstance(urlDto.getDidEmpresa());
+		String namesOfUrlsOfAllProducts = company.getAllUrlsToSearch(productDto);
 		productDto.setNomUrlAllProducts(namesOfUrlsOfAllProducts);
 			
 		return productDto;

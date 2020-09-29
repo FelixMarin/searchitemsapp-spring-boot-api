@@ -12,11 +12,11 @@ import lombok.NonNull;
 
 public interface SelectorsCss {
 	
-	abstract List<CssSelectorsDto> selectorCssListByEnterprise(final String strDidEmpresas);
-	abstract boolean validateSelector(Element elem);
-	abstract CssSelectorsDto addCssSelectors(UrlDto urlDTO, List<CssSelectorsDto> listTodosElementNodes);
-	abstract String elementByCssSelector(@NonNull Element documentElement, 
-			@NonNull String cssSelector,
-			@NonNull UrlDto urlDto) throws MalformedURLException;
+	abstract List<CssSelectorsDto> selectorCssListByEnterprise(final String pipedCompaniesIds);
+	abstract boolean validateSelector(Element element);
+	abstract CssSelectorsDto addCssSelectors(UrlDto urlDTO, List<CssSelectorsDto> allCssSelectors);
+	abstract String elementByCssSelector(@NonNull Element element, 
+			@NonNull String cssSelector, @NonNull UrlDto urlDto) 
+					throws MalformedURLException;
 	
 }

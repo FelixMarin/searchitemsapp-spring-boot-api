@@ -5,7 +5,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Maps;
-import com.searchitemsapp.business.enterprises.Enterprise;
+import com.searchitemsapp.business.enterprises.Company;
 import com.searchitemsapp.business.enterprises.impl.AlcampoImpl;
 import com.searchitemsapp.business.enterprises.impl.CapraboImpl;
 import com.searchitemsapp.business.enterprises.impl.CarrefourImpl;
@@ -24,7 +24,7 @@ import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class ProcessDataEnterpriseFactoryImpl implements EnterpriseFactory {
+public class CompaniesGroupImpl implements CompaniesGroup {
 	
 	
 	private AlcampoImpl alcampo;
@@ -41,28 +41,28 @@ public class ProcessDataEnterpriseFactoryImpl implements EnterpriseFactory {
 	private UlaboxImpl ulabox;
 	private LidlImpl lidl;	
 
-	private Map<Integer, Enterprise> setUp() {
+	private Map<Integer, Company> setUp() {
 		
-		Map<Integer, Enterprise> enterprises =  Maps.newHashMap();
+		Map<Integer, Company> companies =  Maps.newHashMap();
  
-		enterprises.put(alcampo.get_DID(),alcampo);
-		enterprises.put(caprabo.get_DID(),caprabo);
-		enterprises.put(carrefour.get_DID(), carrefour);
-		enterprises.put(condis.get_DID(), condis);		
-		enterprises.put(dia.get_DID(), dia);
-		enterprises.put(elcorteingles.get_DID(), elcorteingles);
-		enterprises.put(eroski.get_DID(), eroski);
-		enterprises.put(hipercor.get_DID(), hipercor);
-		enterprises.put(mercadona.get_DID(), mercadona);		
-		enterprises.put(simply.get_DID(), simply);
-		enterprises.put(ulabox.get_DID(), ulabox);
-		enterprises.put(lidl.get_DID(), lidl);
-		enterprises.put(consum.get_DID(), consum);
+		companies.put(alcampo.get_DID(),alcampo);
+		companies.put(caprabo.get_DID(),caprabo);
+		companies.put(carrefour.get_DID(), carrefour);
+		companies.put(condis.get_DID(), condis);		
+		companies.put(dia.get_DID(), dia);
+		companies.put(elcorteingles.get_DID(), elcorteingles);
+		companies.put(eroski.get_DID(), eroski);
+		companies.put(hipercor.get_DID(), hipercor);
+		companies.put(mercadona.get_DID(), mercadona);		
+		companies.put(simply.get_DID(), simply);
+		companies.put(ulabox.get_DID(), ulabox);
+		companies.put(lidl.get_DID(), lidl);
+		companies.put(consum.get_DID(), consum);
 		
-		return enterprises;
+		return companies;
 	}
 	
-	public Enterprise getInstance(int enterpriseId) {
-		return this.setUp().get(enterpriseId);
+	public Company getInstance(int companyId) {
+		return this.setUp().get(companyId);
 	}
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data @NoArgsConstructor @AllArgsConstructor
 @Builder
 @Component
-public class EnterpriseDto {
+public class CompanyDto {
 
 	private Integer did;
 	private Boolean bolActivo;

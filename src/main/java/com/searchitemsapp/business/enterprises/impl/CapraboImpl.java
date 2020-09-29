@@ -9,29 +9,29 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.enterprises.Enterprise;
+import com.searchitemsapp.business.enterprises.Company;
 import com.searchitemsapp.dto.UrlDto;
 
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class CapraboImpl implements Enterprise {
+public class CapraboImpl implements Company {
 	
-	private Environment env;
+	private Environment environment;
 	
 	public int get_DID() {
-		return NumberUtils.toInt(env.getProperty("flow.value.did.empresa.caprabo"));
+		return NumberUtils.toInt(environment.getProperty("flow.value.did.empresa.caprabo"));
 	}
 
 	@Override
-	public List<String> getListaUrls(final Document document, final UrlDto urlDto)
+	public List<String> getUrls(final Document document, final UrlDto urlDto)
 			throws MalformedURLException {
 		
 		String urlBase = urlDto.getNomUrl();
-		List<String> listaUrls = Lists.newArrayList();
-		listaUrls.add(urlBase);
+		List<String> urls = Lists.newArrayList();
+		urls.add(urlBase);
 		
-		return listaUrls;
+		return urls;
 	}
 }

@@ -18,23 +18,24 @@ import org.openqa.selenium.WebDriver;
 
 import com.searchitemsapp.dto.ProductDto;
 import com.searchitemsapp.dto.UrlDto;
+import com.searchitemsapp.resources.Constants;
 
 /**
  * @author Felix Marin Ramirez
  *
  */
-public interface Enterprise {
+public interface Company {
 
-	abstract List<String> getListaUrls(final Document document, final UrlDto urlDto) throws MalformedURLException;
+	abstract List<String> getUrls(final Document document, final UrlDto urlDto) throws MalformedURLException;
 	
 	default Connection getJsoupConnection(String externalProductURL, String requestProductName) throws MalformedURLException {
 		
 		URL url = new URL(externalProductURL);
 		
 		return Jsoup.connect(externalProductURL)
-				.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36")
+				.userAgent(Constants.USER_AGENT.getValue())
 				.method(Connection.Method.GET)
-				.referrer(url.getProtocol().concat("://").concat(url.getHost().concat("/")))
+				.referrer(url.getProtocol().concat(Constants.PROTOCOL_ACCESSOR.getValue()).concat(url.getHost().concat("/")))
 				.ignoreContentType(Boolean.TRUE)
 				.header("Accept-Language", "es-ES,es;q=0.8")
 				.header("Accept-Encoding", "gzip, deflate, sdch")
@@ -63,7 +64,7 @@ public interface Enterprise {
 		return webDriver.getPageSource();
 	}
 	
-	default String eliminarMarcaPrincipio(String productName) {
+	default String removeInitialBrand(String productName) {
 		return productName;
 	}
 	

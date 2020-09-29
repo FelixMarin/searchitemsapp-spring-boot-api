@@ -12,7 +12,7 @@ public class CustomThrowableLogginAspect {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-	@AfterThrowing(pointcut = "execution(public String com.searchitemsapp.services.impl.SearchItemsServiceImpl.listaProductosService(..))", throwing = "ex")
+	@AfterThrowing(pointcut = "execution(public String com.searchitemsapp.services.impl.SearchItemsServiceImpl.orderedByPriceProducts(..))", throwing = "ex")
 	public void logAfterThrowingAllMethods(Exception ex) throws Throwable {
 		LOGGER.error("****LoggingAspect.logAfterThrowingAllMethods() " + ex.getLocalizedMessage(),ex);
 	}
