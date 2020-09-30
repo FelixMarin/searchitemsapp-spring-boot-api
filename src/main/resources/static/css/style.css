@@ -1,0 +1,228 @@
+.supracontainer {
+    position: absolute;
+    align-content: center;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.containerCL{
+    margin: 0;
+    position: absolute;
+    top: 400%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, 0%);
+}
+
+.desplazar {
+    animation: movetotop .5s 1;
+    -webkit-animation-fill-mode: forwards;
+}
+
+.ident-primero {
+    background-color: #ff7400;
+    font-size: small;
+    position: absolute;
+    width: 25%;
+    text-align: center;
+    margin: 8px 5px 5px 5px;
+    margin-left: 20%;
+}
+
+.ident-segundo {
+	background-color: #ff9a00;
+    font-size: small;
+    position: absolute;
+    width: 25%;
+    text-align: center;
+    margin: 8px 5px 5px 5px;
+    margin-left: 20%;
+    
+}
+
+.ident-tercero {
+	background-color: #ffc100;
+    font-size: small;
+    position: absolute;
+    width: 25%;
+    text-align: center;
+    margin: 8px 5px 5px 5px;
+    margin-left: 20%;
+}
+
+.ident-resto {
+	background-color: #ddd;
+    font-size: small;
+    position: absolute;
+    width: 25%;
+    text-align: center;
+    margin: 8px 5px 5px 5px;
+    margin-left: 20%;
+}
+  
+@keyframes movetotop {
+    100% {top: 22%;}
+    0%   {top: 400%;}    
+}
+
+@media (max-width: 1023px) {
+    .supracontainer {
+        position: absolute;
+        align-content: center;
+        left: 0;
+        right: 0;
+        top: 0%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .containerCL{
+        margin: 0;
+        position: absolute;
+        top: 200%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, 0%);
+    }
+    
+    .desplazar {
+        animation: movetotop .5s 1;
+        -webkit-animation-fill-mode: forwards;
+    }
+      
+    @keyframes movetotop {
+        100% {top:20%;}
+        0%   {top: 500%;}
+    }
+}
+
+.show {
+    display: block;
+    animation: fade-in 2s 1;
+}
+
+.showcard {
+    display: block;
+    animation: fade-in .5s 1;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes fade-in {
+    0% { display:none; opacity: 0;}
+    100% { display:block; opacity: 1;}
+}
+
+.standar-button {
+    background-color: #4B9DEA;
+    color: #FFF;
+    border-color: #4B9DEA;
+    z-index: 1;
+    border-radius: 6px 6px 6px 6px;
+    border-right: none;
+    margin: 0;
+    padding: .75rem 2rem;
+    box-sizing: border-box;
+    position: relative;
+    display: inline-block;
+    border: solid 1px #DDD;
+    font-size: 1rem;
+    line-height: 140%;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+    -webkit-transition: border-color .15s ease-out, color .25s ease-out, background-color .15s ease-out, box-shadow .15s ease-out;
+    transition: border-color .15s ease-out, color .25s ease-out, background-color .15s ease-out, box-shadow .15s ease-out;
+    margin-bottom: .5rem;
+}
+
+.standar-button:hover {
+    background-color: #FFF;
+    color: #4B9DEA;
+    border-color: #4B9DEA;
+    z-index: 1;
+    border-radius: 6px 6px 6px 6px;
+    border-right: none;
+    margin: 0;
+    padding: .75rem 2rem;
+    box-sizing: border-box;
+    position: relative;
+    display: inline-block;
+    border: solid 1px #DDD;
+    font-size: 1rem;
+    line-height: 140%;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+    -webkit-transition: border-color .15s ease-out, color .25s ease-out, background-color .15s ease-out, box-shadow .15s ease-out;
+    transition: border-color .15s ease-out, color .25s ease-out, background-color .15s ease-out, box-shadow .15s ease-out;
+    margin-bottom: .5rem;
+}
+
+.colinp {
+    padding-top: 15px;
+}
+
+.numrank {
+    padding-left: 30%;
+}
+
+@media (max-width: 767px) {
+    .numrank {
+        padding-left: 35%;
+    }
+
+    #boton-volver {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    #boton-volver {
+        display: block;
+    }
+}
+
+#caja-logos-checked {
+    margin-left: 1%;
+}
+
+.live-search {
+    z-index: 1;
+    background-color: #FFF;
+}
+
+#sugerencias {
+    border: 1px solid #ddd;
+    width: 72%;
+    margin-left: .2%;
+    padding: .5% .5% 0 0%;
+}
+
+.sugerencia {
+    color:black;
+}
+
+.sugerencia:hover {
+    text-decoration: none; 
+    color:black;
+}
+
+.divsugerencia {
+    cursor: pointer;
+    padding-bottom: 1%;
+    padding-top: .5%;
+}
+
+.divsugerencia:hover {
+    background-color: #eee;
+}
+
+.separdor-sugerencias {
+    margin-top: .4em;
+    margin-bottom: .4em;
+}

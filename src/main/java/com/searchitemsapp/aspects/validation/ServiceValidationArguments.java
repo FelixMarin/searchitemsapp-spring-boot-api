@@ -17,15 +17,15 @@ import lombok.AllArgsConstructor;
 @Component
 @AllArgsConstructor
 @Aspect
-public class CustomArgsServiceValidation {
+public class ServiceValidationArguments {
 	
 	private ListaProductosValidator validator;
 
-    @Pointcut("execution (public String com.searchitemsapp.controller.SearchItemsController.searchItems(..))")
-    public void listaProductosController() {
+    @Pointcut("execution (* com.searchitemsapp.controller.SearchItemsController.searchItems(..))")
+    public void searchItems() {
     }
     
-    @Before("execution (public String com.searchitemsapp.controller.SearchItemsController.searchItems(..))")
+    @Before("searchItems()")
     public void validateInputAgrsInService(JoinPoint jp) throws IllegalArgumentException {
        
     	Signature signature = jp.getSignature();
