@@ -49,8 +49,6 @@ public class SearchItemsServiceImpl implements SearchItemsService {
 	
 	public List<ProductDto> orderedByPriceProducts(SearchItemsParamsDto searchedParamsDto) {
 
-		org.apache.log4j.BasicConfigurator.configure();
-		
 		ExecutorService executorService = Executors.newCachedThreadPool();
 		List<ProductDto> productsResult = Lists.newArrayList();
 
