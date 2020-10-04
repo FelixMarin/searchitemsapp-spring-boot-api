@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,10 +23,10 @@ import lombok.NonNull;
 @RestController
 public class SearchItemsController {
 	
+	private static final String SEARCH = "/search";
 	private SearchItemsService searchItemsService;
 
-	@GetMapping(value = "/search", produces={MediaType.APPLICATION_JSON_VALUE})
-	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@GetMapping(value = SEARCH, produces={MediaType.APPLICATION_JSON_VALUE})
 	public @ResponseBody ResponseEntity<String> searchItems(@RequestBody 
 				@RequestParam(value = "country", defaultValue = "101") String countryId,
 				@RequestParam(value = "category", defaultValue = "101") String categoryId,

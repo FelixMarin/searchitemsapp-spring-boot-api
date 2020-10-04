@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">  
 <head>
     <meta charset="UTF-8">
     <title>Food Rank</title>
@@ -9,14 +9,14 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Bootstrap CSS -->
-    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
     <!-- animated.css -->
-    <link rel="stylesheet" href="./css/animate.css">
+    <link rel="stylesheet" th:href="@{/css/animate.css}">
 
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/radiobuttons.css">
-    <link rel="stylesheet" href="./css/loading.css">
-    <link rel="stylesheet" href="./css/cards.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/radiobuttons.css}">
+    <link rel="stylesheet" th:href="@{/css/loading.css}">
+    <link rel="stylesheet" th:href="@{/css/cards.css}">
 
 </head>
 <body id="body">
@@ -24,11 +24,11 @@
     <div id="input-container" class="container containerCL">
         <div class="row">
             <div id="logo" class="col-sm-12 col-lg-6 offset-lg-3">
-                <img class="mb-2 w-50" src="./img/logo/pricerank4.png" alt="PRICE RANK">
+                <img class="mb-2 w-50" th:src="@{img/logo/pricerank4.png}" alt="PRICE RANK">
             </div>
             <div id="colinput" class="colinp col-sm-12 col-lg-6 offset-lg-3">  
                 <div class="input-group">
-                    <input id="inputtext" type="text" class="form-control searchbar" placeholder="Buscar producto...">
+                    <input id="inputtext" type="text" class="form-control searchbar" autocomplete="off" placeholder="Buscar producto...">
                     <div class="input-group-append">
                         <button id="botonBarra" class="btn btn-secondary pl-5 pr-5" type="button">
                         <em class="fa fa-search"></em>
@@ -53,44 +53,44 @@
                 <table class="table-bordered w-100 hidden" id="tablalogos">
                     <tr>
                         <td class="w-25 p-3">
-                            <img src="./img/eroski.svg" class="imglogo w-100" alt="107" />
+                            <img th:src="@{img/eroski.svg}" class="imglogo w-100" alt="107" />
                         </td>
                         <td class="w-25 p-3">                  
-                            <img src="./img/hipercor.svg" class="imglogo w-100" alt="103" />
+                            <img th:src="@{img/hipercor.svg}" class="imglogo w-100" alt="103" />
                         </td>
                         <td class="w-25 p-3">
-                            <img src="./img/elcorteingles.svg" class="imglogo w-100" alt="111" />
+                            <img th:src="@{img/elcorteingles.svg}" class="imglogo w-100" alt="111" />
                         </td>
                         <td class="w-25 p-3">
-                            <img src="./img/dia.svg" class="imglogo w-100" alt="105" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="w-25 p-3">
-                            <img src="./img/Simply-market.png" class="imglogo w-100" alt="114" />          
-                        </td>
-                        <td class="w-25 p-3">
-                            <img src="./img/condis.svg" class="imglogo w-100" alt="110" />		
-                        </td>
-                        <td class="w-25 p-3">
-                            <img src="./img/ulabox.svg" class="imglogo w-100" alt="106" />	
-                        </td>
-                        <td class="w-25 p-3">
-                            <img src="./img/carrefour.svg" class="imglogo w-100" alt="104" />
+                            <img th:src="@{img/dia.svg}" class="imglogo w-100" alt="105" />
                         </td>
                     </tr>
                     <tr>
                         <td class="w-25 p-3">
-                            <img src="./img/alcampo.svg" class="imglogo w-100" alt="108" />
+                            <img th:src="@{img/Simply-market.png}" class="imglogo w-100" alt="114" />          
                         </td>
                         <td class="w-25 p-3">
-                            <img src="./img/caprabo.svg" class="imglogo w-100" alt="109" />
+                            <img th:src="@{img/condis.svg}" class="imglogo w-100" alt="110" />		
                         </td>
                         <td class="w-25 p-3">
-                            <img src="./img/mercadona.svg" class="imglogo w-100" alt="101" />
+                            <img th:src="@{img/ulabox.svg}" class="imglogo w-100" alt="106" />	
+                        </td>
+                        <td class="w-25 p-3">
+                            <img th:src="@{img/carrefour.svg}" class="imglogo w-100" alt="104" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="w-25 p-3">
+                            <img th:src="@{img/alcampo.svg}" class="imglogo w-100" alt="108" />
+                        </td>
+                        <td class="w-25 p-3">
+                            <img th:src="@{img/caprabo.svg}" class="imglogo w-100" alt="109" />
+                        </td>
+                        <td class="w-25 p-3">
+                            <img th:src="@{img/mercadona.svg}" class="imglogo w-100" alt="101" />
                         </td>
                         <td class="w-25 p-3">                            
-                            <img src="./img/consum.svg" class="imglogo w-100" alt="116"  />	
+                            <img th:src="@{img/consum.svg}" class="imglogo w-100" alt="116"  />	
                         </td>
                     </tr>
                 </table>
@@ -131,9 +131,9 @@
     </div>
 </div>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="./js/jquery-3.5.0.min.js"></script>
-    <script src="./js/bootstrap.bundle.min.js"></script>    
-    <script src="./js/jquery.imgcheckbox.js"></script>
-    <script src="./js/script.js"></script>
+    <script th:src="@{/js/jquery-3.5.0.min.js}"></script>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>    
+    <script th:src="@{/js/jquery.imgcheckbox.js}"></script>
+    <script th:src="@{/js/script.js}"></script>
  </body>
 </html>

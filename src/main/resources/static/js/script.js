@@ -129,7 +129,7 @@ function enviar() {
         div.classList.add('col-1');
         div.classList.add('mt-3');
         let buttonVolver = document.createElement("a");
-        buttonVolver.setAttribute("href", "./index.html");
+        buttonVolver.setAttribute("href", "/main");
         buttonVolver.setAttribute("id", "boton-volver");
         buttonVolver.innerHTML = "Volver";
         buttonVolver.classList.add('btn');

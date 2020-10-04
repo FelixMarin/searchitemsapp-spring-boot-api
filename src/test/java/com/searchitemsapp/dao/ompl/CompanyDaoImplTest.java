@@ -1,4 +1,4 @@
-package com.searchitemsapp.dao.impl;
+package com.searchitemsapp.dao.ompl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.searchitemsapp.dao.impl.CompanyDaoImpl;
 import com.searchitemsapp.dto.CategoryDto;
 import com.searchitemsapp.dto.CompanyDto;
 
