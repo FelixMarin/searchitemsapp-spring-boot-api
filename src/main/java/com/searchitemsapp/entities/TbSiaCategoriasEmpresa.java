@@ -27,7 +27,7 @@ public class TbSiaCategoriasEmpresa implements Serializable {
 
 	@Id
 	@Column(name = "did")
-	private Integer did;
+	private Long did;
 
 	@Column(name="bol_activo")
 	private Boolean bolActivo;
@@ -53,11 +53,11 @@ public class TbSiaCategoriasEmpresa implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="tbSiaCategoriasEmpresa")
 	private List<TbSiaNomProducto> tbSiaNomProductos;
 
-	public Integer getDid() {
+	public Long getDid() {
 		return this.did;
 	}
 
-	public void setDid(Integer did) {
+	public void setDid(Long did) {
 		this.did = did;
 	}
 

@@ -8,15 +8,14 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Aspect
 @Component
+@Slf4j
 public class LoggingAspect {
-
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Pointcut that matches all repositories, services and Web REST endpoints.
@@ -25,13 +24,15 @@ public class LoggingAspect {
         " || within(@org.springframework.stereotype.Service *)" +
         " || within(@org.springframework.web.bind.annotation.RestController *)")
     public void springBeanPointcut() {
+    	//pointCut
     }
 
     /**
      * Pointcut that matches all Spring beans in the application's main packages.
      */
-    @Pointcut("within(com.searchitemsapp.business.enterprises.impl..*)" )
+    @Pointcut("within(com.searchitemsapp.companies..*)" )
     public void applicationPackagePointcut() {
+    	//pointCut
     }
     
     /**
@@ -39,6 +40,12 @@ public class LoggingAspect {
      */
     @Pointcut("execution(public * com.searchitemsapp.business.impl.ProductsBuilderImpl.*(..))" )
     public void productsBuilderException() {
+    	//pointCut
+    }
+    
+    @Pointcut("execution(public * com.searchitemsapp.user.controller.UserController.existsUser(com.searchitemsapp.user.dto.UserDto))" )
+    public void saveUserException() {
+    	//pointCut
     }
 
     /**
@@ -47,7 +54,7 @@ public class LoggingAspect {
      * @param joinPoint join point for advice
      * @param e exception
      */
-    @AfterThrowing(pointcut = "applicationPackagePointcut() && productsBuilderException()", throwing = "e")
+    @AfterThrowing(pointcut = "applicationPackagePointcut() && productsBuilderException() && saveUserException()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
         log.error("Exception in {}.{}() with cause = {}", joinPoint.getSignature().getDeclaringTypeName(),
             joinPoint.getSignature().getName(), e.getCause() != null ? e.getCause() : "NULL");

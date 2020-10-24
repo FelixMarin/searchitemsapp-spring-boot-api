@@ -23,15 +23,10 @@ public class PatternsImpl implements Patterns {
 	public Elements selectScrapPattern(final Document document,
 			final String strScrapPattern, final String strScrapNotPattern) {
 
-		Elements documentElements;
+		return Objects.isNull(strScrapNotPattern)?
+				document.select(strScrapPattern):
+					document.select(strScrapPattern).not(strScrapNotPattern);
  
-        if(Objects.isNull(strScrapNotPattern)) {
-        	documentElements = document.select(strScrapPattern);
-        } else {
-        	documentElements = document.select(strScrapPattern).not(strScrapNotPattern);
-        }
-
-        return documentElements;
 	}
 	
 	@Override

@@ -23,22 +23,16 @@ public class ServiceValidationArguments {
 
     @Pointcut("execution (* com.searchitemsapp.controller.SearchItemsController.searchItems(..))")
     public void searchItems() {
+    	//pointCut
     }
     
     @Before("searchItems()")
-    public void validateInputAgrsInService(JoinPoint jp) throws IllegalArgumentException {
+    public void validateInputAgrsInService(JoinPoint jp) {
        
     	Signature signature = jp.getSignature();
         MethodSignature mSignature = (MethodSignature) signature;
         Object[] args = jp.getArgs();        
         String[] stringArrayArgs = Arrays.copyOf(args, args.length, String[].class);
-
-        try {
-        	
-        	validator.isParams(stringArrayArgs, mSignature);
-    		
-        } catch (IllegalArgumentException exception) {
-            throw exception;
-        }
+        validator.isParams(stringArrayArgs, mSignature);
     }
 }

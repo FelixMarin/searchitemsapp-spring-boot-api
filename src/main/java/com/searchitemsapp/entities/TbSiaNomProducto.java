@@ -25,26 +25,24 @@ public class TbSiaNomProducto implements Serializable {
 
 	@Id
 	@Column(name = "did")
-	private Integer did;
+	private Long did;
 
-	@Column(name="nom_producto")
-	private String nomProducto;
-
-	//bi-directional many-to-one association to TbSiaCategoriasEmpresa
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="id_categoria", referencedColumnName="did", nullable = false)
 	private TbSiaCategoriasEmpresa tbSiaCategoriasEmpresa;
+	
+	@Column(name="nom_producto")
+	private String nomProducto;
 
-	//bi-directional many-to-one association to TbSiaPais
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="id_pais", referencedColumnName="did", nullable = false)
 	private TbSiaPais tbSiaPais;
 
-	public Integer getDid() {
+	public Long getDid() {
 		return this.did;
 	}
 
-	public void setDid(Integer did) {
+	public void setDid(Long did) {
 		this.did = did;
 	}
 

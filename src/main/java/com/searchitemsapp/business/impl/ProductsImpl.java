@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,11 +16,11 @@ import com.searchitemsapp.business.Brands;
 import com.searchitemsapp.business.Patterns;
 import com.searchitemsapp.business.Products;
 import com.searchitemsapp.business.SelectorsCss;
-import com.searchitemsapp.business.enterprises.Company;
-import com.searchitemsapp.business.enterprises.factory.CompaniesGroup;
+import com.searchitemsapp.company.Company;
+import com.searchitemsapp.company.factory.CompaniesGroup;
 import com.searchitemsapp.dto.ProductDto;
 import com.searchitemsapp.dto.UrlDto;
-import com.searchitemsapp.resources.Constants;
+import com.searchitemsapp.resource.Constants;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -32,20 +33,17 @@ public class ProductsImpl implements Products {
 	private CompaniesGroup companiesGroup;
 	
 	@Override
-	public boolean checkProduct(String requestProducName, int companyId, 
+	public Optional<ProductDto> checkProduct(String requestProducName, Long companyId, 
 			ProductDto productDto, Patterns elementPatterns, 
 			Brands brands) throws IOException {
-			
-		String productName = brands.brandFilter(companyId, productDto.getNomProducto());
-		
-		if(StringUtils.isAllBlank(productName)) {
-			return Boolean.FALSE;
-		}
-		
+			 
+		Optional<String> productName = brands.brandFilter(companyId, productDto.getNomProducto());	
 		String[] productCharArray = requestProducName.split(StringUtils.SPACE);
 		Pattern patternProduct = elementPatterns.createPatternProduct(productCharArray);
+		String productResult = removeTildes(productName.orElseThrow());
 		
-		return patternProduct.matcher(removeTildes(productName).toUpperCase()).find();
+		return patternProduct.matcher(productResult.toUpperCase()).find()?
+				Optional.of(productDto):Optional.empty();
 	}
 	
 	@Override
@@ -54,7 +52,7 @@ public class ProductsImpl implements Products {
 		if(accentedWord.indexOf('\u00f1') == -1) {
 			
 			String wordWithoutTildes = accentedWord.replace(Constants.ENIE_MAY.getValue(), Constants.ENIE_U_HEX.getValue());
-			wordWithoutTildes = Normalizer.normalize(wordWithoutTildes.toLowerCase(), Normalizer.Form.NFD);
+			wordWithoutTildes = java.text.Normalizer.normalize(wordWithoutTildes.toLowerCase(), Normalizer.Form.NFD);
 			wordWithoutTildes = wordWithoutTildes.replaceAll("[\\p{InCombiningDiacriticalMarks}]", StringUtils.EMPTY);
 			wordWithoutTildes = wordWithoutTildes.replace(Constants.ENIE_U_HEX.getValue(),  Constants.ENIE_MIN.getValue());
 			return Normalizer.normalize(wordWithoutTildes, Normalizer.Form.NFC);
@@ -90,35 +88,7 @@ public class ProductsImpl implements Products {
 	
 	@Override
 	public String manageProductName(final String productName) throws IOException {
-		
-		String tratedProduct=addCharacters(productName, Character.MIN_VALUE, 0, 0);
-		tratedProduct=addCharacters(tratedProduct, Character.MIN_VALUE, 0, 1);
-		
-		Matcher matcher = Pattern.compile(Constants.REGEX_DOLAR_PERCENT.getValue()).matcher(tratedProduct);
-		
-		if(matcher.find()) {
-			return tratedProduct;
-		} else {
-			return URLEncoder.encode(tratedProduct, StandardCharsets.UTF_8.toString());
-		}
-	}
-	
-	private String addCharacters(@NonNull String productName, char charToAppend, int size, int type) {
-
-		StringBuilder stringBuilder = new StringBuilder(10);
-		
-		if (type == 0) {
-			stringBuilder.append(productName);
-		}
-		
-		for (int i = 0; i < (size - productName.length()); i++) {
-			stringBuilder.append(charToAppend);
-		}
-
-		if (type == 1) {
-			stringBuilder.append(productName);
-		}
-
-		return stringBuilder.toString();
+		Matcher matcher = Pattern.compile(Constants.REGEX_DOLAR_PERCENT.getValue()).matcher(productName);
+		return matcher.find()?productName:URLEncoder.encode(productName, StandardCharsets.UTF_8.toString());
 	}
 }

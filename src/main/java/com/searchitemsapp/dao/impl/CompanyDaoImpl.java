@@ -2,6 +2,7 @@ package com.searchitemsapp.dao.impl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Query;
 
@@ -10,10 +11,11 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dao.CompanyDao;
-import com.searchitemsapp.dao.repository.CompanyRepository;
 import com.searchitemsapp.dto.CategoryDto;
 import com.searchitemsapp.dto.CompanyDto;
 import com.searchitemsapp.entities.TbSiaEmpresa;
+import com.searchitemsapp.exception.ResourceNotFoundException;
+import com.searchitemsapp.repository.CompanyRepository;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -37,12 +39,15 @@ public class CompanyDaoImpl extends AbstractDao implements CompanyDao {
 	}
 
 	@Override
-	public CompanyDto findByDid(@NonNull final CompanyDto company) throws IOException {
-		return getModelMapper().map(repository.findByDid(company.getDid()), CompanyDto.class);
-	}
+	public Optional<CompanyDto> findByDid(@NonNull final CompanyDto company) throws IOException, ResourceNotFoundException {
+		Optional<TbSiaEmpresa> empresa = repository.findById((company.getDid()));		
+		return Optional.of(getModelMapper() 
+				.map(empresa.orElseThrow(() -> 
+					new ResourceNotFoundException("Resource not found")), CompanyDto.class));
+	} 
 
 	@Override
-	public List<CompanyDto> findByTbSia(@NonNull final CompanyDto empresaDto, 
+	public List<CompanyDto> findByTbSia(@NonNull final CompanyDto empresaDto,  
 			@NonNull final CategoryDto categoriaDto) throws IOException {
 
 		List<CompanyDto> listDto = Lists.newArrayList(); 

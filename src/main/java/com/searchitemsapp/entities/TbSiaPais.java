@@ -26,7 +26,7 @@ public class TbSiaPais implements Serializable {
 
 	@Id
 	@Column(name = "did")
-	private Integer did;
+	private Long did;
 
 
 	@Column(name="bol_activo")
@@ -53,11 +53,11 @@ public class TbSiaPais implements Serializable {
 	@OneToMany(mappedBy="tbSiaPais")
 	private List<TbSiaNomProducto> tbSiaNomProductos;
 
-	public Integer getDid() {
+	public Long getDid() {
 		return this.did;
 	}
 
-	public void setDid(Integer did) {
+	public void setDid(Long did) {
 		this.did = did;
 	}
 

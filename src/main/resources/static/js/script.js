@@ -3,6 +3,12 @@ window.addEventListener("resize", resize);
 window.document.onresize = resize();
 
 function init() {
+
+    if(window.localStorage.getItem('sia_token')  == null) {
+        alert('Please, insert a valid login.')
+        window.location.href = '/login';
+    }
+
     document.getElementById('inputtext').addEventListener('keyup', desplazarbarra, false);
     document.getElementById('botonAceptar').addEventListener('click',enviar,false);
     document.getElementById('botonBarra').addEventListener('click',enviar,false);
@@ -158,7 +164,8 @@ function traerProductos(producto, ordenar, strEmpresas) {
     url: "/search?country=101&category=101&sort="+ ordenar +"&product="+producto + "&pipedcompanies=" + strEmpresas,
     dataType: "text",
     timeout: 600000,
-    beforeSend: function(){
+    beforeSend: function(xhr) {
+        xhr.setRequestHeader ("Authorization", "Bearer " + window.localStorage.getItem('sia_token'));
         $('#sugerencias').addClass('hidden');
         $('#cajamensajes').css("display","none");
         $('#productos').addClass("hidden");
@@ -193,7 +200,8 @@ function liveSearch(keyword) {
         url: "/product/" + keyword,
         dataType: "text",
         timeout: 600000,
-        beforeSend: function(){
+        beforeSend: function(xhr){
+            xhr.setRequestHeader ("Authorization", "Bearer " + window.localStorage.getItem('sia_token'));
             $('#inputtext').addClass('loading-live-search');
             $('#sugerencias').html('');
             $('#sugerencias').css("display", "none");             
@@ -237,7 +245,7 @@ function componerCartas(data) {
     let estructuraHTML = '';
     let contador = 0;
     
-    if(data.includes("Error")) { 
+    if(data.includes("[]")) { 
         document.getElementById("cajamensajes").classList.remove("hidden"); 
         document.getElementById("cajamensajes").style.display = "block";
         return;
@@ -250,7 +258,7 @@ function componerCartas(data) {
         let contenedor = document.getElementById('productos');
         let row;
         
-        datosJSON.products.forEach(element => {           
+        datosJSON.forEach(element => {           
 
             if(contador === 0) {
                 row = document.createElement("div");
@@ -356,6 +364,11 @@ function aceptarSearchBar() {
 
 $(window).resize(function() {
     $( "#log" ).append( "<div>Handler for .resize() called.</div>" );
+  });
+
+  $('#logout').click(function() {
+    localStorage.clear();
+    window.location.href="/login";
   });
 
 function resize() {

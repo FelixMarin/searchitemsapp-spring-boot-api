@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Component
 public class CountryDto {
 	
-	private Integer did;
+	private Long did;
 	private Boolean bolActivo;
 	private String desPais;
 	private String nomPais;

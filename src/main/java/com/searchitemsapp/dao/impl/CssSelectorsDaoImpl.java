@@ -2,6 +2,7 @@ package com.searchitemsapp.dao.impl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Query;
 
@@ -10,10 +11,11 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dao.CssSelectorsDao;
-import com.searchitemsapp.dao.repository.CssSelectorsRepository;
 import com.searchitemsapp.dto.CompanyDto;
 import com.searchitemsapp.dto.CssSelectorsDto;
 import com.searchitemsapp.entities.TbSiaSelectoresCss;
+import com.searchitemsapp.exception.ResourceNotFoundException;
+import com.searchitemsapp.repository.CssSelectorsRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -36,13 +38,14 @@ public class CssSelectorsDaoImpl extends AbstractDao implements CssSelectorsDao 
 	}	
 	
 	@Override
-	public CssSelectorsDto findByDid(final CssSelectorsDto selectorCssDto) throws IOException {
-		
-		return repository.findByDid(selectorCssDto.getDid());
-	}	
+	public Optional<CssSelectorsDto> findByDid(CssSelectorsDto selectorCssDto) throws IOException, ResourceNotFoundException {
+		Optional<TbSiaSelectoresCss> cssSelector = repository.findById(selectorCssDto.getDid());
+		return Optional.of(getModelMapper().map(cssSelector.orElseThrow(() -> 
+			new ResourceNotFoundException("Resource not found")), CssSelectorsDto.class)); 
+	}
 	
 	@Override
-	public List<CssSelectorsDto> findByTbSia(final CssSelectorsDto selectoresCssDto, CompanyDto empresaDto) throws IOException {
+	public List<CssSelectorsDto> findByTbSia(CompanyDto empresaDto) throws IOException {
 
 		List<CssSelectorsDto> listDto = Lists.newArrayList(); 
 

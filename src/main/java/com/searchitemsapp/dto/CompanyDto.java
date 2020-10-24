@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 @Component
 public class CompanyDto {
 
-	private Integer did;
+	private Long did;
 	private Boolean bolActivo;
 	private String desEmpresa;
 	private String nomEmpresa;
 	private Boolean bolDynScrap;	
-	private Integer didCatEmpresa;
+	private Long didCatEmpresa;
 	private String nomCatEmpresa;
-	private Integer didPais;
+	private Long didPais;
 	private String nomPais;
 	private CssSelectorsDto selectores;
 	private UrlDto urls;

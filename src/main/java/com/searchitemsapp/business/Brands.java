@@ -1,8 +1,9 @@
 package com.searchitemsapp.business;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public interface Brands {
 
-	abstract public String brandFilter(final int companyId, final String productName)  throws IOException;
+	abstract Optional<String> brandFilter(final Long companyId, final String productName)  throws IOException;
 }

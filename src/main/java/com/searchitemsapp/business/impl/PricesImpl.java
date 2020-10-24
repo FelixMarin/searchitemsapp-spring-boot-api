@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.searchitemsapp.business.Prices;
 import com.searchitemsapp.dto.ProductDto;
-import com.searchitemsapp.resources.Constants;
+import com.searchitemsapp.resource.Constants;
 
 import lombok.AllArgsConstructor;
 
@@ -30,7 +30,7 @@ public class PricesImpl implements Prices {
 	}
 	
 	@Override
-	public int compare(ProductDto primaryPrice, ProductDto secondaryPrice) {
+	public int compare(ProductDto primaryPrice,ProductDto secondaryPrice) {
 		return priceComparator(primaryPrice, secondaryPrice);
 	}
 	
@@ -89,16 +89,7 @@ public class PricesImpl implements Prices {
 	  String priceResult = StringUtils.EMPTY;
 	  
 	  String priceAux = price.replace(Constants.DOT.getValue(), StringUtils.EMPTY);
-	 
-	  if(priceAux.contains(Constants.PIPE.getValue())) {
-		  priceAux = priceAux.substring(
-				  priceAux.lastIndexOf(Constants.PIPE.getValue())+1,
-				  priceAux.length()).trim().
-				  replaceAll(StringUtils.SPACE
-						  .concat(StringUtils.SPACE),
-						  StringUtils.SPACE);
-	  }
-
+	
 	  Matcher matcherDecimal = Pattern.compile(
 			  Constants.DECIMAL_NUMBER_REGEX.getValue(), Pattern.MULTILINE).matcher(priceAux);
 
@@ -106,18 +97,15 @@ public class PricesImpl implements Prices {
 	     priceResult = matcherDecimal.group(0);
 	  }
 
-	  if(!StringUtils.isAllEmpty(priceResult)) {	  
-		  priceResult = priceResult.replace(Constants.COMMA.getValue(), Constants.DOT.getValue());
-	  } else {
+	  if(StringUtils.isAllEmpty(priceResult)) {	  
 		  return convertToInteger(priceAux);
 	  }
 	  
-	  return priceResult;
+	  return priceResult.replace(Constants.COMMA.getValue(), Constants.DOT.getValue());
 	}
 
 	private  String convertToInteger(final String price) {
 		
-		String priceResult = StringUtils.EMPTY;		
 		Matcher matcherInteger = Pattern.compile(Constants.DECIMAL_NUMBER_REGEX.getValue(), Pattern.MULTILINE).matcher(price);
 		
 	  if(matcherInteger.find()) {
@@ -127,7 +115,8 @@ public class PricesImpl implements Prices {
 	  String priceAux = price.replace(Constants.DOT.getValue(), StringUtils.EMPTY);
 		
 	  matcherInteger = Pattern.compile(Constants.DECIMAL_NUMBER_REGEX.getValue(), Pattern.MULTILINE).matcher(priceAux);
-		
+	  String priceResult = StringUtils.EMPTY;
+	  
 	    if(matcherInteger.find()) {
 		   priceResult = matcherInteger.group();
 		   priceResult = priceResult.concat(Constants.DECIMALS_EXTENSION.getValue());

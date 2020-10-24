@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -48,27 +49,28 @@ public class ProductsBuilderImpl implements ProductBuilder {
     	List<Document> documentList = documents.getHtmlDocument(urlDto, productsInParametersDto.getProduct());
     	
     	documentList.stream()
-	    	.filter(document -> Objects.nonNull(document))
+    		.filter(ObjectUtils::allNotNull)
 	    	.forEach(document -> {
 	    		
 	            Elements documentElements = patterns.selectScrapPattern(document,
 	            		urlDto.getSelectores().getScrapPattern(), 
-	            		urlDto.getSelectores().getScrapNoPattern());
+	            		urlDto.getSelectores().getScrapNoPattern()); 
 	            
 	            documentElements.stream()
-		            .filter(element -> !cssSelectors.validateSelector(element))
+		            .filter(element -> cssSelectors.validateSelector(element).isEmpty())
 		            .forEach(element -> {
 		            	
 		            	try { 
 		            		
 		            		ProductDto productDto = products.addElementsToProducts(element, urlDto, productsInParametersDto.getSort());
-			    			
-			    			if(products.checkProduct(productsInParametersDto.getProduct(), 
-			    					urlDto.getDidEmpresa(), productDto, patterns, brands)) {
-			    				productListAsResult.add(productDto);
-			    			}
+		            		
+		            		Optional<ProductDto> opt = products
+		            				.checkProduct(productsInParametersDto.getProduct(), 
+			    					urlDto.getDidEmpresa(), productDto, patterns, brands);
+		            		
+		            		opt.ifPresent(productListAsResult::add); 
 		    			
-		            	}catch(IOException e) {
+		            	}catch(IOException e) {  
 		            		throw new UncheckedIOException(e);
 		            	}
 		           });

@@ -7,11 +7,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class RegistrationFilter extends OncePerRequestFilter {
 
 	@Override
@@ -19,7 +21,7 @@ public class RegistrationFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 
 		//Pre process
-		LogManager.getLogger(this.getClass().getName()).debug(">>> Filter Log");
+		log.debug(">>> Filter Log");
 		
 		//Passing chain
 		

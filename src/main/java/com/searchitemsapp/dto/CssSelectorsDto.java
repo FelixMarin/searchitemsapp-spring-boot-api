@@ -9,21 +9,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Objeto de Transferencia de Datos (DTO) 
- * es un objeto que transporta datos entre procesos.
- * No tiene más comportamiento que almacenar y entregar 
- * sus propios datos.
- * 
- * @author Felix Marin Ramirez
- *
- */
 @Data @NoArgsConstructor @AllArgsConstructor
 @Builder
 @Component
 public class CssSelectorsDto {
 	
-	private Integer did;
+	private Long did;
 	private Boolean bolActivo;
 	private LocalDate fecModificacion;
 	private String scrapNoPattern;
@@ -34,9 +25,9 @@ public class CssSelectorsDto {
 	private String selPrecio;
 	private String selProducto;
 	private String selPaginacion;	
-	private Integer didEmpresa;
+	private Long didEmpresa;
 	private String nomEmpresa;	
-	private Integer didUrl;
+	private Long didUrl;
 	private String nomUrl;
 
 }

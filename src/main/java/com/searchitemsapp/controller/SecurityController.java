@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class SecurityController {
 	
 	public static final String SECURITY = "/security";
-	
 	public static final String USER = "/user";
-	
 	public static final String MANAGER = "/manager";
-	
 	public static final String ADMIN = "/admin";
+	
+	public static final String  REGISTRATION = "/registrationfilter";
+	public static final String OUT_OF_TIME = "/timeAccess";
 		
 	@PreAuthorize("hasRole('USER') OR hasRole('MANAGER')")
 	@GetMapping(value = USER)
@@ -36,6 +36,16 @@ public class SecurityController {
 	@GetMapping(value = ADMIN)
 	public String readAdmin() {
 		return "OK, Acceso permitido al recurso ADMIN";
+	}
+	
+	@GetMapping(value = OUT_OF_TIME)
+	public String outOfTime() {
+		return "{\"state\":\"off\"}";
+	}
+
+	@GetMapping(value = REGISTRATION)
+	public String registatrion() {
+		return "{\"state\":\"registration\"}";
 	}
 	
 }

@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 @Component
 public class UrlDto {
 
-	private Integer did;
+	private Long did;
 	private Boolean bolActivo;
 	private String desUrl;
 	private String nomUrl;
-	private Integer didEmpresa;
+	private Long didEmpresa;
 	private String nomEmpresa;
 	private Boolean bolStatus;	
 	private Boolean bolLogin;	

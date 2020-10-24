@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Component
 public class LiveSearchDto {
 
-	private Integer did;
+	private Long did;
 	private String nomProducto;
 	
 }

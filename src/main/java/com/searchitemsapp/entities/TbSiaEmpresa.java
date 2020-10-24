@@ -29,7 +29,7 @@ public class TbSiaEmpresa implements Serializable {
 
 	@Id
 	@Column(name = "did")
-	private Integer did;
+	private Long did;
 
 	@Column(name="bol_activo")
 	private Boolean bolActivo;
@@ -62,11 +62,11 @@ public class TbSiaEmpresa implements Serializable {
 	@Column(name="bol_dyn_scrap")
 	private Boolean bolDynScrap;	
 
-	public Integer getDid() {
+	public Long getDid() {
 		return this.did;
 	}
 
-	public void setDid(Integer did) {
+	public void setDid(Long did) {
 		this.did = did;
 	}
 

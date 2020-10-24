@@ -3,13 +3,13 @@ package com.searchitemsapp.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.searchitemsapp.dto.LiveSearchDto;
-import com.searchitemsapp.services.LiveSearchService;
+import com.searchitemsapp.service.LiveSearchService;
 
 import lombok.AllArgsConstructor;
 
@@ -19,7 +19,8 @@ public class LiveSearchController {
 	
 	private LiveSearchService liveSearchService;
 
-	@RequestMapping(value = "/product/{producto}", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('USER')")
+	@GetMapping(value = "/product/{producto}")
 	public ResponseEntity<List<LiveSearchDto>> liveSearchProduct(@PathVariable("producto") final String prod) {
 		return ResponseEntity.ok(liveSearchService.buscarProducto(prod));
 	}

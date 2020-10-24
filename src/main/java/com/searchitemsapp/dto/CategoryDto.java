@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Component
 public class CategoryDto {
 
-	private Integer did;
+	private Long did;
 	private Boolean bolActivo;
 	private String desCatEmpresa;
 	private String nomCatEmpresa;	

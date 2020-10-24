@@ -20,9 +20,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "com.searchitemsapp",
-				excludeFilters = @Filter(Repository.class))
+			   excludeFilters = @Filter(Repository.class))
 @EntityScan("com.searchitemsapp.entities")
-@EnableJpaRepositories("com.searchitemsapp.dao.repository")
+@EnableJpaRepositories(basePackages = {"com.searchitemsapp.repository",
+						"com.searchitemsapp.user.repository"})
 @PropertySource("classpath:db.properties")
 @PropertySource("classpath:flow.properties")
 @PropertySource("classpath:log4j.properties")

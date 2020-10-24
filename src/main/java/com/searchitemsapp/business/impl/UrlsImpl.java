@@ -11,15 +11,15 @@ import com.google.common.collect.Lists;
 import com.searchitemsapp.business.Products;
 import com.searchitemsapp.business.SelectorsCss;
 import com.searchitemsapp.business.Urls;
-import com.searchitemsapp.business.enterprises.Company;
-import com.searchitemsapp.business.enterprises.factory.CompaniesGroup;
+import com.searchitemsapp.company.Company;
+import com.searchitemsapp.company.factory.CompaniesGroup;
 import com.searchitemsapp.dao.UrlDao;
 import com.searchitemsapp.dto.CategoryDto;
 import com.searchitemsapp.dto.CountryDto;
 import com.searchitemsapp.dto.CssSelectorsDto;
 import com.searchitemsapp.dto.SearchItemsParamsDto;
 import com.searchitemsapp.dto.UrlDto;
-import com.searchitemsapp.resources.Constants;
+import com.searchitemsapp.resource.Constants;
 
 import lombok.AllArgsConstructor;
 
@@ -38,8 +38,8 @@ public class UrlsImpl implements Urls {
 			final List<CssSelectorsDto> listAllCssSelector) 
 			throws IOException {
 		
-		countryDto.setDid(NumberUtils.toInt(productsInParametersDto.getCountryId()));		
-		categoryDto.setDid(NumberUtils.toInt(productsInParametersDto.getCategoryId()));
+		countryDto.setDid(NumberUtils.toLong(productsInParametersDto.getCountryId()));		
+		categoryDto.setDid(NumberUtils.toLong(productsInParametersDto.getCategoryId()));
 		
 		List<UrlDto> listUrlDto  = urlDao.obtenerUrlsPorIdEmpresa(countryDto, categoryDto, productsInParametersDto.getPipedEnterprises());
 		
@@ -52,12 +52,12 @@ public class UrlsImpl implements Urls {
 						.addCssSelectors(urlDto, listAllCssSelector));
 				
 				Company company = companiesGroup.getInstance(urlDto.getDidEmpresa());
-				String refinedProductName = company.reemplazarCaracteres(productsInParametersDto.getProduct());
+				String refinedProductName = company.replaceCharacters(productsInParametersDto.getProduct());
 				refinedProductName = products.manageProductName(refinedProductName);
 
 				String urlAux = urlDto.getNomUrl();
 				urlAux = urlAux.replace(Constants.WILDCARD.getValue(), refinedProductName);
-				urlDto.setNomUrl(urlAux);
+				urlDto.setNomUrl(urlAux); 
 				listResultUrlDto.add(urlDto);
 			}catch(IOException e) {
 				throw new UncheckedIOException(e);

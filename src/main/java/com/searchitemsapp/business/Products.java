@@ -1,6 +1,7 @@
 package com.searchitemsapp.business;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import org.jsoup.nodes.Element;
 
@@ -11,7 +12,7 @@ import lombok.NonNull;
 
 public interface Products {
 	
-	abstract boolean checkProduct(String requestProducName, int companyId, 
+	abstract Optional<ProductDto> checkProduct(String requestProducName, Long companyId, 
 			ProductDto productDto, Patterns elementPatterns, 
 			Brands brands) throws IOException;
 	

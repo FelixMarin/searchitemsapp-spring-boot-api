@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.searchitemsapp.config.filter.JwtAuthorizationFilter;
 import com.searchitemsapp.config.filter.RegistrationFilter;
 import com.searchitemsapp.config.filter.TimeAccessFilter;
-import com.searchitemsapp.controller.ExceptionController;
+import com.searchitemsapp.controller.SecurityController;
 
 @Configuration
 @EnableWebSecurity
@@ -31,6 +31,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 	private UserDetailsService userDetailsService;
 	
 	@Autowired
+	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
@@ -43,24 +44,28 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-		http.csrf().disable().httpBasic().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		http.csrf().disable().httpBasic().and()
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and().exceptionHandling().accessDeniedPage("/login")
+		.and().formLogin().loginPage("/login").loginProcessingUrl("/main")
+		.defaultSuccessUrl("/main",true).failureUrl("/error")
 		.and().addFilter(jwtAuthorizationFilter());
 	
 	}
 	
 	@Bean
 	public FilterRegistrationBean<RegistrationFilter> registrationFilter() {
-		FilterRegistrationBean<RegistrationFilter> filterRegistrationBean = new FilterRegistrationBean<RegistrationFilter>();
+		FilterRegistrationBean<RegistrationFilter> filterRegistrationBean = new FilterRegistrationBean<>();
 		filterRegistrationBean.setFilter(new RegistrationFilter());
-		filterRegistrationBean.addUrlPatterns(ExceptionController.REGISTRATION);
+		filterRegistrationBean.addUrlPatterns(SecurityController.REGISTRATION);
 		return filterRegistrationBean;
 	}
 	
 	@Bean
 	public FilterRegistrationBean<TimeAccessFilter> timeAccessFileter() {
-		FilterRegistrationBean<TimeAccessFilter> timeAccessFilter = new FilterRegistrationBean<TimeAccessFilter>();
+		FilterRegistrationBean<TimeAccessFilter> timeAccessFilter = new FilterRegistrationBean<>();
 		timeAccessFilter.setFilter(new TimeAccessFilter());
-		timeAccessFilter.addUrlPatterns(ExceptionController.OUT_OF_TIME);
+		timeAccessFilter.addUrlPatterns(SecurityController.OUT_OF_TIME);
 		timeAccessFilter.setOrder(Ordered.LOWEST_PRECEDENCE - 1);
 		return timeAccessFilter;
 	}

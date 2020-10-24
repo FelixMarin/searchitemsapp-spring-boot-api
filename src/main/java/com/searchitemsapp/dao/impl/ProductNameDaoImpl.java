@@ -2,6 +2,7 @@ package com.searchitemsapp.dao.impl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Query;
 
@@ -10,9 +11,10 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dao.ProductNameDao;
-import com.searchitemsapp.dao.repository.ProductNameRepository;
 import com.searchitemsapp.dto.LiveSearchDto;
 import com.searchitemsapp.entities.TbSiaNomProducto;
+import com.searchitemsapp.exception.ResourceNotFoundException;
+import com.searchitemsapp.repository.ProductNameRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -25,9 +27,11 @@ public class ProductNameDaoImpl extends AbstractDao  implements ProductNameDao {
 	private Environment environment;
 
 	@Override
-	public LiveSearchDto findByDid(LiveSearchDto nomProducto) throws IOException {		
-		return getModelMapper().map(repository
-				.findById(nomProducto.getDid().longValue()), LiveSearchDto.class);
+	public Optional<LiveSearchDto> findByDid(LiveSearchDto nomProducto) throws IOException, ResourceNotFoundException {
+		Optional<TbSiaNomProducto> entity = repository.findById(nomProducto.getDid());
+		return Optional.of(getModelMapper().map(entity.orElseThrow(() -> 
+			new ResourceNotFoundException("Resource not found: " + 
+					this.getClass().getName())), LiveSearchDto.class));
 	}
 
 	@Override
@@ -43,18 +47,20 @@ public class ProductNameDaoImpl extends AbstractDao  implements ProductNameDao {
 	
 	public List<LiveSearchDto> findByNomProducto(String product) {
 
-		List<LiveSearchDto> listDto = Lists.newArrayList(); 
+		List<LiveSearchDto> liveSearchList = Lists.newArrayList(); 
 
-		String nativeQuery = environment.getProperty("flow.value.select.native.producto.by.nombre");
+		Optional<String> nativeQuery = Optional.ofNullable(environment.getProperty("flow.value.select.native.producto.by.nombre"));
 		
-		Query q = getEntityManager().createNativeQuery(nativeQuery.replace("#", product), TbSiaNomProducto.class);
+		nativeQuery.ifPresent(predicate -> {
+			predicate = predicate.replace("#", product);
+			Query q = getEntityManager().createNativeQuery(predicate, TbSiaNomProducto.class);
+			List<TbSiaNomProducto> liEntities = (q.getResultList());
+			
+			liEntities.forEach(entity -> liveSearchList
+					.add(getModelMapper().map(entity, LiveSearchDto.class)));
+		});
 		
-		List<TbSiaNomProducto> liEntities = (q.getResultList());
-		
-		liEntities.forEach(elem -> listDto
-				.add(getModelMapper().map(elem, LiveSearchDto.class)));
-		
-		return listDto;
+		return liveSearchList;
 		
 	}
 }

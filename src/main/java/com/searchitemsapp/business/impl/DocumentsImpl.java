@@ -10,12 +10,13 @@ import org.codehaus.jettison.json.JSONException;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.searchitemsapp.business.Documents;
-import com.searchitemsapp.business.enterprises.Company;
-import com.searchitemsapp.business.enterprises.factory.CompaniesGroup;
+import com.searchitemsapp.company.Company;
+import com.searchitemsapp.company.factory.CompaniesGroup;
 import com.searchitemsapp.dto.UrlDto;
 
 import lombok.AllArgsConstructor;
@@ -26,10 +27,10 @@ public class DocumentsImpl implements Documents {
 	
 	private CompaniesGroup companiesGroup;
 	private DynamicWebProcessingImpl dynamicWebProcessingImpl;
+	private Environment environment;
 	
 	@Override
-	public List<String> urlsPaginacion(final Document document, 
-			final UrlDto urlDto, final int companyId) 
+	public List<String> urlsPaginacion(Document document, UrlDto urlDto, Long companyId) 
 					throws MalformedURLException {
 		
 		List<String> listUrlsResultado = Lists.newArrayList();
@@ -46,18 +47,18 @@ public class DocumentsImpl implements Documents {
 					throws IOException, URISyntaxException, 
 					InterruptedException, JSONException {
 
-    	List<Document> listDocuments = Lists.newArrayList();    	
-		Company company = companiesGroup.getInstance(urlDto.getDidEmpresa());			
+    	List<Document> listDocuments = Lists.newArrayList(); 
+		Company company = companiesGroup.getInstance(urlDto.getDidEmpresa());		 	
     	
-    	Document document = getDocument(urlDto.getNomUrl(), company.get_DID(), product);
+    	Document document = getDocument(urlDto.getNomUrl(), company.getId(), product);
 
-    	List<String> liUrlsPorEmpresaPaginacion = urlsPaginacion(document, urlDto, company.get_DID());
-   		 			
-   		if(liUrlsPorEmpresaPaginacion.isEmpty()) {
+    	List<String> liUrlsPorEmpresaPaginacion = urlsPaginacion(document, urlDto, company.getId());
+   		
+    	if(liUrlsPorEmpresaPaginacion.isEmpty()) {
      			listDocuments.add(document);
    		} else {
 	  		for (String url : liUrlsPorEmpresaPaginacion) {
-	   			listDocuments.add(getDocument(url, company.get_DID(), product));
+	   			listDocuments.add(getDocument(url, company.getId(), product));
 			}
    		}
 	
@@ -65,14 +66,15 @@ public class DocumentsImpl implements Documents {
 	}
 	
 	private Document getDocument(String externalProductURL, 
-			int companyId, String requestProductName) 
-					throws InterruptedException, URISyntaxException, IOException, JSONException {
+			Long companyId, String requestProductName) 
+					throws InterruptedException, URISyntaxException, IOException {
 	
 		Company company = companiesGroup.getInstance(companyId);
 
 		if(company.isDynamic()) {
 			
-			String dynamicContent = dynamicWebProcessingImpl.getDynamicHtmlContent(externalProductURL, companyId);
+			String driverId = environment.getProperty("flow.value.firefox.driver.id");
+			String dynamicContent = dynamicWebProcessingImpl.getDynamicHtmlContent(externalProductURL, companyId, Long.parseLong(driverId));
 			String externalProductoURI = new URL(externalProductURL).toURI().toString();
 			
 			return Jsoup.parse(dynamicContent, externalProductoURI);
