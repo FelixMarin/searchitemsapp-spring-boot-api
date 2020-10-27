@@ -26,11 +26,6 @@ public class Caprabo implements Company {
 	@Override
 	public List<String> getUrls(final Document document, final UrlDto urlDto)
 			throws MalformedURLException {
-		
-		String urlBase = urlDto.getNomUrl();
-		List<String> urls = Lists.newArrayList();
-		urls.add(urlBase);
-		
-		return urls;
+		return Lists.newArrayList();
 	}
 }

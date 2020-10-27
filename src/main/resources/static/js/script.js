@@ -116,7 +116,7 @@ function enviar() {
         opcionPrecio.setAttribute('value','1');
         opcionPrecio.setAttribute('id','precio');
         let opcionVolumen = document.createElement("option");
-        opcionVolumen.text = 'Precio/Kilo';
+        opcionVolumen.text = 'Precio Unitario';
         opcionVolumen.setAttribute('value','2');
         opcionVolumen.setAttribute('id','volumen');
         
@@ -185,7 +185,7 @@ function traerProductos(producto, ordenar, strEmpresas) {
         componerCartas(data);        
     }).fail(function (xhr, textStatus, errorThrown) {
         console.log(errorThrown+'\n'+status+'\n'+xhr.statusText);
-        alert("AJAX call failed: " + textStatus + ", " + errorThrown);
+        window.location.href = '/login'; 
     });
 }
 
@@ -232,7 +232,7 @@ function liveSearch(keyword) {
    
         }).fail(function (xhr, textStatus, errorThrown) {
             console.log(errorThrown+'\n'+status+'\n'+xhr.statusText);
-            alert("AJAX call failed: " + textStatus + ", " + errorThrown);
+            window.location.href = '/login'; 
         });
 }
 
@@ -277,7 +277,7 @@ function componerCartas(data) {
             estructuraHTML += '<img class="imgprod" src="' + element.imagen + '" alt="Photo of sunset" />';
             estructuraHTML += '</a>';
             estructuraHTML += '<h5 class="card-title p-2">' + element.nomProducto + '</h5>';
-            estructuraHTML += '<p class="text pl-2">PVP: ' + element.precio + '<br />PVP/KILO: ' + element.precioKilo + '</p>';     
+            estructuraHTML += '<p class="text pl-2">PVP. ' + element.precio + '<br />PVP/U ' + element.precioKilo + '</p>';     
             estructuraHTML += '</div></div>';
 
             let card = document.createRange().createContextualFragment(estructuraHTML);

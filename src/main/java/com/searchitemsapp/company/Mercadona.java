@@ -35,14 +35,9 @@ public class Mercadona implements Company {
 	private Environment environment;
 
 	@Override
-	public List<String> getUrls(final Document document, final UrlDto urlDto) throws MalformedURLException {
-
-		String urlBase = urlDto.getNomUrl();
-
-		List<String> listaUrls = Lists.newArrayList();
-		listaUrls.add(urlBase);
-
-		return listaUrls;
+	public List<String> getUrls(final Document document, final UrlDto urlDto) 
+			throws MalformedURLException {
+		return Lists.newArrayList();
 	}
 
 	public Long getId() {

@@ -34,12 +34,7 @@ public class Condis implements Company {
 	public List<String> getUrls(final Document document, 
 			final UrlDto urlDto)
 					throws MalformedURLException {
-		
-		String urlBase = urlDto.getNomUrl();
-		List<String> listaUrls = Lists.newArrayList();
-		listaUrls.add(urlBase);
-		
-		return listaUrls;
+		return Lists.newArrayList();
 	}
 	
 	@Override

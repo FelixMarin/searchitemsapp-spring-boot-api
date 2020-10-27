@@ -2,7 +2,6 @@ package com.searchitemsapp.business.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
@@ -69,15 +68,5 @@ class PricesImplTest {
 		product2 = ProductDto.builder().ordenacion(1).precio(",00").build();
 		res = price.priceComparator(product1, product2);
 		assertEquals(0, res);
-	}
-	
-	@Test
-	void testpriceComparatorException() {
-	 
-	    assertThrows(NumberFormatException.class, () -> {
-	    	ProductDto product1 = ProductDto.builder().ordenacion(1).precio("").build();
-	    	ProductDto product2 = ProductDto.builder().ordenacion(1).precio("").build();
-			price.priceComparator(product1, product2);
-	    });
 	}
 }

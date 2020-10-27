@@ -42,7 +42,7 @@ public class SelectorsCssImpl implements SelectorsCss {
 	public List<CssSelectorsDto> selectorCssListByEnterprise(
 			final String companyId) {
 
-		String companiesIdSepearatedByCommas = companyId;
+		String companiesIdSepearatedByCommas;
 		
 		if(Constants.ALL.getValue().equalsIgnoreCase(companyId)) {
 			companiesIdSepearatedByCommas = environment.getProperty("flow.value.all.id.empresa");
@@ -93,8 +93,7 @@ public class SelectorsCssImpl implements SelectorsCss {
 	} 
 	
 	public String elementByCssSelector(@NonNull Element documentElement, 
-			@NonNull String cssSelector,
-			@NonNull UrlDto urlDto) throws MalformedURLException {
+			@NonNull String cssSelector, @NonNull UrlDto urlDto) throws MalformedURLException {
 				
 		List<String> cssSelectorList = Lists.newArrayList();		
 		StringTokenizer st = new StringTokenizer(cssSelector, Constants.PIPE.getValue());  

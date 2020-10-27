@@ -10,11 +10,11 @@ import org.codehaus.jettison.json.JSONException;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.searchitemsapp.business.Documents;
+import com.searchitemsapp.business.webdriver.WebDriverManager;
 import com.searchitemsapp.company.Company;
 import com.searchitemsapp.company.factory.CompaniesGroup;
 import com.searchitemsapp.dto.UrlDto;
@@ -26,8 +26,7 @@ import lombok.AllArgsConstructor;
 public class DocumentsImpl implements Documents {
 	
 	private CompaniesGroup companiesGroup;
-	private DynamicWebProcessingImpl dynamicWebProcessingImpl;
-	private Environment environment;
+	private WebDriverManager webDriverManager;
 	
 	@Override
 	public List<String> urlsPaginacion(Document document, UrlDto urlDto, Long companyId) 
@@ -73,10 +72,8 @@ public class DocumentsImpl implements Documents {
 
 		if(company.isDynamic()) {
 			
-			String driverId = environment.getProperty("flow.value.firefox.driver.id");
-			String dynamicContent = dynamicWebProcessingImpl.getDynamicHtmlContent(externalProductURL, companyId, Long.parseLong(driverId));
+			String dynamicContent = webDriverManager.getDynamicHtmlContent(externalProductURL, companyId);
 			String externalProductoURI = new URL(externalProductURL).toURI().toString();
-			
 			return Jsoup.parse(dynamicContent, externalProductoURI);
 		}
 		

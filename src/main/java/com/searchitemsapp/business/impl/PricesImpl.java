@@ -2,6 +2,7 @@ package com.searchitemsapp.business.impl;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,14 +71,11 @@ public class PricesImpl implements Prices {
 
 	private  Double doubleConverter(final String price) {
 		
-		String priceResult = convertToDecimal(price);
-		
-		if(StringUtils.isAllEmpty(priceResult)) {
-			priceResult = convertToInteger(price);
-		}
- 
-		priceResult = priceResult.trim();
-		return Double.parseDouble(priceResult);
+		Optional<String> priceResult = Optional.ofNullable(convertToDecimal(price));
+		String priceAux = priceResult.orElse(convertToInteger(price)).trim();
+		return price.isBlank() || priceAux.isBlank()?
+				Double.parseDouble(Constants.DEFAULT_PRICE.getValue()):
+				Double.parseDouble(priceAux);
 	}
 
 	private  String convertToDecimal(final String price) {
@@ -86,22 +84,20 @@ public class PricesImpl implements Prices {
 			return Constants.DEFAULT_PRICE.getValue();
 		}
 	     
-	  String priceResult = StringUtils.EMPTY;
+		String priceResult = StringUtils.EMPTY;
 	  
-	  String priceAux = price.replace(Constants.DOT.getValue(), StringUtils.EMPTY);
+		String priceAux = price.replace(Constants.DOT.getValue(), StringUtils.EMPTY);
 	
-	  Matcher matcherDecimal = Pattern.compile(
+		Matcher matcherDecimal = Pattern.compile(
 			  Constants.DECIMAL_NUMBER_REGEX.getValue(), Pattern.MULTILINE).matcher(priceAux);
 
-	  if (matcherDecimal.find()) {
-	     priceResult = matcherDecimal.group(0);
-	  }
-
-	  if(StringUtils.isAllEmpty(priceResult)) {	  
-		  return convertToInteger(priceAux);
-	  }
+		if (matcherDecimal.find()) {
+			priceResult = Optional.ofNullable(matcherDecimal.group(0))
+				 			.orElse(convertToInteger(priceAux))
+				 			.replace(Constants.COMMA.getValue(), Constants.DOT.getValue());
+		}
 	  
-	  return priceResult.replace(Constants.COMMA.getValue(), Constants.DOT.getValue());
+		return priceResult;
 	}
 
 	private  String convertToInteger(final String price) {
@@ -134,24 +130,28 @@ public class PricesImpl implements Prices {
 		return priceResult;
 	}
 	
-	private  void putSamePrice(final ProductDto primaryPriduct, final ProductDto secondaryProduct) {
+	private  void putSamePrice(final ProductDto primaryProduct, final ProductDto secondaryProduct) {
 		
-		if(StringUtils.isAllEmpty(primaryPriduct.getPrecioKilo()) &&
-				!StringUtils.isAllEmpty(primaryPriduct.getPrecio())) {
-			primaryPriduct.setPrecioKilo(convertToDecimal(primaryPriduct.getPrecio())
-					.concat(Constants.KILOGRAM_EXTENSION.getValue()));
-		}
+		Optional<String> primaryUnitPrice = Optional.ofNullable(primaryProduct.getPrecioKilo());
+		Optional<String> secondaryUnitPrice = Optional.ofNullable(secondaryProduct.getPrecioKilo());
 		
-		if(StringUtils.isAllEmpty(secondaryProduct.getPrecioKilo()) &&
-				!StringUtils.isAllEmpty(secondaryProduct.getPrecio())) {
-			secondaryProduct.setPrecioKilo(convertToDecimal(secondaryProduct.getPrecio())
-					.concat(Constants.KILOGRAM_EXTENSION.getValue()));
-		}
+		String precioKilo = primaryUnitPrice.orElse(primaryProduct.getPrecio());
+		precioKilo = convertToDecimal(precioKilo);
+		precioKilo = precioKilo.concat(Constants.KILOGRAM_EXTENSION.getValue());
+		primaryProduct.setPrecioKilo(precioKilo);
+		
+		precioKilo = secondaryUnitPrice.orElse(secondaryProduct.getPrecio());
+		precioKilo = convertToDecimal(precioKilo);
+		precioKilo = precioKilo.concat(Constants.KILOGRAM_EXTENSION.getValue());
+		secondaryProduct.setPrecioKilo(precioKilo);
+		
 	}
 
 	private  void cleanPrices(final ProductDto primaryPrice, final ProductDto secondaryPrice) {
 		
-		if(!StringUtils.isAllEmpty(primaryPrice.getPrecio())) {
+		Optional<String> oprimaryPrice = Optional.ofNullable(primaryPrice.getPrecio());
+		
+		oprimaryPrice.ifPresent(elem -> {
 			primaryPrice.setPrecio(convertToDecimal(primaryPrice.getPrecio())
 					.concat(Constants.EURO_EXTENSION.getValue())
 					.replace(Constants.DOT.getValue(),Constants.COMMA.getValue()));	
@@ -159,16 +159,6 @@ public class PricesImpl implements Prices {
 			secondaryPrice.setPrecio(convertToDecimal(secondaryPrice.getPrecio())
 					.concat(Constants.EURO_EXTENSION.getValue())
 					.replace(Constants.DOT.getValue(),Constants.COMMA.getValue()));
-		}
-		
-		if(!StringUtils.isAllEmpty(primaryPrice.getPrecioKilo())) {
-			primaryPrice.setPrecioKilo(convertToDecimal(primaryPrice.getPrecioKilo())
-			.concat(Constants.KILOGRAM_EXTENSION.getValue())
-			.replace(Constants.DOT.getValue(),Constants.COMMA.getValue()));	
-	
-			secondaryPrice.setPrecioKilo(convertToDecimal(secondaryPrice.getPrecioKilo())
-			.concat(Constants.KILOGRAM_EXTENSION.getValue())
-			.replace(Constants.DOT.getValue(),Constants.COMMA.getValue()));	
-		}
+		});
 	}
 }

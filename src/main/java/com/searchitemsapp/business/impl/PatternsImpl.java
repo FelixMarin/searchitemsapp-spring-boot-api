@@ -3,9 +3,9 @@ package com.searchitemsapp.business.impl;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ public class PatternsImpl implements Patterns {
 	public Elements selectScrapPattern(final Document document,
 			final String strScrapPattern, final String strScrapNotPattern) {
 
-		return Objects.isNull(strScrapNotPattern)?
+		return StringUtils.isAnyBlank(strScrapNotPattern)?
 				document.select(strScrapPattern):
 					document.select(strScrapPattern).not(strScrapNotPattern);
  

@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -61,12 +60,5 @@ public class ElCorteIngles implements Company {
 		}	
 		
 		return listaUrls;
-	}
-	
-	@Override
-	public String selectorTextExtractor(Element documentElement,
-			List<String> cssSelectorList, String cssSelector) {
-		return documentElement.selectFirst(environment
-				.getProperty("flow.value.pagina.precio.eci.offer")).text();
 	}
 }

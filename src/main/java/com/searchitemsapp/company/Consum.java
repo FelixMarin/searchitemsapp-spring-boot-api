@@ -31,12 +31,7 @@ public class Consum implements Company {
 	@Override
 	public List<String> getUrls(Document document, UrlDto urlDto)
 			throws MalformedURLException {
-
-		String urlBase = urlDto.getNomUrl();
-		List<String> listaUrls = Lists.newArrayList();
-		listaUrls.add(urlBase);
-		
-		return listaUrls;
+			return Lists.newArrayList();
 	}
 
 	@Override
@@ -70,7 +65,10 @@ public class Consum implements Company {
 			});
 		}
 		
-		return webDriver.getPageSource();
+		String pageSource = webDriver.getPageSource();
+		webDriver.quit();
+		
+		return pageSource;
 	}
 	public Long getId() {
 		return NumberUtils.toLong(environment.getProperty("flow.value.did.empresa.consum"));

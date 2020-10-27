@@ -61,7 +61,6 @@ public class ProductsBuilderImpl implements ProductBuilder {
 		            .forEach(element -> {
 		            	
 		            	try { 
-		            		
 		            		ProductDto productDto = products.addElementsToProducts(element, urlDto, productsInParametersDto.getSort());
 		            		
 		            		Optional<ProductDto> opt = products

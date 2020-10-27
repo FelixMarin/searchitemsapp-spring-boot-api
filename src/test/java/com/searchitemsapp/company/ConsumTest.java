@@ -12,9 +12,10 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.searchitemsapp.business.DynamicWebProcessing;
+import com.searchitemsapp.business.webdriver.WebDriverFirefox;
 import com.searchitemsapp.dto.UrlDto;
 
 @RunWith(SpringRunner.class)
@@ -22,10 +23,13 @@ import com.searchitemsapp.dto.UrlDto;
 class ConsumTest {
 	
 	@Autowired
-	private DynamicWebProcessing manager;
+	private WebDriverFirefox webDriverFirefox;
 	
 	@Autowired
 	private Consum consum; 
+	
+	@Autowired
+	private Environment environment;
 
 	@Test
 	void testGetUrls() throws MalformedURLException {
@@ -43,7 +47,9 @@ class ConsumTest {
 	@Test
 	void testGetHtmlContent() throws InterruptedException {
 		final String baseUri = "https://tienda.consum.es/consum/es/search?q=miel#!Grid";
-		WebDriver webDriver = manager.initWebDriver(0l);
+		String driverPath  = environment.getProperty("flow.value.firefox.driver.path");
+		String executablePath = environment.getProperty("folw.value.firefox.ejecutable.path");
+		WebDriver webDriver = webDriverFirefox.setup(driverPath, executablePath);
 		String content = consum.getHtmlContent(webDriver, baseUri);
 		assertNotNull(content);
 	}

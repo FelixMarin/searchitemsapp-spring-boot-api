@@ -34,8 +34,7 @@ public class ProductsImpl implements Products {
 	
 	@Override
 	public Optional<ProductDto> checkProduct(String requestProducName, Long companyId, 
-			ProductDto productDto, Patterns elementPatterns, 
-			Brands brands) throws IOException {
+			ProductDto productDto, Patterns elementPatterns, Brands brands) throws IOException {
 			 
 		Optional<String> productName = brands.brandFilter(companyId, productDto.getNomProducto());	
 		String[] productCharArray = requestProducName.split(StringUtils.SPACE);

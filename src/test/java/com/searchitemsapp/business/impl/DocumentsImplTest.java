@@ -1,6 +1,5 @@
 package com.searchitemsapp.business.impl;
 
-import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.IOException;
@@ -16,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.searchitemsapp.business.Documents;
 import com.searchitemsapp.dto.CssSelectorsDto;
-import com.searchitemsapp.dto.UrlDto;
+import com.searchitemsapp.dto.UrlDto;	
 
 @SpringBootTest
 class DocumentsImplTest {
@@ -32,15 +31,6 @@ class DocumentsImplTest {
 		assertFalse(listUrls.isEmpty());
 	}
 	
-	@Test
-	void testGetHtmlDocumentException() {
-	 
-	    assertThrows(IllegalArgumentException.class, () -> {
-			UrlDto urlDto = UrlDto.builder().nomUrl("").didEmpresa(101l).build();
-			document.getHtmlDocument(urlDto, "miel");
-	    });
-	}
-
 	@Test
 	void testGetHtmlDocument() throws IOException, URISyntaxException, InterruptedException, JSONException {
 		CssSelectorsDto selectores = CssSelectorsDto.builder().selPaginacion("0|0").build();

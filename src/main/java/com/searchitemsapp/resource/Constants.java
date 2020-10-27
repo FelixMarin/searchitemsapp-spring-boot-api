@@ -86,7 +86,8 @@ public enum Constants {
     			+ "|(\\w*109\\w*)|(\\w*110\\w*)"
     			+ "|(\\w*111\\w*)|(\\w*112\\w*)"
     			+ "|(\\w*113\\w*)|(\\w*114\\w*)"
-    			+ "|(\\w*115\\w*)|(\\w*,\\w*)\\b";
+    			+ "|(\\w*115\\w*)|(\\w*116\\w*)"
+    			+ "|(\\w*,\\w*)\\b";
     	
     	private static final String REGEX_ORDENACION = "(\\b(1)|(2)\\b)";
     	private static final String REGEX_ALL = "(\\b(\\w*ALL\\w*)\\b)";
