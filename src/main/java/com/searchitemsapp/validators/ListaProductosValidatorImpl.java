@@ -1,4 +1,4 @@
-package com.searchitemsapp.validators.impl;
+package com.searchitemsapp.validators;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -9,7 +9,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import com.searchitemsapp.resource.Constants;
-import com.searchitemsapp.validators.ListaProductosValidator;
 
 @Component
 public class ListaProductosValidatorImpl implements ListaProductosValidator {
@@ -20,13 +19,16 @@ public class ListaProductosValidatorImpl implements ListaProductosValidator {
 			
 			Arrays.asList(args).stream().forEach(value -> {
 				
-				if(value.length() < 1 || value.length() > 35 ||
+				if(value.length() < 1 || value.length() > 47 ||
 						StringUtils.isBlank(value)) {
 					throw new IllegalArgumentException(Arrays.toString(mSignature.getParameterNames()));
 				}
 				
-				value = Pattern.compile(Constants.REGEX_SPECIAL_CHARACTERS.getValue()).matcher(value).find()?StringUtils.EMPTY:value;
-				value = Pattern.compile(Constants.REGEX_WORDS.getValue()).matcher(value.toLowerCase()).find()?StringUtils.EMPTY:value;
+				value = Pattern.compile(Constants.REGEX_SPECIAL_CHARACTERS.getValue())
+						.matcher(value).find()?StringUtils.EMPTY:value;
+				
+				value = Pattern.compile(Constants.REGEX_WORDS.getValue())
+						.matcher(value.toLowerCase()).find()?StringUtils.EMPTY:value;
 				
 				if(StringUtils.isBlank(value)) {
 					throw new IllegalArgumentException(Arrays.toString(mSignature.getParameterNames()));

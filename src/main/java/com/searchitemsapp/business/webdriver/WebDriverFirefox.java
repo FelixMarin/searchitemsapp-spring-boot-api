@@ -6,14 +6,20 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import lombok.AllArgsConstructor;
+
 @Component
+@AllArgsConstructor
 public class WebDriverFirefox {
+	
+	private Environment environment; 
 	
 	public WebDriver setup(String driverPath, String executablePath) {
 		
-		System.setProperty("webdriver.gecko.driver", driverPath);
+		System.setProperty(environment.getProperty("flow.value.firefox.driver"), driverPath);
 		
 		FirefoxOptions options = new FirefoxOptions();
 		options.setBinary(executablePath);

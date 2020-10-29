@@ -1,7 +1,6 @@
 package com.searchitemsapp.business.impl;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,11 +40,12 @@ public class PricesImpl implements Prices {
 		int comparationResult= 0;
 	
 		if(primaryPrice.getOrdenacion() == 1) {
-
-			if(StringUtils.isAllEmpty(primaryPrice.getPrecio())) {
-				primaryPrice.setPrecio(Constants.DEFAULT_PRICE.getValue());
-			}
-
+			
+			String price = Optional.ofNullable(primaryPrice.getPrecio())
+					.orElse(Constants.DEFAULT_PRICE.getValue());
+			
+			primaryPrice.setPrecio(price);
+			
 			comparationResult = doubleConverter(primaryPrice.getPrecio())
 					.compareTo(doubleConverter(secondaryPrice.getPrecio()));
 
@@ -53,11 +53,12 @@ public class PricesImpl implements Prices {
 			
 		} else if(primaryPrice.getOrdenacion() == 2) {
 	
-			if(Objects.isNull(primaryPrice.getPrecioKilo()) || 
-					StringUtils.isAllEmpty(primaryPrice.getPrecioKilo())) {
-				primaryPrice.setPrecioKilo(Constants.DEFAULT_PRICE.getValue());
-			}
-
+			String priceUnit = Optional.ofNullable(primaryPrice.getPrecioKilo())
+					.filter(elem -> elem != "")
+					.orElse(Constants.DEFAULT_PRICE.getValue());
+			
+			primaryPrice.setPrecioKilo(priceUnit);
+	
 			putSamePrice(primaryPrice, secondaryPrice);
 
 			comparationResult = doubleConverter(primaryPrice.getPrecioKilo())
@@ -72,7 +73,10 @@ public class PricesImpl implements Prices {
 	private  Double doubleConverter(final String price) {
 		
 		Optional<String> priceResult = Optional.ofNullable(convertToDecimal(price));
-		String priceAux = priceResult.orElse(convertToInteger(price)).trim();
+		
+		String priceAux = priceResult
+				.orElse(convertToInteger(price)).trim();
+		
 		return price.isBlank() || priceAux.isBlank()?
 				Double.parseDouble(Constants.DEFAULT_PRICE.getValue()):
 				Double.parseDouble(priceAux);
@@ -84,25 +88,40 @@ public class PricesImpl implements Prices {
 			return Constants.DEFAULT_PRICE.getValue();
 		}
 	     
-		String priceResult = StringUtils.EMPTY;
-	  
-		String priceAux = price.replace(Constants.DOT.getValue(), StringUtils.EMPTY);
-	
+		String priceAux = checkIfHasPipeLine(price);
+		
 		Matcher matcherDecimal = Pattern.compile(
-			  Constants.DECIMAL_NUMBER_REGEX.getValue(), Pattern.MULTILINE).matcher(priceAux);
+			  Constants.DECIMAL_NUMBER_REGEX.getValue(), 
+			  Pattern.MULTILINE).matcher(priceAux);
 
+		String subPrice = StringUtils.EMPTY;
+		
 		if (matcherDecimal.find()) {
-			priceResult = Optional.ofNullable(matcherDecimal.group(0))
+			subPrice = Optional.ofNullable(matcherDecimal.group(0))
 				 			.orElse(convertToInteger(priceAux))
 				 			.replace(Constants.COMMA.getValue(), Constants.DOT.getValue());
 		}
 	  
-		return priceResult;
+		subPrice = Optional.ofNullable(subPrice)
+			.filter(StringUtils::isNoneBlank)
+			.orElse(Constants.DEFAULT_PRICE.getValue());
+		
+		Double priceFinal = Double.parseDouble(subPrice);
+		return priceFinal.toString();
+	}
+	
+	private String checkIfHasPipeLine(String price) {
+		String priceAux = price.replace(Constants.DOT.getValue(), Constants.COMMA.getValue());
+		boolean hasPipe = priceAux.contains(Constants.PIPE.getValue());
+		int iniIndex = priceAux.indexOf(Constants.PIPE.getValue())-1;
+		String subPriceAux = iniIndex<1?priceAux:priceAux.substring(iniIndex, priceAux.length());
+		return hasPipe?subPriceAux:priceAux;
 	}
 
 	private  String convertToInteger(final String price) {
 		
-		Matcher matcherInteger = Pattern.compile(Constants.DECIMAL_NUMBER_REGEX.getValue(), Pattern.MULTILINE).matcher(price);
+		Matcher matcherInteger = Pattern.compile(Constants.DECIMAL_NUMBER_REGEX.getValue(), 
+				Pattern.MULTILINE).matcher(price);
 		
 	  if(matcherInteger.find()) {
 		  return Constants.DECIMALS_EXTENSION.getValue();
@@ -110,24 +129,18 @@ public class PricesImpl implements Prices {
 		
 	  String priceAux = price.replace(Constants.DOT.getValue(), StringUtils.EMPTY);
 		
-	  matcherInteger = Pattern.compile(Constants.DECIMAL_NUMBER_REGEX.getValue(), Pattern.MULTILINE).matcher(priceAux);
-	  String priceResult = StringUtils.EMPTY;
+	  matcherInteger = Pattern.compile(Constants.DECIMAL_NUMBER_REGEX.getValue(), 
+			  Pattern.MULTILINE).matcher(priceAux);
 	  
-	    if(matcherInteger.find()) {
-		   priceResult = matcherInteger.group();
-		   priceResult = priceResult.concat(Constants.DECIMALS_EXTENSION.getValue());
-	    }
-
-		if(StringUtils.isAllEmpty(priceResult)) {
-			  matcherInteger = Pattern.compile("\\d+", Pattern.MULTILINE).matcher(priceAux);
-
-			if(matcherInteger.find()) {
-				  priceResult = matcherInteger.group();
-				  priceResult = priceResult.concat(Constants.DECIMALS_EXTENSION.getValue());
-			}
-		}
+	  Optional<String> priceResult = matcherInteger.find()?Optional.ofNullable(matcherInteger.group()):Optional.empty();
+	  priceResult.ifPresent(elem -> elem = elem.concat(Constants.DECIMALS_EXTENSION.getValue()));
+	  
+	  priceResult.filter(StringUtils::isAllEmpty).ifPresent(elem -> {
+	    	Matcher matcher = Pattern.compile("\\d+", Pattern.MULTILINE).matcher(priceAux);
+	    	elem = matcher.find()?matcher.group().concat(Constants.DECIMALS_EXTENSION.getValue()):elem;
+	    });
 		
-		return priceResult;
+		return priceResult.orElse(Constants.DEFAULT_PRICE.getValue());
 	}
 	
 	private  void putSamePrice(final ProductDto primaryProduct, final ProductDto secondaryProduct) {
