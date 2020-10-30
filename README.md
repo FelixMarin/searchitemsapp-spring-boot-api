@@ -1,5 +1,5 @@
 
-# API REST para obtener una lista de productos vendidos en supermercados online del mismo tipo, ordenados por precio.
+# API REST para obtener una lista de productos del mismo tipo, vendidos en supermercados online, y ordenados por precio.
 
 Una aplicación web desarrollada en java EE, Spring Framework e Hibernate. La API rest recibe una solicitud y esta devuelve una estructura en formato JSON con una lista ordenada por precio con productos vendidos en supermercados online. La característica principal del servicio es la utilizaciión de internet como fuente de datos, dichos datos son obtenidos en tiempo real, lo que permite tener siempre la información atualizada. El servicio es una API RESTFul, con lo que para obtener la informcación habrá que solicitarla mediante una petición sobre el protocolo HTTP.
 
