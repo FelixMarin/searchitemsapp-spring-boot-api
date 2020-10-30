@@ -99,7 +99,7 @@ http://[url]:[port]/searchitemsapp/search?pais=[id_país]&categoria=[id_categor�
 Esta URL devolverá un listado de objetos json con los productos de todos los supermercados ordenados por precio. 
 
 ```console
-http://[url]:[port]/searchitemsapp/search?pais=101&categoria=101&ordenacion=1&producto=arroz/empresas=ALL
+http://[url]:[port]/searchitemsapp/search?pais=101&categoria=101&ordenacion=1&producto=arroz&empresas=ALL
 ```
 
 Esta URL devolverá un listado de objetos json con los productos de un supermercado ordenados por volumen.
