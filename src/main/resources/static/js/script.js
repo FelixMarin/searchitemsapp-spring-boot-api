@@ -300,7 +300,7 @@ function componerCartas(data) {
             estructuraHTML += colorIdentificador(element.identificador);
             estructuraHTML += '</h4>'
             estructuraHTML += '<a href="' + element.nomUrl + '" target="_blank" rel="noopener noreferrer">';
-            estructuraHTML += '<img class="imgprod" src="' + element.imagen + '" alt="Photo of sunset" />';
+            estructuraHTML += '<img class="imgprod" src="' + element.imagen + '" alt=" Producto" />';
             estructuraHTML += '</a>';
             estructuraHTML += '<h5 class="card-title p-2">' + element.nomProducto + '</h5>';
             estructuraHTML += '<p class="text pl-2">Precio ' + element.precio + '<br />P.Kilo  ' + element.precioKilo + '</p>';     
