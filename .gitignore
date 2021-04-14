@@ -61,3 +61,6 @@ log4j/
 
 #webdriver
 gecko/
+
+#mvn
+.mvn
