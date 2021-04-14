@@ -44,6 +44,11 @@ $( "#signup-id").click(function( event ) {
 $( "#login-id").click(function( event ) {
   event.preventDefault();
 
+  if(mailExists()) {
+    alert('El usuario ya existe');
+    return;
+  }
+
   let user = {
     "username": $('#user_name').val(),
     "password": $('#user_pass_signup').val(),
@@ -71,4 +76,23 @@ $( "#login-id").click(function( event ) {
 		type: 'POST'
   });
 });
+
+function mailExists() {
+
+  let isEmail = false;
+
+  $.ajax({
+    url : "/user/mailExists?mail=" + $('#user_email').val(),
+    type: "GET",    
+    async: false,
+    success: function(data, textStatus, xhr) {
+      isEmail = (data == true);
+    },
+    error: function(xhr) {      
+      alert('Error al consultar el email');
+    }
+});  
+
+return isEmail;
+}
 

@@ -64,4 +64,9 @@ public class UserServiceImpl implements UserService {
 		allUsers.forEach(elem -> elem.setRoles(null));		
 		return allUsers;
 	}
+	
+	public boolean mailExists(String mail) throws ResourceNotFoundException {
+		UserDto user = userDao.findByEmail(mail);		
+		return user.getEmail() != null;
+	}
 }

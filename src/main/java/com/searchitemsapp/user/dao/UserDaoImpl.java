@@ -27,7 +27,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 	public UserDto findByUserName(@NonNull String username) throws ResourceNotFoundException {
 		TbSiaUser entity= repository.findByUsername(username)
 				.orElseThrow(() -> new ResourceNotFoundException("Doesn't exist: " + username));
-		
+				
 		return UserDto.builder().username(entity.getUsername())
 				.password(entity.getPassword())
 				.email(entity.getEmail())
@@ -50,7 +50,9 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 		List<TbSiaRoles> roles = Lists.newArrayList();
 		roles.add(rolesRepository.getOne(2l));
 		user.setRoles(roles);
-		TbSiaUser entity = getModelMapper().map(user, TbSiaUser.class);
+		TbSiaUser entity = getModelMapper().map(user, TbSiaUser.class); 
+		
+		repository.save(entity);
 		
 		return UserDto.builder().username(entity.getUsername())
 				.password(entity.getPassword())
@@ -61,6 +63,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 				.enabled(entity.getEnabled())
 				.id(entity.getId())
 				.roles(entity.getRoles()).build();
+		
 	}
 	
 	@Override
@@ -100,5 +103,27 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 				.enabled(entity.getEnabled())
 				.id(entity.getId())
 				.roles(entity.getRoles()).build();
+	}
+
+	@Override
+	public UserDto findByEmail(String email) {
+
+		List<TbSiaUser> list = repository.findByEmail(email);
+		
+		if(!list.isEmpty()) {
+			TbSiaUser entity = list.get(0);
+			return  UserDto.builder().username(entity.getUsername())
+					.password(entity.getPassword())
+					.email(entity.getEmail())
+					.accountNonExpired(entity.getAccountNonExpired())
+					.accountNonLocked(entity.getAccountNonExpired())
+					.createAt(entity.getCreateAt())
+					.enabled(entity.getEnabled())
+					.id(entity.getId())
+					.roles(entity.getRoles()).build();
+		} else {
+			return UserDto.builder().build();
+		}
+		
 	}
 }

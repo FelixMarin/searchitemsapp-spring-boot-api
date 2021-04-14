@@ -13,4 +13,6 @@ public interface UserService {
 	abstract boolean update(UserDto user) throws ResourceNotFoundException, ConfilctFoundException;
 	abstract UserDto existsByUserName(String username) throws ResourceNotFoundException;
 	abstract List<UserDto> findAll();
+	abstract boolean mailExists(String mail) throws ResourceNotFoundException;
 }
+           

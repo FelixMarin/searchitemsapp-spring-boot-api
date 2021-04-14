@@ -16,4 +16,5 @@ public interface UserDao {
 	abstract  void delete(Long id);
 	abstract List<UserDto> findAll();
 	abstract UserDto findByUsernameAndPassword(@NonNull String username, @NonNull String password)  throws ResourceNotFoundException; 
+	abstract UserDto findByEmail(String email);
 }

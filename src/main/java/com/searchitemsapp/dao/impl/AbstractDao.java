@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.modelmapper.ModelMapper;
 
 import com.google.common.collect.Lists;
@@ -30,19 +31,16 @@ public abstract class AbstractDao {
 		
 		List<UrlDto> listUrlDto = Lists.newArrayList();
 		
-		if (!urlList.isEmpty()){  
-			
-			urlList.forEach(obj -> 
-				
-				listUrlDto.add(UrlDto.builder().nomUrl(String.valueOf(obj[0]))
-						.didEmpresa(Long.parseLong(String.valueOf(obj[1])))
-						.did(Long.parseLong(String.valueOf(obj[2])))
-						.bolActivo(Boolean.parseBoolean(null!=obj[3]?String.valueOf(obj[3]):null))
-						.nomEmpresa(String.valueOf(obj[4]))
-						.bolStatus(Boolean.parseBoolean(null!=obj[5]?String.valueOf(obj[5]):null))
-						.bolLogin(Boolean.parseBoolean(null!=obj[6]?String.valueOf(obj[6]):null))
-						.desUrl(String.valueOf(obj[7])).build()));
-		}
+		urlList.stream().filter(ObjectUtils::isNotEmpty).forEach(obj -> 
+		
+		listUrlDto.add(UrlDto.builder().nomUrl(String.valueOf(obj[0]))
+			.didEmpresa(Long.parseLong(String.valueOf(obj[1])))
+			.did(Long.parseLong(String.valueOf(obj[2])))
+			.bolActivo(Boolean.parseBoolean(null!=obj[3]?String.valueOf(obj[3]):null))
+			.nomEmpresa(String.valueOf(obj[4]))
+			.bolStatus(Boolean.parseBoolean(null!=obj[5]?String.valueOf(obj[5]):null))
+			.bolLogin(Boolean.parseBoolean(null!=obj[6]?String.valueOf(obj[6]):null))
+			.desUrl(String.valueOf(obj[7])).build()));
 		
 		return listUrlDto;
 	}

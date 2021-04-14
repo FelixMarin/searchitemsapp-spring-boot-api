@@ -33,6 +33,8 @@ public class UserController {
 	
 	public static final String EXISTS = "/exists";
 	
+	public static final String MAIL_EXISTS = "/mailExists";
+	
 	public static final String SAVE = "/save";
 	
 	public static final String DELETE = "/delete";
@@ -48,6 +50,13 @@ public class UserController {
 		return ResponseEntity
 		        .status(HttpStatus.OK)
 		        .body(userService.existsByUserName(user.getName()));
+	}
+	
+	@GetMapping(value = MAIL_EXISTS)
+	public ResponseEntity<Boolean> mailExists(String mail) throws ResourceNotFoundException {
+		return ResponseEntity
+		        .status(HttpStatus.OK)
+		        .body(userService.mailExists(mail));
 	}
 	
 	@PostMapping(value = SAVE)

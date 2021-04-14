@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.persistence.Query;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -60,7 +61,7 @@ public class CompanyDaoImpl extends AbstractDao implements CompanyDao {
 		
 		List<TbSiaEmpresa> liEntities = (q.getResultList());
 		
-		liEntities.forEach(elem ->listDto
+		liEntities.stream().filter(ObjectUtils::isNotEmpty).forEach(elem ->listDto
 				.add(getModelMapper().map(elem, CompanyDto.class)));
 		
 		return listDto;

@@ -91,9 +91,27 @@
         animation: movetotop .5s 1;
         -webkit-animation-fill-mode: forwards;
     }
+    
+    .separacion-input-productos-sm {
+    	margin-top:12%;
+    }
+    
+    .sm-img {
+    	width: 100%;
+    }
+    
+    .mobile-size {
+    	width: 19%;
+    }
+    
+    #select-top {
+    	display: block;
+    	position: absolute;
+    	width: 157%;
+    }
       
     @keyframes movetotop {
-        100% {top:20%;}
+        100% {top:18%;}
         0%   {top: 500%;}
     }
 }

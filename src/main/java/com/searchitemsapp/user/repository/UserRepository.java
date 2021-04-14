@@ -1,5 +1,6 @@
 package com.searchitemsapp.user.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,8 @@ public interface UserRepository   extends JpaRepository<TbSiaUser, Long>{
 	
 	@Query("from TbSiaUser u where u.username = ?1 and u.password = ?2")
 	abstract Optional<TbSiaUser> findByUsernameAndPassword(@NonNull String username, @NonNull String password);
+	
+	abstract List<TbSiaUser> findByEmail(String email);
+	
 	
 }

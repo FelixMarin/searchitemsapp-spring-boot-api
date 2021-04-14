@@ -44,6 +44,12 @@ function desplazarbarra() {
         document.getElementById("button-aceptar").classList.add('show');
         document.getElementById("separdor-footer").classList.remove('hidden');
         document.getElementById("separdor-footer").classList.add('show');
+
+        let sizescreen = window.screen.availWidth;
+
+        if(sizescreen <= 1023) {
+            document.getElementById("contenedor-input-productos").classList.add('separacion-input-productos-sm');
+        }
     }
 }
 
@@ -69,7 +75,13 @@ function enviar() {
 
         for (let item of elemEmpresas) {
             let didEmpresa = item.firstChild.alt;
-            let imgLogo = imagenLogoEmpresa(parseInt(didEmpresa)).replace('w-50','w-100');
+            let sizescreen = window.screen.availWidth;
+            let imgLogo;
+            if(sizescreen > 1023) {
+                imgLogo = imagenLogoEmpresa(parseInt(didEmpresa)).replace('w-50','w-100');
+            } else {
+                imgLogo = imagenLogoEmpresa(parseInt(didEmpresa)).replace('w-50','');
+            }
             let logoEmpresa = document.createRange().createContextualFragment(imgLogo);
             logoEmpresa.children[0].classList.add('cardinal');
             logoEmpresa.children[0].classList.remove('climg');
@@ -83,6 +95,7 @@ function enviar() {
             div.classList.add('col-md-2');
             div.classList.add('col-sm-3');
             div.classList.add('col-xs-3');
+            div.classList.add('mobile-size');
             div.appendChild(logoEmpresa);
             document.getElementById('caja-logos-checked').appendChild(div);
             valEmpresas += didEmpresa + ',';
@@ -105,6 +118,7 @@ function enviar() {
         selectGroup.setAttribute("class", "form-control");
         selectGroup.style.border = "solid 1px #ddd";
         selectGroup.classList.add('float-right'); 
+        selectGroup.setAttribute('onchange','enviar();return false;');
         let opcionPrecio = document.createElement("option");
         opcionPrecio.text = 'Precio';
         opcionPrecio.setAttribute('value','1');
@@ -153,6 +167,11 @@ function enviar() {
 }
 
 function traerProductos(producto, ordenar, strEmpresas) {	
+
+
+    let d = new Date();
+    let bufferProductos = window.localStorage.getItem(producto + '|' + ordenar + '|' + strEmpresas + '|' + d.getDate() + '|' + window.localStorage.getItem('sia_token'));
+
     $.ajax({
     type: "GET",
     url: "/search?country=101&category=101&sort="+ ordenar +"&product="+producto + "&pipedcompanies=" + strEmpresas,
@@ -171,11 +190,19 @@ function traerProductos(producto, ordenar, strEmpresas) {
         $("#input-container").addClass("mt-2");
         $('#ruleta').removeClass('hidden');
         $('#ruleta').addClass('show');
+        if(bufferProductos != undefined && bufferProductos != null) {
+            $('#ruleta').addClass('hidden');
+            $('#productos').removeClass("hidden");
+            $('#productos').addClass("show");
+            componerCartas(bufferProductos);
+            return;
+        }
     }
     }).done(function (data) {        
         $('#ruleta').addClass('hidden');
         $('#productos').removeClass("hidden");
         $('#productos').addClass("show");
+        window.localStorage.setItem(producto + '|' + ordenar + '|' + strEmpresas + '|' + d.getDate() + '|' + window.localStorage.getItem('sia_token'),data);
         componerCartas(data);        
     }).fail(function (xhr, textStatus, errorThrown) {
         console.log(errorThrown+'\n'+status+'\n'+xhr.statusText);
@@ -233,6 +260,11 @@ function liveSearch(keyword) {
 function focoSerchBar(param) {
     document.getElementById('inputtext').value = param.innerText.trim();
     document.getElementById('sugerencias').style.display = "none";
+    let elemEmpresas = document.getElementsByClassName('imgChked');
+
+    if(elemEmpresas != undefined && elemEmpresas.length != 0) {
+        enviar();
+    }
 }
 
 function componerCartas(data) {
@@ -315,31 +347,31 @@ function imagenLogoEmpresa(didEmpresa) {
 
     switch (didEmpresa) {
         case 101:
-            return '<img class="w-50 pt-2 pl-2 pb-2 climg" src="img/mercadona.svg" alt="mercadona" />';
+            return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/mercadona.svg" alt="mercadona" />';
         case 102:
-            return '<img class="w-50 pt-2 pl-2 pb-2 climg" src="img/lidl.png" alt="lidl" />';
+            return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/lidl.png" alt="lidl" />';
         case 103:
-            return '<img class="w-50 pt-2 pl-2 pb-2 climg" src="img/hipercor.svg" alt="hipercor" />';
+            return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/hipercor.svg" alt="hipercor" />';
         case 105:            			
-            return '<img class="w-50 pt-2 pl-2 pb-2 climg" src="img/dia.svg" alt="dia" />';
+            return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/dia.svg" alt="dia" />';
          case 106:            			
-             return '<img class="w-50 pt-2 pl-2 pb-2 climg" src="img/ulabox.svg" alt="ulabox" />';
+             return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/ulabox.svg" alt="ulabox" />';
          case 107:            			
-             return '<img class="w-50 pt-2 pl-2 pb-2 climg" src="img/eroski.svg" alt="eroski" />'; 
+             return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/eroski.svg" alt="eroski" />'; 
          case 108: 			
-             return '<img class="w-50 pt-2 pl-2 pb-2 climg" src="img/alcampo.svg" alt="alcampo" />';
+             return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/alcampo.svg" alt="alcampo" />';
          case 109:	
-            return '<img class="w-50 pt-2 pl-2 pb-2 climg" src="img/caprabo.svg" alt="caprabo" />';
+            return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/caprabo.svg" alt="caprabo" />';
          case 104:	
-             return '<img class="w-50 pt-2 pl-2 pb-2 climg" src="img/carrefour.svg" alt="carrefour" />';
+             return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/carrefour.svg" alt="carrefour" />';
          case 110:	
-             return '<img class="w-50 pt-2 pl-2 pb-2 climg" src="img/condis.svg" alt="condis" />';
+             return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/condis.svg" alt="condis" />';
          case 111:		
-             return '<img class="w-50 pt-2 pl-2 pb-2 climg" src="img/elcorteingles.svg" alt="elcorteingles" />';
+             return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/elcorteingles.svg" alt="elcorteingles" />';
          case 114:		
-             return '<img class="w-50 pt-2 pl-2 pb-2 climg" src="img/Simply-market.png" alt="simply" />';
+             return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/Simply-market.png" alt="simply" />';
          case 116:		
-             return '<img class="w-50 pt-2 pl-2 pb-2 climg" src="img/consum.svg" alt="consum" />';
+             return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/consum.svg" alt="consum" />';
     }
 }
 
@@ -416,15 +448,16 @@ function resize() {
             logochecked[index].classList.remove('w-50');
             logochecked[index].classList.remove('w-100');
             logochecked[index].classList.remove('climg');
-            logochecked[index].classList.add('w-100');
+            logochecked[index].classList.add('w-25');
         }
 
         let cardinal = document.getElementsByClassName('cardinal');
 
         for (let index = 0; index < cardinal.length; index++) {
             cardinal[index].classList.remove('w-50');
+            cardinal[index].classList.remove('w-100');
             cardinal[index].classList.remove('w-75');
-            cardinal[index].classList.add('w-100');        
+            cardinal[index].classList.add('w-25');        
         }
 
     } else {
@@ -469,7 +502,7 @@ function resize() {
             logochecked[index].classList.remove('w-50');
             logochecked[index].classList.remove('w-100');
             logochecked[index].classList.remove('climg');
-            logochecked[index].classList.add('w-50');
+            logochecked[index].classList.add('w-100');
         }
     }
 
