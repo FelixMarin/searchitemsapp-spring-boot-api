@@ -1,7 +1,13 @@
 
-# API REST para obtener una lista de productos del mismo tipo, vendidos en supermercados online, y ordenados por precio.
+# Comparador de precios de supermercados online.
 
-Una aplicación web desarrollada en java EE, Spring Framework e Hibernate. La API recibe una solicitud y esta devuelve una estructura en formato JSON con una lista ordenada por precio con productos vendidos en supermercados online. La característica principal del servicio es la utilización de internet como fuente de datos, dichos datos son obtenidos en tiempo real, lo que permite tener siempre la información actualizada. El servicio es una API RESTFul, con lo que para obtener la información habrá que solicitarla mediante una petición sobre el protocolo HTTP.
+Una aplicación web desarrollada en [Spring boot](https://spring.io/projects/spring-boot). En ella se integran front-end, back-end y base de datos. 
+
+**Back-end**: Se trata de un servicio web que recibe una solicitud y éste devuelve una estructura en formato JSON con una lista ordenada por precio con productos vendidos en supermercados online. La característica principal del servicio es la utilización de internet como fuente de datos, dichos datos son obtenidos en tiempo real, lo que permite tener siempre la información actualizada. El servicio web escucha peticiones http y a partir de una URL con una serie de parámetros de entrada, devuelve una lista de productos del mismo tipo ordenados por precio o precio/kilo.
+
+**Front-end**: Conjunto de prototipos de diseño web integrados en la aplicación y totalmente desacoplados, que realizan solicitudes de servicio al back-end y que interpretan de forma gráfica los resultados obtenidos. 
+
+La aplicación 
 
 ## Herramientas
 
@@ -14,8 +20,15 @@ Una aplicación web desarrollada en java EE, Spring Framework e Hibernate. La AP
 
 ## Lenguajes
 
-- JAVA – J2EE
+**Back-end**
+- JAVA
 - SQL
+
+**Front-end**
+- HTML5
+- CSS3
+- Bootstrap
+- Javascript/Jquery
 
 ## Arquitectura
 
