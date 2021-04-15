@@ -1,13 +1,7 @@
 
 # Comparador de precios de supermercados online.
 
-Una aplicación web desarrollada en [Spring boot](https://spring.io/projects/spring-boot). En ella se integran front-end, back-end y base de datos. 
-
-**Back-end**: Se trata de un servicio web que recibe una solicitud y éste devuelve una estructura en formato JSON con una lista ordenada por precio con productos vendidos en supermercados online. La característica principal del servicio es la utilización de internet como fuente de datos, dichos datos son obtenidos en tiempo real, lo que permite tener siempre la información actualizada. El servicio web escucha peticiones http y a partir de una URL con una serie de parámetros de entrada, devuelve una lista de productos del mismo tipo ordenados por precio o precio/kilo.
-
-**Front-end**: Conjunto de prototipos de diseño web integrados en la aplicación y totalmente desacoplados, que realizan solicitudes de servicio al back-end y que interpretan de forma gráfica los resultados obtenidos. 
-
-La aplicación 
+La aplicación consiste en un servicio web con arquitectura Restful, desarrollado en java Empresarial. Lo que hace la aplicación es retorna una lista de productos de supermercado del mismo tipo. Esta lista viene ordenada por precio o por precio kilo según se indique en los parámetros de entrada indicados en la solicitud. La solicitud se realiza mediante el método GET a través del protocolo http lo que significa que los parámetros de la petición van en la propia URL. En la URL se indican parámetros como el nombre del producto y los identificadores de los supermercados con los que se va a realizar la comparativa.
 
 ## Herramientas
 
@@ -32,7 +26,7 @@ La aplicación
 
 ## Arquitectura
 
-- RestFul
+- Distribución por capas. 
 
 ## Frameworks
 
@@ -43,6 +37,14 @@ La aplicación
 ## Técnica de extracción de datos
 
 - [Web Scraping](https://es.wikipedia.org/wiki/Web_scraping)
+
+
+## La aplicación
+
+**Back-end**: Se trata de un servicio web que recibe una solicitud y devuelve una estructura en formato JSON. Dicha estructura JSON, contiene una lista de productos ordenada por  precio o precio/kilo.
+
+**Front-end**: Conjunto de prototipos de diseño web integrados en la aplicación y totalmente desacoplados que realizan solicitudes de servicio al back-end y que interpretan los resultados JSON de forma gráfica. 
+
 
 # Preparación del Entorno
 
