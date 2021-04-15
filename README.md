@@ -38,14 +38,6 @@ La aplicación consiste en un servicio web con arquitectura Restful, desarrollad
 
 - [Web Scraping](https://es.wikipedia.org/wiki/Web_scraping)
 
-
-## La aplicación
-
-**Back-end**: Se trata de un servicio web que recibe una solicitud y devuelve una estructura en formato JSON. Dicha estructura JSON, contiene una lista de productos ordenada por  precio o precio/kilo.
-
-**Front-end**: Conjunto de prototipos de diseño web integrados en la aplicación y totalmente desacoplados que realizan solicitudes de servicio al back-end y que interpretan los resultados JSON de forma gráfica. 
-
-
 # Preparación del Entorno
 
 
