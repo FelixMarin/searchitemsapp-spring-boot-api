@@ -1,7 +1,7 @@
 
-# API REST para obtener una lista de productos del mismo tipo, vendidos en supermercados online, y ordenados por precio.
+# Comparador de precios de supermercados online.
 
-Una aplicación web desarrollada en java EE, Spring Framework e Hibernate. La API recibe una solicitud y esta devuelve una estructura en formato JSON con una lista ordenada por precio con productos vendidos en supermercados online. La característica principal del servicio es la utilización de internet como fuente de datos, dichos datos son obtenidos en tiempo real, lo que permite tener siempre la información actualizada. El servicio es una API RESTFul, con lo que para obtener la información habrá que solicitarla mediante una petición sobre el protocolo HTTP.
+La aplicación consiste en un servicio web con arquitectura Restful, desarrollado en java Empresarial. Lo que hace la aplicación es retorna una lista de productos de supermercado del mismo tipo. Esta lista viene ordenada por precio o por precio kilo según se indique en los parámetros de entrada indicados en la solicitud. La solicitud se realiza mediante el método GET a través del protocolo http lo que significa que los parámetros de la petición van en la propia URL. En la URL se indican parámetros como el nombre del producto y los identificadores de los supermercados con los que se va a realizar la comparativa.
 
 ## Herramientas
 
@@ -14,12 +14,19 @@ Una aplicación web desarrollada en java EE, Spring Framework e Hibernate. La AP
 
 ## Lenguajes
 
-- JAVA – J2EE
+**Back-end**
+- JAVA
 - SQL
+
+**Front-end**
+- HTML5
+- CSS3
+- Bootstrap
+- Javascript/Jquery
 
 ## Arquitectura
 
-- RestFul
+- Distribución por capas. 
 
 ## Frameworks
 
@@ -136,4 +143,5 @@ http://[url]:[port]/searchitemsapp/search?pais=101&categoria=101&ordenacion=2&pr
 ]}
 ```
 
-#### Ejemplo en [vídeo](https://youtu.be/smuZhHQhij4)
+#### Ejemplo backend en [vídeo](https://youtu.be/smuZhHQhij4)
+#### Ejemplo frontend en [vídeo](https://www.youtube.com/watch?v=K_4Wp0Poh2Q&t=7s)
