@@ -19,7 +19,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "com.searchitemsapp",
+@ComponentScan(basePackages = {"com.searchitemsapp"},
 			   excludeFilters = @Filter(Repository.class))
 @EntityScan("com.searchitemsapp.entities")
 @EnableJpaRepositories(basePackages = {"com.searchitemsapp.repository",
@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource("classpath:db.properties")
 @PropertySource("classpath:flow.properties")
 @PropertySource("classpath:log4j.properties")
+@PropertySource("classpath:/templates/")
 @EnableTransactionManagement
 @EnableScheduling
 @EnableCaching
