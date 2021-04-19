@@ -48,11 +48,6 @@ public class TbSiaCategoriasEmpresa implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="tbSiaCategoriasEmpresa")
 	private List<TbSiaMarcas> tbSiaMarcas;
 
-	//bi-directional many-to-one association to TbSiaNomProducto
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="tbSiaCategoriasEmpresa")
-	private List<TbSiaNomProducto> tbSiaNomProductos;
-
 	public Long getDid() {
 		return this.did;
 	}
@@ -112,29 +107,7 @@ public class TbSiaCategoriasEmpresa implements Serializable {
 		getTbSiaMarcas().add(tbSiaMarca);
 		return tbSiaMarca;
 	}
-
-	public void setTbSiaNomProductos(List<TbSiaNomProducto> tbSiaNomProductos) {
-		this.tbSiaNomProductos = tbSiaNomProductos;
-	}
 	
-	public List<TbSiaNomProducto> getTbSiaNomProductos() {
-		return this.tbSiaNomProductos;
-	}
-
-	public TbSiaNomProducto addTbSiaNomProducto(TbSiaNomProducto tbSiaNomProducto) {
-		getTbSiaNomProductos().add(tbSiaNomProducto);
-		tbSiaNomProducto.setTbSiaCategoriasEmpresa(this);
-
-		return tbSiaNomProducto;
-	}
-
-	public TbSiaNomProducto removeTbSiaNomProducto(TbSiaNomProducto tbSiaNomProducto) {
-		getTbSiaNomProductos().remove(tbSiaNomProducto);
-		tbSiaNomProducto.setTbSiaCategoriasEmpresa(null);
-
-		return tbSiaNomProducto;
-	}
-
 	public TbSiaEmpresa removeTbSiaEmpresa(TbSiaEmpresa tbSiaEmpresa) {
 		this.tbSiaEmpresas.remove(tbSiaEmpresa);
 		tbSiaEmpresa.setTbSiaCategoriasEmpresa(null);

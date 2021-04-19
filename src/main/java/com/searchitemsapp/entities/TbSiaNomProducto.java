@@ -26,10 +26,6 @@ public class TbSiaNomProducto implements Serializable {
 	@Id
 	@Column(name = "did")
 	private Long did;
-
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="id_categoria", referencedColumnName="did", nullable = false)
-	private TbSiaCategoriasEmpresa tbSiaCategoriasEmpresa;
 	
 	@Column(name="nom_producto")
 	private String nomProducto;
@@ -52,14 +48,6 @@ public class TbSiaNomProducto implements Serializable {
 
 	public void setNomProducto(String nomProducto) {
 		this.nomProducto = nomProducto;
-	}
-
-	public TbSiaCategoriasEmpresa getTbSiaCategoriasEmpresa() {
-		return this.tbSiaCategoriasEmpresa;
-	}
-
-	public void setTbSiaCategoriasEmpresa(TbSiaCategoriasEmpresa tbSiaCategoriasEmpresa) {
-		this.tbSiaCategoriasEmpresa = tbSiaCategoriasEmpresa;
 	}
 
 	public TbSiaPais getTbSiaPais() {
