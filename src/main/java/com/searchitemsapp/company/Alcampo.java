@@ -1,11 +1,13 @@
 package com.searchitemsapp.company;
 
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -29,12 +31,11 @@ public class Alcampo implements Company {
 			throws MalformedURLException {
 		
 		String urlBase = urlDto.getNomUrl();
+		String lastElement = StringUtils.EMPTY;
 		
 		String paginationSelector = urlDto.getSelectores().getSelPaginacion();	
 		String strPaginacion = Constants.ZERO.getValue();
 			
-		int numresultados = NumberUtils.toInt(environment.getProperty("flow.value.paginacion.url.alcampo"));
-		
 		List<String> selectors = Lists.newArrayList();
 		
 		StringTokenizer tokenizer = new StringTokenizer(paginationSelector, Constants.PIPE.getValue());  
@@ -46,12 +47,11 @@ public class Alcampo implements Company {
 		Elements elements = document.select(selectors.get(0));
 		List<String> urls = Lists.newArrayList();
 		
-		if(elements.isEmpty()) {
-			urls.add(urlBase);
-			return urls;
-		}
+		urls.add(urlBase);
 		
-		String lastElement = elements.get(elements.size()-1).attr(selectors.get(1));
+		if(!elements.isEmpty()) {
+			lastElement = elements.get(elements.size()-1).attr(selectors.get(1));
+		}
 		
 		Matcher m = Pattern.compile(Constants.PAGE_REGEX.getValue()).matcher(lastElement);
 		
@@ -61,13 +61,16 @@ public class Alcampo implements Company {
 		
 		int intPaginacion = NumberUtils.toInt(strPaginacion.trim());
 		
-		for (int i = 2; i <= intPaginacion; i++) {
-			urls.add(urlBase.replace("&page=1", "&page=".concat(String.valueOf(i))));
-		}
+		URL mainURL = new URL(urlBase);
+		StringBuilder path = new StringBuilder(10);
+		path.append(mainURL.getProtocol())
+		.append(Constants.PROTOCOL_ACCESSOR.getValue())
+		.append(mainURL.getHost())
+		.append(lastElement);
 		
-		if(numresultados > 0 && numresultados <= urls.size()) {
-			urls = urls.subList(0, numresultados);
-		}		
+		for (int i = 1; i <= intPaginacion; i++) {
+			urls.add(path.toString().replace("&page="+intPaginacion, "&page=".concat(String.valueOf(i))));
+		}	
 		
 		return urls;
 	}
