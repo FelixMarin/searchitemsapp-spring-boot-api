@@ -145,3 +145,4 @@ http://[url]:[port]/searchitemsapp/search?pais=101&categoria=101&ordenacion=2&pr
 
 #### Ejemplo backend en [vídeo](https://youtu.be/smuZhHQhij4)
 #### Ejemplo frontend en [vídeo](https://www.youtube.com/watch?v=K_4Wp0Poh2Q&t=7s)
+#### [Descargar](https://github.com/FelixMarin/searchitemsapp-spring-boot-api/releases/download/rls1.8/rls1.8.zip)
