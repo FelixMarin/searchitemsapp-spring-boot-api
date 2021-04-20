@@ -37,7 +37,7 @@ public class ProductsImpl implements Products {
 			ProductDto productDto, Patterns elementPatterns, Brands brands) throws IOException {
 			 
 		Optional<String> productName = brands.brandFilter(companyId, productDto.getNomProducto());	
-		String[] productCharArray = requestProducName.split(StringUtils.SPACE);
+		String[] productCharArray = removeTildes(requestProducName).split(StringUtils.SPACE);
 		Pattern patternProduct = elementPatterns.createPatternProduct(productCharArray);
 		String productResult = removeTildes(productName.orElseThrow());
 		
