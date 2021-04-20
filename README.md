@@ -48,7 +48,7 @@ El primer paso consiste en descargar el proyecto de GitHub.
 ~$ sudo apt install git 
 ~$ git clone https://github.com/FelixMarin/searchitemsapp-spring-boot-api.git 
 ```
-A continuacion, importar el proyecto en [Spring Tools Suite](https://spring.io/tools):
+A continuacion, importar el proyecto al IDE [Spring Tools Suite](https://spring.io/tools):
 
 ```bash
 1. 'File > Import'.
