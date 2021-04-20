@@ -112,7 +112,7 @@ http://[url]:[port]/searchitemsapp/search?pais=101&categoria=101&ordenacion=1&pr
 Esta URL devolverá un listado de objetos json con los productos de un supermercado ordenados por volumen.
 
 ```console
-http://[url]:[port]/searchitemsapp/search?pais=101&categoria=101&ordenacion=2&producto=sal&empresas=103
+http://[url]:[port]/search?country=101&category=101&sort=1&product=sal&pipedcompanies=103
 ```
 
 - **Ejemplo de respuesta:**
