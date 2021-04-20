@@ -87,7 +87,7 @@ java -jar sia-0.0.1-SNAPSHOT.jar
 - **Formato de la URL con la que se realizará la solicitud al servicio:**
 
 ```console
-http://[url]:[port]/searchitemsapp/search?pais=[id_país]&categoria=[id_categoría]&ordenacion=[ordenar]&producto=[producto]&empresas=[id_empresa]
+http://[url]:[port]/searchitemsapp/search?country=[id_país]&category=[id_categoría]&sort=[ordenar]&product=[producto]&pipedcompanies=[id_empresa]
 ```
 
 - **Lista de parámetros de la solicitud:**
@@ -106,7 +106,7 @@ http://[url]:[port]/searchitemsapp/search?pais=[id_país]&categoria=[id_categor�
 Esta URL devolverá un listado de objetos json con los productos de todos los supermercados ordenados por precio. 
 
 ```console
-http://[url]:[port]/searchitemsapp/search?pais=101&categoria=101&ordenacion=1&producto=arroz&empresas=ALL
+http://[url]:[port]/search?country=101&category=101&sort=1&product=arroz&pipedcompanies=ALL
 ```
 
 Esta URL devolverá un listado de objetos json con los productos de un supermercado ordenados por volumen.
