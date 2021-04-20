@@ -12,6 +12,12 @@ jQuery(document).ready(function ($) {
   });
 });
 
+$('#user_pass_login').on('keypress',function(e) {
+  if(e.which == 13) {
+    $( "#signup-id").click();
+  }
+});
+
 $( "#signup-id").click(function( event ) {
   
   event.preventDefault();

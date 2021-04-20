@@ -213,6 +213,7 @@ function traerProductos(producto, ordenar, strEmpresas) {
 function liveSearch(keyword) {
 	
 	if(keyword === '' || keyword === undefined) {
+        $('#sugerencias').css("display", "none");  
 		return
 	}
 	
@@ -230,7 +231,8 @@ function liveSearch(keyword) {
         }).done(function (data) {
 			$('#inputtext').removeClass('loading-live-search');
 			
-			if(data === '' || data === undefined) {
+			if(data === '[]') {
+                $('#sugerencias').css("display", "none");  
 				return '';
 			}
 			

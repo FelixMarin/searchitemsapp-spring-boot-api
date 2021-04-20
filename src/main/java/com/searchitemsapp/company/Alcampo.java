@@ -68,7 +68,7 @@ public class Alcampo implements Company {
 		.append(mainURL.getHost())
 		.append(lastElement);
 		
-		for (int i = 1; i <= intPaginacion; i++) {
+		for (int i = 1; i <= 3; i++) {
 			urls.add(path.toString().replace("&page="+intPaginacion, "&page=".concat(String.valueOf(i))));
 		}	
 		
