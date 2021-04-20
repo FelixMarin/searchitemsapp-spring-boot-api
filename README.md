@@ -94,11 +94,11 @@ http://[url]:[port]/searchitemsapp/search?country=[id_país]&category=[id_catego
 
 | Parámetro | Valor |
 | --- | --- |
-| __país__ | 101 (España). |
-| __categoría__ | 101 (Supermercados) |
-| __ordenar__ | PVP: 1 / PVP/KILO: 2 |
-| __producto__ | (Arroz, Aceite, sal, ...) |
-| __super__ | [101] , [101,103,104] , [ALL] |
+| __country__ | 101 (España). |
+| __category__ | 101 (Supermercados) |
+| __sort__ | PVP: 1 / PVP/KILO: 2 |
+| __product__ | (Arroz, Aceite, sal, ...) |
+| __pipedcompanies__ | [101] , [101,103,104] , [ALL] |
  
 
 - **Ejemplos de solicitud:**
