@@ -46,7 +46,7 @@ El primer paso consiste en descargar el proyecto de GitHub.
 
 ```bash
 ~$ sudo apt install git 
-~$ git clone https://github.com/FelixMarin/searchitemsapp-spring-boot-version.git 
+~$ git clone https://github.com/FelixMarin/searchitemsapp-spring-boot-api.git 
 ```
 A continuacion, importar el proyecto en Eclipse IDE:
 
