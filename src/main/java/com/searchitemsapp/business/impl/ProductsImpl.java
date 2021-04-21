@@ -65,9 +65,16 @@ public class ProductsImpl implements Products {
 	public ProductDto addElementsToProducts(@NonNull Element elem,
 			@NonNull UrlDto urlDto, 
 			@NonNull String ordenacion) throws IOException {
+		
+		String image = StringUtils.isNotBlank(urlDto.getSelectores().getSelImage())?
+				cssSelectors.elementByCssSelector(elem, urlDto.getSelectores().getSelImage(), urlDto):
+				StringUtils.EMPTY;
+		String image2 = StringUtils.isNotBlank(urlDto.getSelectores().getSelImage2())?
+				cssSelectors.elementByCssSelector(elem, urlDto.getSelectores().getSelImage2(), urlDto):
+					StringUtils.EMPTY;
 
 		ProductDto productDto = ProductDto.builder()
-				.imagen(cssSelectors.elementByCssSelector(elem, urlDto.getSelectores().getSelImage(), urlDto))
+				.imagen(StringUtils.isNotBlank(image)?image:image2)
 				.nomProducto(cssSelectors.elementByCssSelector(elem, urlDto.getSelectores().getSelProducto(), urlDto))
 				.desProducto(cssSelectors.elementByCssSelector(elem, urlDto.getSelectores().getSelProducto(), urlDto))
 				.precio(cssSelectors.elementByCssSelector(elem, urlDto.getSelectores().getSelPrecio(), urlDto))

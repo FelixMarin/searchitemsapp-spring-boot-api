@@ -42,6 +42,9 @@ public class TbSiaSelectoresCss implements Serializable {
 
 	@Column(name="sel_image")
 	private String selImage;
+	
+	@Column(name="sel_image_2")
+	private String selImage2;
 
 	@Column(name="sel_link_prod")
 	private String selLinkProd;
@@ -114,6 +117,14 @@ public class TbSiaSelectoresCss implements Serializable {
 
 	public void setSelImage(String selImage) {
 		this.selImage = selImage;
+	}
+	
+	public String getSelImage2() {
+		return this.selImage2;
+	}
+
+	public void setSelImage2(String selImage2) {
+		this.selImage2 = selImage2;
 	}
 
 	public String getSelLinkProd() {

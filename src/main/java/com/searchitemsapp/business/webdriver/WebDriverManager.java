@@ -1,10 +1,10 @@
 package com.searchitemsapp.business.webdriver;
 
+import java.util.Optional;
+
 import org.openqa.selenium.WebDriver;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import com.searchitemsapp.company.Company;
 import com.searchitemsapp.company.factory.CompaniesGroup;
 
 import lombok.AllArgsConstructor;
@@ -13,17 +13,20 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class WebDriverManager {
 	
-	private Environment environment;
 	private CompaniesGroup companiesGroup;
 	private WebDriverFirefox webDriverFirefox;
 
-	public String getDynamicHtmlContent(String externalProductURL, Long companyId) 
+	public String getDynamicHtmlContent(WebDriver webDriver, String externalProductURL, Long companyId) 
 			throws InterruptedException {
 		
-		Company company = companiesGroup.getInstance(companyId);
-		String driverPath  = environment.getProperty("flow.value.firefox.driver.path");
-		String executablePath = environment.getProperty("folw.value.firefox.ejecutable.path");
-		WebDriver webDriver = webDriverFirefox.setup(driverPath, executablePath);
-		return company.getHtmlContent(webDriver, externalProductURL);			
+		return companiesGroup.getInstance(companyId).getHtmlContent(webDriver, externalProductURL);			
+	}
+	
+	public WebDriver getWebDriver() {		
+		return webDriverFirefox.setup();
+	}
+	
+	public void webDriverQuit(Optional<WebDriver> webDriver) {
+		webDriver.ifPresent(elem -> elem.quit());
 	}
 }

@@ -20,6 +20,7 @@ public class CssSelectorsDto {
 	private String scrapNoPattern;
 	private String scrapPattern;
 	private String selImage;
+	private String selImage2;
 	private String selLinkProd;
 	private String selPreKilo;
 	private String selPrecio;

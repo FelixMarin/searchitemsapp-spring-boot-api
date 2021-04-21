@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Connection;
@@ -38,6 +37,7 @@ public interface Company {
 				.method(Connection.Method.GET)
 				.referrer(url.getProtocol().concat(Constants.PROTOCOL_ACCESSOR.getValue()).concat(url.getHost().concat(Constants.SLASH.getValue())))
 				.ignoreContentType(Boolean.TRUE)
+				.header("Cache-Control", "no-cache")
 				.header(Constants.ACCEPT_LANGUAGE.getValue(), Constants.ES_ES.getValue())
 				.header(Constants.ACCEPT_ENCODING.getValue(), Constants.GZIP_DEFLATE_SDCH.getValue())
 				.header(Constants.ACCEPT.getValue(), Constants.TEXT_HTML_APPLICATION.getValue())
@@ -70,7 +70,6 @@ public interface Company {
 		StringBuilder stringBuilder = new StringBuilder(10);
 
 		Arrays.asList(splitedProductName).stream()
-				.filter(elem -> Pattern.matches("\\b[a-zA-Z0-9]{1,}\\b", elem))
 				.forEach(elem -> stringBuilder.append(elem).append(StringUtils.SPACE));
 
 		return stringBuilder.toString();

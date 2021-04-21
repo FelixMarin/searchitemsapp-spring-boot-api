@@ -17,8 +17,10 @@ public class WebDriverFirefox {
 	
 	private Environment environment; 
 	
-	public WebDriver setup(String driverPath, String executablePath) {
+	public WebDriver setup() {
 		
+		String driverPath  = environment.getProperty("flow.value.firefox.driver.path");
+		String executablePath = environment.getProperty("folw.value.firefox.ejecutable.path");
 		System.setProperty(environment.getProperty("flow.value.firefox.driver"), driverPath);
 		
 		FirefoxOptions options = new FirefoxOptions();

@@ -5,11 +5,13 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 
 import org.codehaus.jettison.json.JSONException;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.openqa.selenium.WebDriver;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
@@ -47,32 +49,35 @@ public class DocumentsImpl implements Documents {
 					InterruptedException, JSONException {
 
     	List<Document> listDocuments = Lists.newArrayList(); 
-		Company company = companiesGroup.getInstance(urlDto.getDidEmpresa());		 	
+		Company company = companiesGroup.getInstance(urlDto.getDidEmpresa());	
+		Optional<WebDriver> opWebDriver = company.isDynamic()?
+				Optional.ofNullable(webDriverManager.getWebDriver()):
+					Optional.empty();
     	
-    	Document document = getDocument(urlDto.getNomUrl(), company.getId(), product);
+    	Document document = getDocument(urlDto.getNomUrl(), company, product, opWebDriver);
 
     	List<String> liUrlsPorEmpresaPaginacion = urlsPaginacion(document, urlDto, company.getId());
    		
-    	if(liUrlsPorEmpresaPaginacion.isEmpty()) {
+    	if(liUrlsPorEmpresaPaginacion.size() < 2) {
      			listDocuments.add(document);
    		} else {
 	  		for (String url : liUrlsPorEmpresaPaginacion) {
-	   			listDocuments.add(getDocument(url, company.getId(), product));
+	   			listDocuments.add(getDocument(url, company, product, opWebDriver));
 			}
    		}
 	
+    	webDriverManager.webDriverQuit(opWebDriver);
+    	
 		return listDocuments;
 	}
 	
 	private Document getDocument(String externalProductURL, 
-			Long companyId, String requestProductName) 
+			Company company, String requestProductName, Optional<WebDriver> opWebDriver) 
 					throws InterruptedException, URISyntaxException, IOException {
 	
-		Company company = companiesGroup.getInstance(companyId);
-
-		if(company.isDynamic()) {
-			
-			String dynamicContent = webDriverManager.getDynamicHtmlContent(externalProductURL, companyId);
+		if(opWebDriver.isPresent()) {
+			WebDriver webDriver = opWebDriver.get();
+			String dynamicContent = webDriverManager.getDynamicHtmlContent(webDriver,externalProductURL, company.getId());
 			String externalProductoURI = new URL(externalProductURL).toURI().toString();
 			return Jsoup.parse(dynamicContent, externalProductoURI);
 		}

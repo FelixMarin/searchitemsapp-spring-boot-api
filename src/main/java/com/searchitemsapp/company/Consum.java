@@ -40,11 +40,11 @@ public class Consum implements Company {
 		
 		JavascriptExecutor js = (JavascriptExecutor) webDriver;
 		
-		webDriver.get(strUrl);		
+		webDriver.navigate().to(strUrl);	
 		WebDriverWait wait = new WebDriverWait(webDriver, 30);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("onetrust-accept-btn-handler"))).click();
 		
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 1; i++) {
 			
 			Optional<WebElement> wButton = 
 					Optional.of(wait.until(ExpectedConditions
@@ -65,10 +65,7 @@ public class Consum implements Company {
 			});
 		}
 		
-		String pageSource = webDriver.getPageSource();
-		webDriver.quit();
-		
-		return pageSource;
+		return webDriver.getPageSource();
 	}
 	public Long getId() {
 		return NumberUtils.toLong(environment.getProperty("flow.value.did.empresa.consum"));

@@ -176,7 +176,7 @@ function traerProductos(producto, ordenar, strEmpresas) {
     type: "GET",
     url: "/search?country=101&category=101&sort="+ ordenar +"&product="+producto + "&pipedcompanies=" + strEmpresas,
     dataType: "text",
-    timeout: 600000,
+    timeout: 1000000,
     beforeSend: function(xhr) {
         xhr.setRequestHeader ("Authorization", "Bearer " + window.localStorage.getItem('sia_token'));
         $('#sugerencias').addClass('hidden');
@@ -203,7 +203,14 @@ function traerProductos(producto, ordenar, strEmpresas) {
         $('#productos').removeClass("hidden");
         $('#productos').addClass("show");
         window.localStorage.setItem(producto + '|' + ordenar + '|' + strEmpresas + '|' + d.getDate() + '|' + window.localStorage.getItem('sia_token'),data);
-        componerCartas(data);        
+
+        if(Object.is(data,window.localStorage.getItem('data'))) {
+            return;
+        } else {
+            componerCartas(data);
+            window.localStorage.setItem('data',data);
+        }
+        
     }).fail(function (xhr, textStatus, errorThrown) {
         console.log(errorThrown+'\n'+status+'\n'+xhr.statusText);
         window.location.href = '/login'; 
