@@ -46,9 +46,9 @@ El primer paso consiste en descargar el proyecto de GitHub.
 
 ```bash
 ~$ sudo apt install git 
-~$ git clone https://github.com/FelixMarin/searchitemsapp-spring-boot-version.git 
+~$ git clone https://github.com/FelixMarin/searchitemsapp-spring-boot-api.git 
 ```
-A continuacion, importar el proyecto en Eclipse IDE:
+A continuacion, importar el proyecto al IDE [Spring Tools Suite](https://spring.io/tools):
 
 ```bash
 1. 'File > Import'.
@@ -87,18 +87,18 @@ java -jar sia-0.0.1-SNAPSHOT.jar
 - **Formato de la URL con la que se realizará la solicitud al servicio:**
 
 ```console
-http://[url]:[port]/searchitemsapp/search?pais=[id_país]&categoria=[id_categoría]&ordenacion=[ordenar]&producto=[producto]&empresas=[id_empresa]
+http://[url]:[port]/searchitemsapp/search?country=[id_país]&category=[id_categoría]&sort=[ordenar]&product=[producto]&pipedcompanies=[id_empresa]
 ```
 
 - **Lista de parámetros de la solicitud:**
 
 | Parámetro | Valor |
 | --- | --- |
-| __país__ | 101 (España). |
-| __categoría__ | 101 (Supermercados) |
-| __ordenar__ | PVP: 1 / PVP/KILO: 2 |
-| __producto__ | (Arroz, Aceite, sal, ...) |
-| __super__ | [101] , [101,103,104] , [ALL] |
+| __country__ | 101 (España). |
+| __category__ | 101 (Supermercados) |
+| __sort__ | PVP: 1 / PVP/KILO: 2 |
+| __product__ | (Arroz, Aceite, sal, ...) |
+| __pipedcompanies__ | [101] , [101,103,104] , [ALL] |
  
 
 - **Ejemplos de solicitud:**
@@ -106,13 +106,13 @@ http://[url]:[port]/searchitemsapp/search?pais=[id_país]&categoria=[id_categor�
 Esta URL devolverá un listado de objetos json con los productos de todos los supermercados ordenados por precio. 
 
 ```console
-http://[url]:[port]/searchitemsapp/search?pais=101&categoria=101&ordenacion=1&producto=arroz&empresas=ALL
+http://[url]:[port]/search?country=101&category=101&sort=1&product=arroz&pipedcompanies=ALL
 ```
 
 Esta URL devolverá un listado de objetos json con los productos de un supermercado ordenados por volumen.
 
 ```console
-http://[url]:[port]/searchitemsapp/search?pais=101&categoria=101&ordenacion=2&producto=sal&empresas=103
+http://[url]:[port]/search?country=101&category=101&sort=1&product=sal&pipedcompanies=103
 ```
 
 - **Ejemplo de respuesta:**
@@ -145,3 +145,4 @@ http://[url]:[port]/searchitemsapp/search?pais=101&categoria=101&ordenacion=2&pr
 
 #### Ejemplo backend en [vídeo](https://youtu.be/smuZhHQhij4)
 #### Ejemplo frontend en [vídeo](https://www.youtube.com/watch?v=K_4Wp0Poh2Q&t=7s)
+#### [Descargar](https://github.com/FelixMarin/searchitemsapp-spring-boot-api/releases/download/rls1.8/rls1.8.zip)
