@@ -2,14 +2,11 @@ package com.searchitemsapp.company;
 
 import java.net.MalformedURLException;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.nodes.Document;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.core.env.Environment;
@@ -24,8 +21,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class Consum implements Company {
 	
-	private static final String SCROLL_INTO_VIEW = "arguments[0].scrollIntoView(true)";
-	
 	private Environment environment;
 
 	@Override
@@ -37,33 +32,10 @@ public class Consum implements Company {
 	@Override
 	public String getHtmlContent(final WebDriver webDriver, final String strUrl) 
 			throws InterruptedException  {
-		
-		JavascriptExecutor js = (JavascriptExecutor) webDriver;
-		
+				
 		webDriver.navigate().to(strUrl);	
 		WebDriverWait wait = new WebDriverWait(webDriver, 30);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("onetrust-accept-btn-handler"))).click();
-		
-		for (int i = 0; i < 1; i++) {
-			
-			Optional<WebElement> wButton = 
-					Optional.of(wait.until(ExpectedConditions
-							.elementToBeClickable(By.className("grid__footer-viewMore"))));
-			
-			wButton.ifPresent(elem -> { 
-				
-				js.executeScript(SCROLL_INTO_VIEW, elem);
-				
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-				}
-				
-				wait.until(ExpectedConditions.visibilityOf(elem));
-				elem.click();
-			});
-		}
 		
 		return webDriver.getPageSource();
 	}
