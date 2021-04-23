@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.searchitemsapp.business.webdriver.WebDriverManager;
+import com.searchitemsapp.business.webdriver.impl.WebDriverManagerImpl;
 import com.searchitemsapp.dto.UrlDto;
 
 @RunWith(SpringRunner.class)
@@ -24,7 +24,7 @@ class ConsumTest {
 	private Consum consum; 
 	
 	@Autowired
-	WebDriverManager dynamicWebProcessing;
+	WebDriverManagerImpl dynamicWebProcessing;
 
 	@Test
 	void testGetUrls() throws MalformedURLException {
@@ -42,7 +42,7 @@ class ConsumTest {
 	@Test
 	void testGetHtmlContent() throws InterruptedException {
 		final String baseUri = "https://tienda.consum.es/consum/es/search?q=miel#!Grid";
-		String content = consum.getHtmlContent(dynamicWebProcessing.getWebDriver(), baseUri);
+		String content = consum.getHtmlContent(dynamicWebProcessing.getWebDriver().get(), baseUri);
 		assertNotNull(content);
 	}
 

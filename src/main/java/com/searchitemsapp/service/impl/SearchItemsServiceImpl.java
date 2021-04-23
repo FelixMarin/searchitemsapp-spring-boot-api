@@ -22,6 +22,7 @@ import com.searchitemsapp.business.ProductBuilder;
 import com.searchitemsapp.business.Products;
 import com.searchitemsapp.business.SelectorsCss;
 import com.searchitemsapp.business.Urls;
+import com.searchitemsapp.business.webdriver.WebDriverManager;
 import com.searchitemsapp.dto.CssSelectorsDto;
 import com.searchitemsapp.dto.ProductDto;
 import com.searchitemsapp.dto.SearchItemsParamsDto;
@@ -44,6 +45,7 @@ public class SearchItemsServiceImpl implements SearchItemsService {
 	private Patterns patterns;
 	private Products products;
 	private SelectorsCss selectorCss;
+	private WebDriverManager webDriverManager;
 	
 	public List<ProductDto> orderedByPriceProducts(SearchItemsParamsDto searchedParamsDto) {
 
@@ -70,7 +72,7 @@ public class SearchItemsServiceImpl implements SearchItemsService {
 				productCore.setPatterns(patterns);
 				productCore.setProducts(products);
 				productCore.setCssSelectors(selectorCss);
-	
+				productCore.setWebDriverManager(webDriverManager);
 				callables.add(productCore);	
 			});
 	
@@ -94,7 +96,11 @@ public class SearchItemsServiceImpl implements SearchItemsService {
 			Thread.currentThread().interrupt();				
 			
 		} finally {			
-				executorService.shutdown();
+			
+			if(webDriverManager.isOpen()) {
+				webDriverManager.shutdownWebDriver();
+			}
+			executorService.shutdown();
 		}
 
 		return productsResult;

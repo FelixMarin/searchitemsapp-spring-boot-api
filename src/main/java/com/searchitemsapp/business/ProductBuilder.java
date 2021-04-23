@@ -7,6 +7,7 @@ import java.util.concurrent.Callable;
 
 import org.codehaus.jettison.json.JSONException;
 
+import com.searchitemsapp.business.webdriver.WebDriverManager;
 import com.searchitemsapp.dto.ProductDto;
 import com.searchitemsapp.dto.SearchItemsParamsDto;
 import com.searchitemsapp.dto.UrlDto;
@@ -21,4 +22,5 @@ public interface ProductBuilder extends Callable<List<ProductDto>> {
 	abstract void setPatterns(Patterns patterns);
 	abstract void setProducts(Products products);
 	abstract void setCssSelectors(SelectorsCss selectorCss);
+	abstract void setWebDriverManager(WebDriverManager webDriverManager);
 }

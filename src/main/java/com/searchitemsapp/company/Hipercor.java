@@ -37,10 +37,12 @@ public class Hipercor implements Company {
 	public String getHtmlContent(final WebDriver webDriver, final String strUrl) 
 			throws InterruptedException  {
 		
-		webDriver.navigate().to(strUrl);
-		WebDriverWait wait = new WebDriverWait(webDriver, 30);
-		wait.until(ExpectedConditions.elementToBeClickable(By.className("product_controls-button")));
-		return webDriver.getPageSource();
+		webDriver.get(strUrl);
+		WebDriverWait wait = new WebDriverWait(webDriver, 50);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("cookies-agree-all"))).click();
+		String res = webDriver.getPageSource();
+		webDriver.close();
+		return res;
 	}
 	
 	@Override

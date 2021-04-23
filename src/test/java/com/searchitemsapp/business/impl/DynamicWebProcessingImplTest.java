@@ -20,7 +20,8 @@ class DynamicWebProcessingImplTest {
 	@Test
 	void testDynamicHtmlContent() throws InterruptedException {
 		final String urlBase = "https://tienda.consum.es/consum/es/search?q=miel#!Grid";
-		String result = dynamicWebProcessing.getDynamicHtmlContent(dynamicWebProcessing.getWebDriver(),urlBase, 116l);
+		String result = dynamicWebProcessing.getDynamicHtmlContentSync(dynamicWebProcessing.getWebDriver().get(),
+				urlBase, Long.valueOf(116));
 		
 		assertNotNull(result);
 	}

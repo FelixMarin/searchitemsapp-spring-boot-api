@@ -11,6 +11,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +29,6 @@ import lombok.AllArgsConstructor;
 public class DocumentsImpl implements Documents {
 	
 	private CompaniesGroup companiesGroup;
-	private WebDriverManager webDriverManager;
 	
 	@Override
 	public List<String> urlsPaginacion(Document document, UrlDto urlDto, Long companyId) 
@@ -44,17 +44,39 @@ public class DocumentsImpl implements Documents {
 	}
 	
 	@Override
-	public List<Document> getHtmlDocument(final UrlDto urlDto, final String product) 
+	public synchronized List<Document> getHtmlDocument(final UrlDto urlDto, final String product, WebDriverManager webDriverManager) 
 					throws IOException, URISyntaxException, 
 					InterruptedException, JSONException {
 
     	List<Document> listDocuments = Lists.newArrayList(); 
-		Company company = companiesGroup.getInstance(urlDto.getDidEmpresa());	
-		Optional<WebDriver> opWebDriver = company.isDynamic()?
-				Optional.ofNullable(webDriverManager.getWebDriver()):
+		Company company = companiesGroup.getInstance(urlDto.getDidEmpresa()); 
+		Optional<WebDriver> opWebDriver;
+		Document document;
+		
+		if(company.isDynamic() && webDriverManager.isOpen()) {
+			webDriverManager.shutdownWebDriver();
+			webDriverManager.setUp();
+		}else if(company.isDynamic()) {
+			webDriverManager.setUp();
+		}
+		
+		opWebDriver = company.isDynamic()?
+				webDriverManager.getWebDriver():
 					Optional.empty();
-    	
-    	Document document = getDocument(urlDto.getNomUrl(), company, product, opWebDriver);
+
+		if(company.isDynamic()) {
+			
+			opWebDriver.ifPresent(elem -> {
+				JavascriptExecutor jse = (JavascriptExecutor)elem;
+				jse.executeScript("window.open('about:blank','_blank');");
+				List<String> tabs = Lists.newArrayList(elem.getWindowHandles());
+				elem.switchTo().window(tabs.get(elem.getWindowHandles().size()-1));
+			});
+			
+			document = getDocumentSync(urlDto.getNomUrl(), company, product, opWebDriver, webDriverManager);
+		} else {
+			document = getDocumentAsync(urlDto.getNomUrl(), company, product, opWebDriver, webDriverManager);
+		}
 
     	List<String> liUrlsPorEmpresaPaginacion = urlsPaginacion(document, urlDto, company.getId());
    		
@@ -62,26 +84,36 @@ public class DocumentsImpl implements Documents {
      			listDocuments.add(document);
    		} else {
 	  		for (String url : liUrlsPorEmpresaPaginacion) {
-	   			listDocuments.add(getDocument(url, company, product, opWebDriver));
+	   			listDocuments.add(getDocumentSync(url, company, product, opWebDriver, webDriverManager));
 			}
    		}
-	
-    	webDriverManager.webDriverQuit(opWebDriver);
-    	
 		return listDocuments;
 	}
 	
-	private Document getDocument(String externalProductURL, 
-			Company company, String requestProductName, Optional<WebDriver> opWebDriver) 
+	private synchronized  Document getDocumentSync(String externalProductURL, 
+			Company company, String requestProductName, Optional<WebDriver> opWebDriver, WebDriverManager webDriverManager) 
 					throws InterruptedException, URISyntaxException, IOException {
 	
-		if(opWebDriver.isPresent()) {
-			WebDriver webDriver = opWebDriver.get();
-			String dynamicContent = webDriverManager.getDynamicHtmlContent(webDriver,externalProductURL, company.getId());
+		if(company.isDynamic() && opWebDriver.isPresent()) {
+			String dynamicContent = webDriverManager.getDynamicHtmlContentSync(opWebDriver.get(),externalProductURL, company.getId());
 			String externalProductoURI = new URL(externalProductURL).toURI().toString();
 			return Jsoup.parse(dynamicContent, externalProductoURI);
 		}
 		
+		Response httpResponse = company.getJsoupConnection(externalProductURL, requestProductName).execute();
+		return company.getJsoupDocument(httpResponse, externalProductURL);
+	}
+	
+	private Document getDocumentAsync(String externalProductURL, 
+			Company company, String requestProductName, Optional<WebDriver> opWebDriver, WebDriverManager webDriverManager) 
+					throws InterruptedException, URISyntaxException, IOException {
+	
+		if(company.isDynamic() && opWebDriver.isPresent()) {
+			String dynamicContent = webDriverManager.getDynamicHtmlContentAsync(opWebDriver.get(),externalProductURL, company.getId());
+			String externalProductoURI = new URL(externalProductURL).toURI().toString();
+			return Jsoup.parse(dynamicContent, externalProductoURI);
+		}
+	
 		Response httpResponse = company.getJsoupConnection(externalProductURL, requestProductName).execute();
 		return company.getJsoupDocument(httpResponse, externalProductURL);
 	}

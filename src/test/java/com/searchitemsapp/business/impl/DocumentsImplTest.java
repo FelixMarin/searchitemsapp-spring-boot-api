@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.searchitemsapp.business.Documents;
+import com.searchitemsapp.business.webdriver.WebDriverManager;
 import com.searchitemsapp.dto.CssSelectorsDto;
 import com.searchitemsapp.dto.UrlDto;	
 
@@ -22,6 +23,9 @@ class DocumentsImplTest {
 	
 	@Autowired
 	Documents document;
+	
+	@Autowired
+	WebDriverManager webDriverManager;
 	
 	@Test
 	void testUrlsPaginacion() throws MalformedURLException {
@@ -38,7 +42,7 @@ class DocumentsImplTest {
 		UrlDto urlDto = UrlDto.builder()
 				.nomUrl("https://www.dia.es/compra-online/search?q=miel%3Aprice-asc&page=0&disp=")
 				.didEmpresa(105l).selectores(selectores).build();
-		List<Document> listDocuments = document.getHtmlDocument(urlDto, "miel");
+		List<Document> listDocuments = document.getHtmlDocument(urlDto, "miel", webDriverManager);
 		assertFalse(listDocuments.isEmpty());
 	}
 }

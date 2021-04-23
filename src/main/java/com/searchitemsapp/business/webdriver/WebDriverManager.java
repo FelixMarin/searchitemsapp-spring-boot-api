@@ -3,30 +3,16 @@ package com.searchitemsapp.business.webdriver;
 import java.util.Optional;
 
 import org.openqa.selenium.WebDriver;
-import org.springframework.stereotype.Component;
 
-import com.searchitemsapp.company.factory.CompaniesGroup;
+public interface WebDriverManager {
 
-import lombok.AllArgsConstructor;
-
-@Component
-@AllArgsConstructor
-public class WebDriverManager {
+	abstract String getDynamicHtmlContentSync(WebDriver webDriver, String externalProductURL, Long companyId) throws InterruptedException;
+	abstract String getDynamicHtmlContentAsync(WebDriver webDriver, String externalProductURL, Long companyId) throws InterruptedException;
 	
-	private CompaniesGroup companiesGroup;
-	private WebDriverFirefox webDriverFirefox;
-
-	public String getDynamicHtmlContent(WebDriver webDriver, String externalProductURL, Long companyId) 
-			throws InterruptedException {
-		
-		return companiesGroup.getInstance(companyId).getHtmlContent(webDriver, externalProductURL);			
-	}
-	
-	public WebDriver getWebDriver() {		
-		return webDriverFirefox.setup();
-	}
-	
-	public void webDriverQuit(Optional<WebDriver> webDriver) {
-		webDriver.ifPresent(elem -> elem.quit());
-	}
+	abstract Optional<WebDriver>  getWebDriver();
+	abstract void shutdownWebDriver();
+	abstract boolean isOpen();
+	abstract void setUp();
+	abstract void closeDriver();
 }
+

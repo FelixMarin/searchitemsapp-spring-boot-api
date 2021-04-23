@@ -20,6 +20,7 @@ import com.searchitemsapp.business.Patterns;
 import com.searchitemsapp.business.ProductBuilder;
 import com.searchitemsapp.business.Products;
 import com.searchitemsapp.business.SelectorsCss;
+import com.searchitemsapp.business.webdriver.WebDriverManager;
 import com.searchitemsapp.dto.ProductDto;
 import com.searchitemsapp.dto.SearchItemsParamsDto;
 import com.searchitemsapp.dto.UrlDto;
@@ -40,13 +41,14 @@ public class ProductsBuilderImpl implements ProductBuilder {
 	private Patterns patterns;
 	private Products products;
 	private SelectorsCss cssSelectors;
+	private WebDriverManager webDriverManager;
 
 	private  List<ProductDto> createProductsList() 
 			throws IOException, URISyntaxException, InterruptedException, JSONException {
 		
 		List<ProductDto> productListAsResult = Lists.newArrayList();
 				
-    	List<Document> documentList = documents.getHtmlDocument(urlDto, productsInParametersDto.getProduct());
+    	List<Document> documentList = documents.getHtmlDocument(urlDto, productsInParametersDto.getProduct(), webDriverManager);
     	
     	documentList.stream()
     		.filter(ObjectUtils::allNotNull)
@@ -73,7 +75,7 @@ public class ProductsBuilderImpl implements ProductBuilder {
 		            		throw new UncheckedIOException(e);
 		            	}
 		           });
-	    	});  
+	    	});     	
         
         return productListAsResult;
 	}
