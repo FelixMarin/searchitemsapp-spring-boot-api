@@ -32,7 +32,6 @@ public class Consum implements Company {
 	@Override
 	public String getHtmlContent(final WebDriver webDriver, final String strUrl) 
 			throws InterruptedException  {
-<<<<<<< HEAD
 		
 		webDriver.get(strUrl);
 		WebDriverWait wait = new WebDriverWait(webDriver, 50);
@@ -40,14 +39,6 @@ public class Consum implements Company {
 		String res = webDriver.getPageSource();
 		webDriver.close();
 		return res;
-=======
-				
-		webDriver.navigate().to(strUrl);	
-		WebDriverWait wait = new WebDriverWait(webDriver, 30);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("onetrust-accept-btn-handler"))).click();
-		
-		return webDriver.getPageSource();
->>>>>>> 0c2ff3791fc10c7a74534f05945a3c20bc2d96ee
 	}
 	public Long getId() {
 		return NumberUtils.toLong(environment.getProperty("flow.value.did.empresa.consum"));
