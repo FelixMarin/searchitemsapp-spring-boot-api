@@ -68,3 +68,4 @@ gecko/
 #exclude
 .db
 .log
+.firefox/
