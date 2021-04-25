@@ -14,7 +14,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.Brands;
 import com.searchitemsapp.business.Documents;
 import com.searchitemsapp.business.Patterns;
 import com.searchitemsapp.business.Prices;
@@ -41,7 +40,6 @@ public class SearchItemsServiceImpl implements SearchItemsService {
 	private Urls urls;
 	private Prices prices;
 	private Documents documents;
-	private Brands brands;
 	private Patterns patterns;
 	private Products products;
 	private SelectorsCss selectorCss;
@@ -67,7 +65,6 @@ public class SearchItemsServiceImpl implements SearchItemsService {
 				
 				productCore.setUrlDto(urlDto);
 				productCore.setProductsInParametersDto(searchedParamsDto);
-				productCore.setBrands(brands);
 				productCore.setDocuments(documents);
 				productCore.setPatterns(patterns);
 				productCore.setProducts(products);

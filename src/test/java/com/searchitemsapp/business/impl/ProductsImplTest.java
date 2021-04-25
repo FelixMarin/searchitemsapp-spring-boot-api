@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.searchitemsapp.business.Brands;
 import com.searchitemsapp.business.Patterns;
 import com.searchitemsapp.business.Products;
 import com.searchitemsapp.dto.CssSelectorsDto;
@@ -32,9 +31,6 @@ class ProductsImplTest {
 	
 	@Autowired 
 	private Patterns patterns;
-	
-	@Autowired
-	private Brands brands;
 
 	@Test
 	void testCheckProduct() throws IOException, ResourceNotFoundException {
@@ -43,13 +39,13 @@ class ProductsImplTest {
 		String sandia = "sandia";
 		
 		Optional<ProductDto> optional = product.checkProduct(sandia, 101l, 
-				ProductDto.builder().nomProducto(sandia).build(), patterns, brands);
+				ProductDto.builder().nomProducto(sandia).build(), patterns);
 		
 		assertNotNull(optional);
 		assertTrue(optional.isPresent());
 		
 		optional = product.checkProduct(melon, 101l, 
-				ProductDto.builder().nomProducto(melon).build(), patterns, brands);
+				ProductDto.builder().nomProducto(melon).build(), patterns);
 		
 		assertNotNull(optional);
 		assertTrue(optional.isEmpty());

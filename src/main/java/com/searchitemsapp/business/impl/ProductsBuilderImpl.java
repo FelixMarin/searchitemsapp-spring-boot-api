@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.business.Brands;
 import com.searchitemsapp.business.Documents;
 import com.searchitemsapp.business.Patterns;
 import com.searchitemsapp.business.ProductBuilder;
@@ -36,7 +35,6 @@ public class ProductsBuilderImpl implements ProductBuilder {
 	
 	private UrlDto urlDto; 
 	private SearchItemsParamsDto productsInParametersDto;
-	private Brands brands;
 	private Documents documents;
 	private Patterns patterns;
 	private Products products;
@@ -67,7 +65,7 @@ public class ProductsBuilderImpl implements ProductBuilder {
 		            		
 		            		Optional<ProductDto> opt = products
 		            				.checkProduct(productsInParametersDto.getProduct(), 
-			    					urlDto.getDidEmpresa(), productDto, patterns, brands);
+			    					urlDto.getDidEmpresa(), productDto, patterns);
 		            		
 		            		opt.ifPresent(productListAsResult::add); 
 		    			

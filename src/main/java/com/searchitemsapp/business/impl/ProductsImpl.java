@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
 
-import com.searchitemsapp.business.Brands;
 import com.searchitemsapp.business.Patterns;
 import com.searchitemsapp.business.Products;
 import com.searchitemsapp.business.SelectorsCss;
@@ -34,9 +33,9 @@ public class ProductsImpl implements Products {
 	
 	@Override
 	public Optional<ProductDto> checkProduct(String requestProducName, Long companyId, 
-			ProductDto productDto, Patterns elementPatterns, Brands brands) throws IOException {
+			ProductDto productDto, Patterns elementPatterns) throws IOException {
 			 
-		Optional<String> productName = brands.brandFilter(companyId, productDto.getNomProducto());	
+		Optional<String> productName = Optional.ofNullable(productDto.getNomProducto());
 		String[] productCharArray = removeTildes(requestProducName).split(StringUtils.SPACE);
 		Pattern patternProduct = elementPatterns.createPatternProduct(productCharArray);
 		String productResult = removeTildes(productName.orElseThrow());

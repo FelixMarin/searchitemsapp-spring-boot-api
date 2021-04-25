@@ -13,8 +13,7 @@ import lombok.NonNull;
 public interface Products {
 	
 	abstract Optional<ProductDto> checkProduct(String requestProducName, Long companyId, 
-			ProductDto productDto, Patterns elementPatterns, 
-			Brands brands) throws IOException;
+			ProductDto productDto, Patterns elementPatterns) throws IOException;
 	
 	abstract String removeTildes(final String productName);
 	

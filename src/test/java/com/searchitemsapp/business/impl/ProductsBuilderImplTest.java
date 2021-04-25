@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.searchitemsapp.business.Brands;
 import com.searchitemsapp.business.Documents;
 import com.searchitemsapp.business.Patterns;
 import com.searchitemsapp.business.ProductBuilder;
@@ -30,10 +29,7 @@ class ProductsBuilderImplTest {
 	
 	@Autowired
 	private ProductBuilder builder;
-	
-	@Autowired
-	private Brands brands;
-	
+		
 	@Autowired 
 	private SelectorsCss selectorCss;
 	
@@ -54,7 +50,6 @@ class ProductsBuilderImplTest {
 
 	@Test
 	void testCall() throws IOException, URISyntaxException, InterruptedException, JSONException {
-		builder.setBrands(brands);
 		builder.setCssSelectors(selectorCss);
 		builder.setDocuments(documents);
 		builder.setPatterns(patterns);

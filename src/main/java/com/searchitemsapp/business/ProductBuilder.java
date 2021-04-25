@@ -15,7 +15,6 @@ import com.searchitemsapp.dto.UrlDto;
 public interface ProductBuilder extends Callable<List<ProductDto>> {
 
 	abstract List<ProductDto> call() throws IOException, URISyntaxException, InterruptedException, JSONException;
-	abstract void setBrands(Brands brands);
 	abstract void setProductsInParametersDto(SearchItemsParamsDto productsInParametersDto);
 	abstract void setUrlDto(UrlDto urlDto);
 	abstract void setDocuments(Documents documents);

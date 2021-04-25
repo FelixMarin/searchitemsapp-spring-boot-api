@@ -43,11 +43,6 @@ public class TbSiaPais implements Serializable {
 	@OneToMany(mappedBy="tbSiaPais")
 	private List<TbSiaEmpresa> tbSiaEmpresas;
 
-	//bi-directional many-to-one association to TbSiaMarca
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy="tbSiaPais")
-	private List<TbSiaMarcas> tbSiaMarcas;
-
 	//bi-directional many-to-one association to TbSiaNomProducto
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy="tbSiaPais")
@@ -106,25 +101,7 @@ public class TbSiaPais implements Serializable {
 
 		return tbSiaEmpresa;
 	}
-
-	public List<TbSiaMarcas> getTbSiaMarcas() {
-		return this.tbSiaMarcas;
-	}
-
-	public void setTbSiaMarcas(List<TbSiaMarcas> tbSiaMarcas) {
-		this.tbSiaMarcas = tbSiaMarcas;
-	}
-
-	public TbSiaMarcas addTbSiaMarca(TbSiaMarcas tbSiaMarca) {
-		getTbSiaMarcas().add(tbSiaMarca);
-		return tbSiaMarca;
-	}
-
-	public TbSiaMarcas removeTbSiaMarca(TbSiaMarcas tbSiaMarca) {
-		getTbSiaMarcas().remove(tbSiaMarca);
-		return tbSiaMarca;
-	}
-
+	
 	public List<TbSiaNomProducto> getTbSiaNomProductos() {
 		return this.tbSiaNomProductos;
 	}
