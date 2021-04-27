@@ -83,7 +83,7 @@ java -jar sia-0.0.1-SNAPSHOT.jar
 ```
 
 ## Ejecutable
-[Descargar](https://github.com/FelixMarin/searchitemsapp-spring-boot-api/releases/download/rls1.8/rls1.8.zip)
+[Descargar](https://github.com/FelixMarin/searchitemsapp-spring-boot-api/releases/download/rls1.9/rls1.9.zip)
 
 ## Uso de la aplicación
 
