@@ -69,7 +69,7 @@ public class DocumentsImpl implements Documents {
 			
 			document = getDocumentSync(urlDto.getNomUrl(), company, product, opWebDriver, webDriverManager);
 		} else {
-			document = getDocumentAsync(urlDto.getNomUrl(), company, product, opWebDriver, webDriverManager);
+			document = getDocumentAsync(urlDto.getNomUrl(), company, product);
 		}
 
     	List<String> liUrlsPorEmpresaPaginacion = urlsPaginacion(document, urlDto, company.getId());
@@ -94,20 +94,12 @@ public class DocumentsImpl implements Documents {
 			return Jsoup.parse(dynamicContent, externalProductoURI);
 		}
 		
-		Response httpResponse = company.getJsoupConnection(externalProductURL, requestProductName).execute();
-		return company.getJsoupDocument(httpResponse, externalProductURL);
+		return getDocumentAsync(externalProductURL, company, requestProductName);
 	}
 	
 	private Document getDocumentAsync(String externalProductURL, 
-			Company company, String requestProductName, Optional<WebDriver> opWebDriver, WebDriverManager webDriverManager) 
-					throws InterruptedException, URISyntaxException, IOException {
-	
-		if(company.isDynamic() && opWebDriver.isPresent()) {
-			String dynamicContent = webDriverManager.getDynamicHtmlContentAsync(opWebDriver.get(),externalProductURL, company.getId());
-			String externalProductoURI = new URL(externalProductURL).toURI().toString();
-			return Jsoup.parse(dynamicContent, externalProductoURI);
-		}
-	
+			Company company, String requestProductName) throws IOException {
+		
 		Response httpResponse = company.getJsoupConnection(externalProductURL, requestProductName).execute();
 		return company.getJsoupDocument(httpResponse, externalProductURL);
 	}
