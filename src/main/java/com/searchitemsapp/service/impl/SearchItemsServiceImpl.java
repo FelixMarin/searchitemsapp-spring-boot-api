@@ -94,7 +94,7 @@ public class SearchItemsServiceImpl implements SearchItemsService {
 			
 		} finally {			
 			
-			if(webDriverManager.isOpen()) {
+			if(webDriverManager.isPresent()) {
 				webDriverManager.shutdownWebDriver();
 			}
 			executorService.shutdown();

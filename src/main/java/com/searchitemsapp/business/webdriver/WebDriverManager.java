@@ -1,5 +1,6 @@
 package com.searchitemsapp.business.webdriver;
 
+import java.io.File;
 import java.util.Optional;
 
 import org.openqa.selenium.WebDriver;
@@ -11,8 +12,10 @@ public interface WebDriverManager {
 	
 	abstract Optional<WebDriver>  getWebDriver();
 	abstract void shutdownWebDriver();
-	abstract boolean isOpen();
+	abstract boolean isPresent();
 	abstract void setUp();
 	abstract void closeDriver();
+	abstract Optional<File> firefoxExecutable();
+	abstract void openWindow(WebDriver elem);
 }
 

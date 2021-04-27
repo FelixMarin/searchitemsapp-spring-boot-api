@@ -11,7 +11,6 @@ import org.codehaus.jettison.json.JSONException;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.springframework.stereotype.Component;
 
@@ -50,28 +49,23 @@ public class DocumentsImpl implements Documents {
 
     	List<Document> listDocuments = Lists.newArrayList(); 
 		Company company = companiesGroup.getInstance(urlDto.getDidEmpresa()); 
-		Optional<WebDriver> opWebDriver;
+		Optional<WebDriver> opWebDriver = Optional.empty();
 		Document document;
-		
-		if(company.isDynamic() && webDriverManager.isOpen()) {
-			webDriverManager.shutdownWebDriver();
-			webDriverManager.setUp();
-		}else if(company.isDynamic()) {
-			webDriverManager.setUp();
-		}
-		
-		opWebDriver = company.isDynamic()?
-				webDriverManager.getWebDriver():
-					Optional.empty();
 
-		if(company.isDynamic()) {
+		if(company.isDynamic()) {	
 			
-			opWebDriver.ifPresent(elem -> {
-				JavascriptExecutor jse = (JavascriptExecutor)elem;
-				jse.executeScript("window.open('about:blank','_blank');");
-				List<String> tabs = Lists.newArrayList(elem.getWindowHandles());
-				elem.switchTo().window(tabs.get(elem.getWindowHandles().size()-1));
+			webDriverManager.firefoxExecutable().ifPresent(elem -> {
+				
+				if(webDriverManager.isPresent()) {
+					webDriverManager.shutdownWebDriver();
+				}
+				
+				webDriverManager.setUp();
+				
 			});
+			
+			opWebDriver = webDriverManager.getWebDriver();			
+			opWebDriver.ifPresent(elem -> webDriverManager.openWindow(elem));
 			
 			document = getDocumentSync(urlDto.getNomUrl(), company, product, opWebDriver, webDriverManager);
 		} else {
