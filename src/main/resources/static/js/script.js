@@ -172,6 +172,14 @@ function traerProductos(producto, ordenar, strEmpresas) {
     let d = new Date();
     let bufferProductos = window.localStorage.getItem(producto + '|' + ordenar + '|' + strEmpresas + '|' + d.getDate() + '|' + window.localStorage.getItem('sia_token'));
 
+    if(bufferProductos != undefined && bufferProductos != null) {
+        $('#ruleta').addClass('hidden');
+        $('#productos').removeClass("hidden");
+        componerCartas(bufferProductos);
+        $('#productos').addClass("show");        
+        return;
+    }
+
     $.ajax({
     type: "GET",
     url: "/search?country=101&category=101&sort="+ ordenar +"&product="+producto + "&pipedcompanies=" + strEmpresas,
@@ -190,13 +198,6 @@ function traerProductos(producto, ordenar, strEmpresas) {
         $("#input-container").addClass("mt-2");
         $('#ruleta').removeClass('hidden');
         $('#ruleta').addClass('show');
-        if(bufferProductos != undefined && bufferProductos != null) {
-            $('#ruleta').addClass('hidden');
-            $('#productos').removeClass("hidden");
-            $('#productos').addClass("show");
-            componerCartas(bufferProductos);
-            return;
-        }
     }
     }).done(function (data) {        
         $('#ruleta').addClass('hidden');
