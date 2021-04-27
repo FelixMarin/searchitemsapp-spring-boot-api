@@ -82,6 +82,9 @@ Para ejecutar la apliación se utilizará el siguiente comando:
 java -jar sia-0.0.1-SNAPSHOT.jar
 ```
 
+## Ejecutable
+[Descargar](https://github.com/FelixMarin/searchitemsapp-spring-boot-api/releases/download/rls1.8/rls1.8.zip)
+
 ## Uso de la aplicación
 
 - **Formato de la URL con la que se realizará la solicitud al servicio:**
