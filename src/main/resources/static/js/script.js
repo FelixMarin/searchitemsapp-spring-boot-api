@@ -12,14 +12,22 @@ function init() {
     document.getElementById('inputtext').addEventListener('keyup', desplazarbarra, false);
     document.getElementById('botonAceptar').addEventListener('click',enviar,false);
     document.getElementById('botonBarra').addEventListener('click',enviar,false);
-    document.getElementById('inputtext').addEventListener('keyup', function() {
+
+    $('#inputtext').bind('keyup', function() {
+        
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            $('#botonAceptar').click();
+            $('#sugerencias').css("display", "none");
+            $('#botonBarra').focus();
+            return;
+        } 
+
         liveSearch(this.value);
-        aceptarSearchBar();
-        document.getElementById('sugerencias').style.display = "none";  
-    }, false);
+      });
 
     document.getElementById('body').addEventListener('click', function() {
-        document.getElementById('sugerencias').style.display = "none"; 
+        $('#sugerencias').css("display", "none");
     }, false);
 
     $("img.imglogo").imgCheckbox();
@@ -269,7 +277,7 @@ function liveSearch(keyword) {
 
 function focoSerchBar(param) {
     document.getElementById('inputtext').value = param.innerText.trim();
-    document.getElementById('sugerencias').style.display = "none";
+    $('#sugerencias').css("display", "none");
     let elemEmpresas = document.getElementsByClassName('imgChked');
 
     if(elemEmpresas != undefined && elemEmpresas.length != 0) {
@@ -392,7 +400,7 @@ function aceptarSearchBar() {
         if (event.keyCode === 13) {
           event.preventDefault();
           document.getElementById("botonAceptar").click();
-          document.getElementById("sugerencias").style.display = "none";
+          $('#sugerencias').css("display", "none");
           $('#botonBarra').focus();
         }
       });
