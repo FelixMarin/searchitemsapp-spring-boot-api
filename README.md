@@ -82,6 +82,9 @@ Para ejecutar la apliación se utilizará el siguiente comando:
 java -jar sia-0.0.1-SNAPSHOT.jar
 ```
 
+## Ejecutable
+[Descargar](https://github.com/FelixMarin/searchitemsapp-spring-boot-api/releases/download/rls1.9/rls1.9.zip)
+
 ## Uso de la aplicación
 
 - **Formato de la URL con la que se realizará la solicitud al servicio:**
@@ -145,4 +148,4 @@ http://[url]:[port]/search?country=101&category=101&sort=1&product=sal&pipedcomp
 
 #### Ejemplo backend en [vídeo](https://youtu.be/smuZhHQhij4)
 #### Ejemplo frontend en [vídeo](https://www.youtube.com/watch?v=K_4Wp0Poh2Q&t=7s)
-#### [Descargar](https://github.com/FelixMarin/searchitemsapp-spring-boot-api/releases/download/rls1.8/rls1.8.zip)
+#### [Descargar](https://github.com/FelixMarin/searchitemsapp-spring-boot-api/releases/download/rls1.9/rls1.9.zip)
