@@ -9,9 +9,17 @@ function init() {
         window.location.href = '/login';
     }
 
-    document.getElementById('inputtext').addEventListener('keyup', desplazarbarra, false);
-    document.getElementById('botonAceptar').addEventListener('click',enviar,false);
-    document.getElementById('botonBarra').addEventListener('click',enviar,false);
+    $('#inputtext').bind('keyup', function() {
+        desplazarbarra();
+      });
+
+    $('#botonAceptar').bind('click', function() {
+        enviar();
+      });
+
+    $('#botonBarra').bind('click', function() {
+        enviar();
+      });
 
     $('#inputtext').bind('keyup', function() {
         
@@ -26,9 +34,9 @@ function init() {
         liveSearch(this.value);
       });
 
-    document.getElementById('body').addEventListener('click', function() {
+      $('#body').bind('click', function() {
         $('#sugerencias').css("display", "none");
-    }, false);
+      });
 
     $("img.imglogo").imgCheckbox();
     
@@ -38,8 +46,8 @@ function init() {
 function desplazarbarra() {
     let input = document.getElementById('inputtext');
 
-    if(input.value != '') {
-        document.getElementById('logo').style.display = "none";    
+    if(input.value != '') { 
+        $('#logo').css("display", "none");  
         document.getElementById("input-container").classList.add('desplazar');
         document.getElementById('colinput').className = "col-12";
         document.getElementById("tablalogos").classList.remove('hidden');
@@ -62,7 +70,7 @@ function desplazarbarra() {
 }
 
 function enviar() {
-    document.getElementById('cajamensajes').style.display = 'none';
+    $('#cajamensajes').css("display", "none");
     let elemProducto = document.getElementById('inputtext');
     let elemEmpresas = document.getElementsByClassName('imgChked');
     let elemOrdenarDown = document.getElementsByName('sizeBy');

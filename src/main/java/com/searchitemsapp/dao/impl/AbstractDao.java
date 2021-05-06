@@ -1,6 +1,7 @@
 package com.searchitemsapp.dao.impl;
 
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -43,5 +44,17 @@ public abstract class AbstractDao {
 			.desUrl(String.valueOf(obj[7])).build()));
 		
 		return listUrlDto;
+	}
+	
+	protected String[] tokenizeString(final String cadena, final String token) {
+		
+		StringTokenizer tokenizer = new StringTokenizer(cadena, token); 		
+		List<String> listaAux = Lists.newArrayList();
+		
+		while (tokenizer.hasMoreElements()) {
+			listaAux.add((String) tokenizer.nextElement());
+		}
+		
+		return listaAux.toArray(new String[0]);
 	}
 }

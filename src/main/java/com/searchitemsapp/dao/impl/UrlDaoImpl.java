@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.StringTokenizer;
 
 import javax.persistence.Query;
 
@@ -69,18 +68,6 @@ public class UrlDaoImpl extends AbstractDao implements UrlDao {
 				.add(getModelMapper().map(elem, UrlDto.class)));
 		
 		return listDto;
-	}
-	
-	private String[] tokenizeString(final String cadena, final String token) {
-		
-		StringTokenizer tokenizer = new StringTokenizer(cadena, token); 		
-		List<String> listaAux = Lists.newArrayList();
-		
-		while (tokenizer.hasMoreElements()) {
-			listaAux.add((String) tokenizer.nextElement());
-		}
-		
-		return listaAux.toArray(new String[0]);
 	}
 
 	@Override
