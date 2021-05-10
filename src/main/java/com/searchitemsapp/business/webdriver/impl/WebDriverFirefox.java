@@ -34,9 +34,19 @@ public class WebDriverFirefox {
 	
 	public void setUp() {
 		
-		String driverPath  = environment.getProperty("flow.value.firefox.driver.path");
-		String executablePath = environment.getProperty("folw.value.firefox.ejecutable.path");
-		System.setProperty(environment.getProperty("flow.value.firefox.driver"), driverPath);
+		String driverPath;
+		String executablePath;
+		String os = System.getProperty("os.name");
+		
+		if(os.startsWith("Windows")) {		
+			driverPath  = environment.getProperty("flow.value.firefox.driver.path");
+			executablePath = environment.getProperty("folw.value.firefox.ejecutable.path");
+			System.setProperty(environment.getProperty("flow.value.firefox.driver"), driverPath);
+		} else {
+			driverPath  = environment.getProperty("flow.value.firefox.driver.linux.path");
+			executablePath = environment.getProperty("folw.value.firefox.ejecutable.linux.path");
+			System.setProperty(environment.getProperty("flow.value.firefox.driver"), driverPath);			
+		}
 		
 		FirefoxBinary binary = new FirefoxBinary(new File(executablePath));
 		FirefoxOptions options = new FirefoxOptions();
