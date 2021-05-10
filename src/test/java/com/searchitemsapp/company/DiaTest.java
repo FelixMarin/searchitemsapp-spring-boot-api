@@ -45,7 +45,7 @@ class DiaTest {
 
 	@Test
 	void testRemoveInitialBrand() {
-		assertEquals("aceite ", dia.removeInitialBrand("HACENDADO aceite"));
+		assertEquals("HACENDADO aceite ", dia.removeInitialBrand("HACENDADO aceite"));
 	}
 
 }

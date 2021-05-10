@@ -13,7 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -26,7 +29,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles("test") 
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @EntityScan("com.searchitemsapp.entities")
 @EnableJpaRepositories("com.searchitemsapp.dao.repository")
 @PropertySource("classpath:db.properties")
@@ -34,17 +37,24 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource("classpath:text.properties")
 @PropertySource("classpath:log4j.properties")
 @EnableTransactionManagement
-@WithMockUser(username = "user", password = "User1", roles = "USER")
+@WithMockUser(username = "user10", password = "0000", roles = "USER")
 class SearchItemsControllerTest {
 			
     @Autowired
     private MockMvc mvc;
     
+    private String TOKEN_ATTR_NAME = "org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository.CSRF_TOKEN";
+    
 	@Test
 	void statusCodeOkTest() throws Exception {
-				 
+		
+		HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
+		CsrfToken csrfToken = httpSessionCsrfTokenRepository.generateToken(new MockHttpServletRequest());
+		
 		 MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/search")
+				.sessionAttr(TOKEN_ATTR_NAME, csrfToken)				
 				 .accept(MediaType.APPLICATION_JSON)
+				 .param(csrfToken.getParameterName(), csrfToken.getToken())
 				 .param("country", "101")
 				 .param("category", "101")
 				 .param("sort", "1")

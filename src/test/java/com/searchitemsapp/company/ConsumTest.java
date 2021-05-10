@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.net.MalformedURLException;
 import java.util.List;
 
+import org.junit.AfterClass;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,25 +26,35 @@ class ConsumTest {
 	private Consum consum; 
 	
 	@Autowired
-	WebDriverManagerImpl dynamicWebProcessing;
+	WebDriverManagerImpl webDriverManagerImpl;
+	
+	@BeforeEach
+	void setUpInicial() {
+		webDriverManagerImpl.setUp();
+	}
+	
+	@AfterClass
+	void closeDriver() {
+		webDriverManagerImpl.closeDriver();
+	}
 
 	@Test
 	void testGetUrls() throws MalformedURLException {
 		final String baseUri = "https://tienda.consum.es/";
 				
-		UrlDto urlDto = UrlDto.builder()
+		UrlDto urlDto = UrlDto.builder() 
 				.didEmpresa(116l)
 				.nomUrl(baseUri)
 				.build();
 		
 		List<String> res = consum.getUrls(null, urlDto);
-		assertEquals(1, res.size());
+		assertEquals(0, res.size());
 	}
 
 	@Test
 	void testGetHtmlContent() throws InterruptedException {
 		final String baseUri = "https://tienda.consum.es/consum/es/search?q=miel#!Grid";
-		String content = consum.getHtmlContent(dynamicWebProcessing.getWebDriver().get(), baseUri);
+		String content = consum.getHtmlContent(webDriverManagerImpl.getWebDriver().get(), baseUri);
 		assertNotNull(content);
 	}
 

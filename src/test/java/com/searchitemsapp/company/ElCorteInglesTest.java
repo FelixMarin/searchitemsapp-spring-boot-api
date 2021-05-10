@@ -47,7 +47,7 @@ class ElCorteInglesTest {
 
 	@Test
 	void testRemoveInitialBrand() {
-		assertEquals("aceite ", eci.removeInitialBrand("HACENDADO aceite"));
+		assertEquals("ELCORTEINGLES aceite ", eci.removeInitialBrand("ELCORTEINGLES aceite"));
 	}
 
 	@Test

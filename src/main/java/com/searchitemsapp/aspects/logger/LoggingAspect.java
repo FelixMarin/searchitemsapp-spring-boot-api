@@ -43,7 +43,7 @@ public class LoggingAspect {
     	//pointCut
     }
     
-    @Pointcut("execution(public * com.searchitemsapp.user.controller.UserController.existsUser(com.searchitemsapp.user.dto.UserDto))" )
+    @Pointcut("execution(public * com.searchitemsapp.controller.UserController.existsUser(com.searchitemsapp.dto.UserDto))" )
     public void saveUserException() {
     	//pointCut
     }

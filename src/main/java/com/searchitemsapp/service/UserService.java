@@ -1,10 +1,10 @@
-package com.searchitemsapp.user.service;
+package com.searchitemsapp.service;
 
 import java.util.List;
 
+import com.searchitemsapp.dto.UserDto;
 import com.searchitemsapp.exception.ConfilctFoundException;
 import com.searchitemsapp.exception.ResourceNotFoundException;
-import com.searchitemsapp.user.dto.UserDto;
 
 public interface UserService {
 

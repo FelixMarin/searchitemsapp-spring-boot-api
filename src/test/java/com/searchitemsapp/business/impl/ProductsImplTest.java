@@ -1,6 +1,7 @@
 package com.searchitemsapp.business.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -47,8 +48,8 @@ class ProductsImplTest {
 		optional = product.checkProduct(melon, 101l, 
 				ProductDto.builder().nomProducto(melon).build(), patterns);
 		
-		assertNotNull(optional);
-		assertTrue(optional.isEmpty());
+		assertNotNull(optional.get());
+		assertFalse(optional.isEmpty());
 	}
 
 	@Test

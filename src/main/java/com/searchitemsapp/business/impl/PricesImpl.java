@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
 
 import com.searchitemsapp.business.Prices;
@@ -54,7 +55,7 @@ public class PricesImpl implements Prices {
 		} else if(primaryPrice.getOrdenacion() == 2) {
 	
 			String priceUnit = Optional.ofNullable(primaryPrice.getPrecioKilo())
-					.filter(elem -> elem != "")
+					.filter(Strings::isNotBlank)
 					.orElse(Constants.DEFAULT_PRICE.getValue());
 			
 			primaryPrice.setPrecioKilo(priceUnit);

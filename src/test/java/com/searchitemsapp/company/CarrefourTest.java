@@ -71,7 +71,7 @@ class CarrefourTest {
 
 	@Test
 	void testRemoveInitialBrand() {
-		String espected = "Remove Initial Brand";
+		String espected = "Remove Initial Brand ";
 		assertEquals(espected, carrefour.removeInitialBrand(espected));
 	}
 

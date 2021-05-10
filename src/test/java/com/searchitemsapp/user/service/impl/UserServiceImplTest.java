@@ -1,14 +1,15 @@
 package com.searchitemsapp.user.service.impl;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import javax.transaction.Transactional;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
@@ -19,12 +20,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.google.common.collect.Lists;
+import com.searchitemsapp.dto.UserDto;
 import com.searchitemsapp.entities.TbSiaRoles;
 import com.searchitemsapp.exception.ConfilctFoundException;
 import com.searchitemsapp.exception.ResourceNotFoundException;
-import com.searchitemsapp.user.dto.UserDto;
-import com.searchitemsapp.user.service.UserService;
+import com.searchitemsapp.service.UserService;
 
+@Transactional
 @RunWith(SpringRunner.class)
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -34,8 +36,9 @@ class UserServiceImplTest {
 	@Autowired
 	private UserService service;
 	
-    private final String username = "test6";
-    private final String  password = "Test6";
+    private final String username = "test60";
+    private final String  password = "Test60";
+    private final String email = "test60@mail.com";
     private final Long id = 996l;
     
 	List<TbSiaRoles> roles = Lists.newArrayList();
@@ -43,10 +46,11 @@ class UserServiceImplTest {
 	UserDto user = UserDto.builder().id(id)
 			.username(username)
 			.password(password)
+			.email(email)
 			.roles(roles).build();
 
 	@Test
-	@BeforeEach
+	@BeforeClass
 	void testSave() throws ConfilctFoundException {
 		entity.setId(id);
 		entity.setRoleName("USER");
@@ -55,13 +59,18 @@ class UserServiceImplTest {
 	}
 
 	@Test
-	@AfterEach
+	@AfterClass
 	void testDelete() throws ResourceNotFoundException, ConfilctFoundException {
 		entity.setId(id);
 		entity.setRoleName("USER");
 		roles.add(entity);
+		service.save(user);
 		service.delete(user);
-		assertNull(service.existsByUserName(username));
+		
+		assertThrows(ResourceNotFoundException.class, () -> {
+			service.existsByUserName(username);
+		});
+		
 	}
 
 	@Test

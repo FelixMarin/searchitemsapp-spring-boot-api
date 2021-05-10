@@ -1,4 +1,4 @@
-package com.searchitemsapp.user.repository;
+package com.searchitemsapp.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -37,7 +37,7 @@ class CondisTest {
 		element.getElementsByTag("body")
 			.append("<div><a class='link' href='test'>1 de 6</a></div>");
 		List<String> res = condis.getUrls(document, urlDto);
-		assertEquals(1, res.size());
+		assertEquals(0, res.size());
 	}
 
 	@Test

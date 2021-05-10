@@ -3,10 +3,10 @@ package com.searchitemsapp.company;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.json.JSONObject;
 import org.json.XML;
 import org.jsoup.Connection;
@@ -87,11 +87,11 @@ public class Mercadona implements Company {
 	
 	@Override
 	public String getAllUrlsToSearch(ProductDto productDto) {
+		String urlAll = environment.getProperty("flow.value.url.all");
 		String productoAux= productDto.getNomProducto().replace(StringUtils.SPACE, Constants.SPACE_URL.getValue());		
 		productDto.setImagen(productDto.getImagen().replace(Constants.COMMA.getValue(), Constants.DOT.getValue()));
-		Optional<String> urlAll = Optional.ofNullable(environment.getProperty("flow.value.url.all"));
-		urlAll.ifPresent(elem -> elem.concat(productoAux));
-		return urlAll.orElse(productoAux);
+		urlAll = Strings.isNotBlank(urlAll)?urlAll.concat(productoAux):productoAux;
+		return urlAll;
 	}
 	
 	@Override

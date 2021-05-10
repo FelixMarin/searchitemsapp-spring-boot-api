@@ -1,4 +1,4 @@
-package com.searchitemsapp.user.repository;
+package com.searchitemsapp.repository;
 
 import java.util.List;
 import java.util.Optional;

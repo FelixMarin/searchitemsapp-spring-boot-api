@@ -65,7 +65,7 @@ public class DocumentsImpl implements Documents {
 			});
 			
 			opWebDriver = webDriverManager.getWebDriver();			
-			opWebDriver.ifPresent(elem -> webDriverManager.openWindow(elem));
+			opWebDriver.ifPresent(webDriverManager::openWindow);
 			
 			document = getDocumentSync(urlDto.getNomUrl(), company, product, opWebDriver, webDriverManager);
 		} else {

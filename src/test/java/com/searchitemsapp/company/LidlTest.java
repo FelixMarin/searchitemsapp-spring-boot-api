@@ -30,7 +30,7 @@ class LidlTest {
 				.build();
 		
 		List<String> res = lidl.getUrls(null, urlDto);
-		assertEquals(1, res.size());
+		assertEquals(0, res.size());
 	}
 
 	@Test

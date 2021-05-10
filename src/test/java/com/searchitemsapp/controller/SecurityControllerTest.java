@@ -1,7 +1,10 @@
 package com.searchitemsapp.controller;
-
+import static org.mockito.BDDMockito.given;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.security.Principal;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,30 +22,66 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @RunWith(SpringRunner.class)
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class SecurityControllerTest {
 	
 	@Autowired
 	private MockMvc mvc;
 	
-	private final String[] paths = {
-			"/security/user",
-			"/security/manager",
-			"/security/admin",
-			"/security/timeAccess",
-			"/security/registrationfilter"
-	};
+	@Test
+	@WithMockUser(username = "user", password = "User1", roles = "USER")
+	void user() throws Exception {
+		
+		Principal user = mock(Principal.class);
+		given(user.getName()).willReturn("user");
+		MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/security/user").principal(user))
+				.andExpect(status().isOk()).andReturn();
+		
+		String resultado = result.getResponse().getContentAsString();
+		assertNotNull(resultado);
+	}
+	
+	@Test
+	@WithMockUser(username = "manager", password = "Manager1", roles = "MANAGER")
+	void manager() throws Exception {
+		
+		MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/security/manager"))
+				.andExpect(status().isOk()).andReturn();
+		
+		String resultado = result.getResponse().getContentAsString();
+		assertNotNull(resultado);
+	}
 	
 	@Test
 	@WithMockUser(username = "admin", password = "Admin1", roles = "ADMIN")
-	void testRead() throws Exception {
+	void admin() throws Exception {
 		
-		for (int i = 0; i < paths.length; i++) {
-			MvcResult result = mvc.perform(MockMvcRequestBuilders.get(paths[i]))
-					.andExpect(status().isOk()).andReturn();
-			
-			String resultado = result.getResponse().getContentAsString();
-			assertNotNull(resultado);
-		}
+		MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/security/admin"))
+				.andExpect(status().isOk()).andReturn();
+		
+		String resultado = result.getResponse().getContentAsString();
+		assertNotNull(resultado);
+	}
+	
+	@Test
+	@WithMockUser(username = "admin", password = "Admin1", roles = "ADMIN")
+	void timeAccess() throws Exception {
+		
+		MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/security/timeAccess"))
+				.andExpect(status().isOk()).andReturn();
+		
+		String resultado = result.getResponse().getContentAsString();
+		assertNotNull(resultado);
+	}
+	
+	@Test
+	@WithMockUser(username = "admin", password = "Admin1", roles = "ADMIN")
+	void registrationfilter() throws Exception {
+		
+		MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/security/registrationfilter"))
+				.andExpect(status().isOk()).andReturn();
+		
+		String resultado = result.getResponse().getContentAsString();
+		assertNotNull(resultado);
 	}
 }

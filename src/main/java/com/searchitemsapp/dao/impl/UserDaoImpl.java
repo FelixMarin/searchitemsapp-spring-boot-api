@@ -1,17 +1,17 @@
-package com.searchitemsapp.user.dao;
+package com.searchitemsapp.dao.impl;
 
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-import com.searchitemsapp.dao.impl.AbstractDao;
+import com.searchitemsapp.dao.UserDao;
 import com.searchitemsapp.entities.TbSiaRoles;
 import com.searchitemsapp.entities.TbSiaUser;
 import com.searchitemsapp.exception.ResourceNotFoundException;
-import com.searchitemsapp.user.dto.UserDto;
-import com.searchitemsapp.user.repository.RolesRepository;
-import com.searchitemsapp.user.repository.UserRepository;
+import com.searchitemsapp.dto.UserDto;
+import com.searchitemsapp.repository.RolesRepository;
+import com.searchitemsapp.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -27,7 +27,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 	public UserDto findByUserName(@NonNull String username) throws ResourceNotFoundException {
 		TbSiaUser entity= repository.findByUsername(username)
 				.orElseThrow(() -> new ResourceNotFoundException("Doesn't exist: " + username));
-				
+			  	     
 		return UserDto.builder().username(entity.getUsername())
 				.password(entity.getPassword())
 				.email(entity.getEmail())
@@ -52,7 +52,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 		user.setRoles(roles);
 		TbSiaUser entity = getModelMapper().map(user, TbSiaUser.class); 
 		
-		repository.save(entity);
+		repository.saveAndFlush(entity);
 		
 		return UserDto.builder().username(entity.getUsername())
 				.password(entity.getPassword())

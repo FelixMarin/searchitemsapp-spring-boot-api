@@ -1,4 +1,4 @@
-package com.searchitemsapp.user.controller;
+package com.searchitemsapp.controller;
 
 import java.security.Principal;
 import java.util.List;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.searchitemsapp.dto.UserDto;
 import com.searchitemsapp.exception.ConfilctFoundException;
 import com.searchitemsapp.exception.ResourceNotFoundException;
-import com.searchitemsapp.user.dto.UserDto;
-import com.searchitemsapp.user.service.UserService;
+import com.searchitemsapp.service.UserService;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -83,7 +83,7 @@ public class UserController {
 		userService.delete(user);
 		return ResponseEntity
 		        .status(HttpStatus.OK)
-		        .body(HttpStatus.OK.value());
+		        .body(HttpStatus.OK.value()); 
 	}
 	
 	@PreAuthorize("hasRole('MANAGER') OR hasRole('ADMIN')")

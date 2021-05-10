@@ -1,4 +1,4 @@
-package com.searchitemsapp.user.service.impl;
+package com.searchitemsapp.service.impl;
 
 import java.util.List;
 
@@ -16,9 +16,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.searchitemsapp.dao.UserDao;
+import com.searchitemsapp.dto.UserDto;
 import com.searchitemsapp.exception.ResourceNotFoundException;
-import com.searchitemsapp.user.dao.UserDao;
-import com.searchitemsapp.user.dto.UserDto;
 
 @Service
 @Transactional(value = TxType.REQUIRES_NEW)

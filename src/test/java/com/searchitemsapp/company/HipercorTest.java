@@ -40,12 +40,12 @@ class HipercorTest {
 		element.getElementsByTag("body")
 			.append("<div><a class='link' href='test'>1 de 6</a></div>");
 		List<String> res = hipercor.getUrls(document, urlDto);
-		assertEquals(5, res.size());
+		assertEquals(1, res.size());
 	}
 
 	@Test
 	void testRemoveInitialBrand() {
-		assertEquals("aceite ", hipercor.removeInitialBrand("HACENDADO aceite"));
+		assertEquals("HIPERCOR aceite ", hipercor.removeInitialBrand("HIPERCOR aceite"));
 	}
 
 }

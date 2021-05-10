@@ -1,15 +1,15 @@
-package com.searchitemsapp.user.service.impl;
+package com.searchitemsapp.service.impl;
 
 import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.searchitemsapp.dao.UserDao;
+import com.searchitemsapp.dto.UserDto;
 import com.searchitemsapp.exception.ConfilctFoundException;
 import com.searchitemsapp.exception.ResourceNotFoundException;
-import com.searchitemsapp.user.dao.UserDao;
-import com.searchitemsapp.user.dto.UserDto;
-import com.searchitemsapp.user.service.UserService;
+import com.searchitemsapp.service.UserService;
 
 import lombok.AllArgsConstructor;
 

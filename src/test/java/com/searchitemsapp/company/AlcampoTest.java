@@ -37,7 +37,7 @@ class AlcampoTest {
 		element.getElementsByTag("body")
 			.append("<div><a class='link' href='&page=3'>1 de 6</a></div>");
 		List<String> res = alcampo.getUrls(document, urlDto);
-		assertEquals(2, res.size());
+		assertEquals(4, res.size());
 		
 		cssSelectorsDto.setSelPaginacion("div");
 		element.getElementsByTag("div").remove();

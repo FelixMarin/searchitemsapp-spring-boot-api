@@ -34,6 +34,15 @@ function init() {
         liveSearch(this.value);
       });
 
+      $(window).resize(function() {
+        $( "#log" ).append( "<div>Handler for .resize() called.</div>" );
+      });
+    
+    $('#logout').click(function() {
+        localStorage.clear();
+        window.location.href="/login";
+      });      
+
       $('#body').bind('click', function() {
         $('#sugerencias').css("display", "none");
       });
@@ -44,7 +53,7 @@ function init() {
 }
 
 function desplazarbarra() {
-    let input = document.getElementById('inputtext');
+    let input = $('#inputtext');
 
     if(input.value != '') { 
         $('#logo').css("display", "none");  
@@ -71,9 +80,9 @@ function desplazarbarra() {
 
 function enviar() {
     $('#cajamensajes').css("display", "none");
-    let elemProducto = document.getElementById('inputtext');
-    let elemEmpresas = document.getElementsByClassName('imgChked');
-    let elemOrdenarDown = document.getElementsByName('sizeBy');
+    let elemProducto = $('#inputtext');
+    let elemEmpresas = $('.imgChked');
+    let elemOrdenarDown = $('[name="sizeBy"]');
     let valOrdenar = 1;
     let valProducto = '';
     let valEmpresas = '';
@@ -81,14 +90,15 @@ function enviar() {
     document.getElementById('productos').innerHTML ='';
     document.getElementById('caja-logos-checked').innerHTML ='';
 
-    if(elemProducto.value != '') {
-        valProducto = encodeURIComponent(elemProducto.value);
+    if(elemProducto.val() != '') {
+        valProducto = encodeURIComponent(elemProducto.val());
     } else {
         return;
     }
-      
+    
     if(elemEmpresas.length != 0) {
 
+        $('#logout').css("display", "none");
         for (let item of elemEmpresas) {
             let didEmpresa = item.firstChild.alt;
             let sizescreen = window.screen.availWidth;
@@ -120,7 +130,8 @@ function enviar() {
         let div1 = document.createElement('div');
         div1.classList.add('col-2');
         div1.classList.add('mt-3');
-        div1.classList.add('offset-lg-' + (12 - elemEmpresas.length-3)); 
+        div1.classList.add('offset-lg-' + (12 - elemEmpresas.length-3));
+
         let selectGroup = document.createElement("select");
         selectGroup.addEventListener('change',function() {
             let opcion = this.options[this.selectedIndex].value;
@@ -135,10 +146,12 @@ function enviar() {
         selectGroup.style.border = "solid 1px #ddd";
         selectGroup.classList.add('float-right'); 
         selectGroup.setAttribute('onchange','enviar();return false;');
+
         let opcionPrecio = document.createElement("option");
         opcionPrecio.text = 'Precio';
         opcionPrecio.setAttribute('value','1');
         opcionPrecio.setAttribute('id','precio');
+
         let opcionVolumen = document.createElement("option");
         opcionVolumen.text = 'Precio/Kilo';
         opcionVolumen.setAttribute('value','2');
@@ -153,11 +166,12 @@ function enviar() {
         selectGroup.appendChild(opcionPrecio);
         selectGroup.appendChild(opcionVolumen);
         div1.appendChild(selectGroup);
-        document.getElementById('caja-logos-checked').appendChild(div1);
+        $('#caja-logos-checked').append(div1);
 
         let div = document.createElement("div");
         div.classList.add('col-1');
         div.classList.add('mt-3');
+
         let buttonVolver = document.createElement("a");
         buttonVolver.setAttribute("href", "/main");
         buttonVolver.setAttribute("id", "boton-volver");
@@ -167,8 +181,13 @@ function enviar() {
         buttonVolver.style.border = "solid 1px #ddd";
         buttonVolver.classList.add('ml-5');
         buttonVolver.classList.add('float-right'); 
+
         div.appendChild(buttonVolver);
-        document.getElementById('caja-logos-checked').appendChild(div);
+        $('#caja-logos-checked').append(div);
+
+        buttonVolver.addEventListener('click', function() {
+            $('#logout').css("display", "block");
+        });
         
         valEmpresas = valEmpresas.substr(0,valEmpresas.length - 1);  
     } else {
@@ -197,40 +216,44 @@ function traerProductos(producto, ordenar, strEmpresas) {
     }
 
     $.ajax({
-    type: "GET",
-    url: "/search?country=101&category=101&sort="+ ordenar +"&product="+producto + "&pipedcompanies=" + strEmpresas,
-    dataType: "text",
-    timeout: 1000000,
-    beforeSend: function(xhr) {
-        xhr.setRequestHeader ("Authorization", "Bearer " + window.localStorage.getItem('sia_token'));
-        $('#sugerencias').addClass('hidden');
-        $('#cajamensajes').css("display","none");
-        $('#productos').addClass("hidden");
-        $("#rowempresas").css("display", "none");
-        $("#separdor-footer").css("display", "none");
-        $("#radiogroupid").css("display", "none");
-        $("#colinput").css("margin-top", "1%");
-        $('#input-container').removeClass("containerCL");
-        $("#input-container").addClass("mt-2");
-        $('#ruleta').removeClass('hidden');
-        $('#ruleta').addClass('show');
-    }
-    }).done(function (data) {        
-        $('#ruleta').addClass('hidden');
-        $('#productos').removeClass("hidden");
-        $('#productos').addClass("show");
-        window.localStorage.setItem(producto + '|' + ordenar + '|' + strEmpresas + '|' + d.getDate() + '|' + window.localStorage.getItem('sia_token'),data);
-
-        if(Object.is(data,window.localStorage.getItem('data'))) {
-            return;
-        } else {
-            componerCartas(data);
-            window.localStorage.setItem('data',data);
+        type: "GET",
+        url: "/search?country=101&category=101&sort="+ ordenar +"&product="+producto + "&pipedcompanies=" + strEmpresas,
+        dataType: "text",
+        timeout: 1000000,
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader ("Authorization", "Bearer " + window.localStorage.getItem('sia_token'));
+            $('#inputtext').prop( "disabled", true);
+            $('#botonBarra').prop( "disabled", true);
+            $('#sugerencias').addClass('hidden');
+            $('#cajamensajes').css("display","none");
+            $('#productos').addClass("hidden");
+            $("#rowempresas").css("display", "none");
+            $("#separdor-footer").css("display", "none");
+            $("#radiogroupid").css("display", "none");
+            $("#colinput").css("margin-top", "1%");
+            $('#input-container').removeClass("containerCL");
+            $("#input-container").addClass("mt-2");
+            $('#ruleta').removeClass('hidden');
+            $('#ruleta').addClass('show');
         }
-        
-    }).fail(function (xhr, textStatus, errorThrown) {
-        console.log(errorThrown+'\n'+status+'\n'+xhr.statusText);
-        window.location.href = '/login'; 
+        }).done(function (data) {        
+            $('#ruleta').addClass('hidden');
+            $('#productos').removeClass("hidden");
+            $('#productos').addClass("show");
+            $('#inputtext').prop( "disabled", false);
+            $('#botonBarra').prop( "disabled", false);
+            window.localStorage.setItem(producto + '|' + ordenar + '|' + strEmpresas + '|' + d.getDate() + '|' + window.localStorage.getItem('sia_token'),data);
+
+            if(Object.is(data,window.localStorage.getItem('data'))) {
+                return;
+            } else {
+                componerCartas(data);
+                window.localStorage.setItem('data',data);
+            }
+            
+        }).fail(function (xhr, textStatus, errorThrown) {
+            console.log(errorThrown+'\n'+status+'\n'+xhr.statusText);
+            window.location.href = '/login'; 
     });
 }
 
@@ -299,10 +322,10 @@ function componerCartas(data) {
     
     if(data.includes("[]")) { 
         document.getElementById("cajamensajes").classList.remove("hidden"); 
-        document.getElementById("cajamensajes").style.display = "block";
+        $('#cajamensajes').css('display','block');
         return;
-    } else { 
-    	document.getElementById("cajamensajes").style.display = "none"; 
+    } else {  
+        $('#cajamensajes').css('display','none');
     }
 
     try {
@@ -326,7 +349,7 @@ function componerCartas(data) {
             estructuraHTML += colorIdentificador(element.identificador);
             estructuraHTML += '</h4>'
             estructuraHTML += '<a href="' + element.nomUrl + '" target="_blank" rel="noopener noreferrer">';
-            estructuraHTML += '<img class="imgprod" src="' + element.imagen + '" alt=" Producto" />';
+            estructuraHTML += '<img class="imgprod" loading="lazy" src="' + element.imagen + '" alt=" Producto" />';
             estructuraHTML += '</a>';
             estructuraHTML += '<h5 class="card-title p-2">' + element.nomProducto + '</h5>';
             estructuraHTML += '<p class="text pl-2">Precio ' + element.precio + '<br />P.Kilo  ' + element.precioKilo + '</p>';     
@@ -341,87 +364,109 @@ function componerCartas(data) {
                 contador = 0;
             }
         });  
-    } catch(error) {
-        document.getElementById("cajamensajes").style.display = "block";      
+    } catch(error) {      
+        $('#cajamensajes').css("display", "block");
         console.log(error);
     }
 }
 
 function colorIdentificador(identificador) {
 	
-	let resultado;
+    let span = document.createElement('span');
 	
 	switch (parseInt(identificador)) {
 	case 1:
-		resultado = '<span class="ident-primero">' + identificador + '</span>';
+        span.classList.add("ident-primero");
 		break;
 	case 2:
-		resultado = '<span class="ident-segundo">' + identificador + '</span>';
+        span.classList.add("ident-segundo");
 		break;
 	case 3:
-		resultado = '<span class="ident-tercero">' + identificador + '</span>';
+        span.classList.add("ident-tercero");
 		break;
 	default:
-		resultado = '<span class="ident-resto">' + identificador + '</span>';
+        span.classList.add("ident-resto");
 		break;
 	}
+
+    span.innerText = identificador
 	
-	return resultado;
+	return span.outerHTML;
 }
 
 function imagenLogoEmpresa(didEmpresa) {
 
+    let img = document.createElement('img');
+    img.classList.add('w-50', 'pt-2', 'pl-2', 'pb-2', 'climg', 'sm-img');
+
     switch (didEmpresa) {
         case 101:
-            return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/mercadona.svg" alt="mercadona" />';
+            img.setAttribute('src','img/mercadona.svg');
+            img.setAttribute('alt', 'mercadona');
+            break;
         case 102:
-            return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/lidl.png" alt="lidl" />';
+            img.setAttribute('src','img/lidl.png');
+            img.setAttribute('alt', 'lidl');
+            break;
         case 103:
-            return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/hipercor.svg" alt="hipercor" />';
+            img.setAttribute('src','img/hipercor.svg');
+            img.setAttribute('alt', 'hipercor');
+            break;
         case 105:            			
-            return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/dia.svg" alt="dia" />';
+            img.setAttribute('src','img/dia.svg');
+            img.setAttribute('alt', 'dia');
+            break;
          case 106:            			
-             return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/ulabox.svg" alt="ulabox" />';
-         case 107:            			
-             return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/eroski.svg" alt="eroski" />'; 
+            img.setAttribute('src','img/ulabox.svg');
+            img.setAttribute('alt', 'ulabox');
+            break;
+         case 107:         
+             img.setAttribute('src','img/eroski.svg');
+             img.setAttribute('alt', 'eroski');   
+             break;			
          case 108: 			
-             return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/alcampo.svg" alt="alcampo" />';
+            img.setAttribute('src','img/alcampo.svg');
+            img.setAttribute('alt', 'alcampo');
+            break;
          case 109:	
-            return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/caprabo.svg" alt="caprabo" />';
+            img.setAttribute('src','img/caprabo.svg');
+            img.setAttribute('alt', 'caprabo');
+            break;
          case 104:	
-             return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/carrefour.svg" alt="carrefour" />';
+            img.setAttribute('src','img/carrefour.svg');
+            img.setAttribute('alt', 'carrefour');
+            break;
          case 110:	
-             return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/condis.svg" alt="condis" />';
+            img.setAttribute('src','img/condis.svg');
+            img.setAttribute('alt', 'condis');
+            break;
          case 111:		
-             return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/elcorteingles.svg" alt="elcorteingles" />';
+            img.setAttribute('src','img/elcorteingles.svg');
+            img.setAttribute('alt', 'elcorteingles');
+            break;
          case 114:		
-             return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/Simply-market.png" alt="simply" />';
+            img.setAttribute('src','img/Simply-market.png');
+            img.setAttribute('alt', 'simply');
+            break;
          case 116:		
-             return '<img class="w-50 pt-2 pl-2 pb-2 climg sm-img" src="img/consum.svg" alt="consum" />';
+            img.setAttribute('src','img/consum.svg');
+            img.setAttribute('alt', 'consum');
+            break;
     }
+    return img.outerHTML;
 }
 
 function aceptarSearchBar() {
-    let elemProducto = document.getElementById('inputtext');
 
-    elemProducto.addEventListener("keypress", function(event) {
+    $('#inputtext').bind('keypress', function() {
         if (event.keyCode === 13) {
-          event.preventDefault();
-          document.getElementById("botonAceptar").click();
-          $('#sugerencias').css("display", "none");
-          $('#botonBarra').focus();
-        }
+            event.preventDefault();
+            $( "#botonAceptar" ).click();
+            $('#sugerencias').css("display", "none");
+            $('#botonBarra').focus();
+          }
       });
 }
-
-$(window).resize(function() {
-    $( "#log" ).append( "<div>Handler for .resize() called.</div>" );
-  });
-
-  $('#logout').click(function() {
-    localStorage.clear();
-    window.location.href="/login";
-  });
 
 function resize() {
     let ancho = window.outerWidth;
@@ -433,12 +478,12 @@ function resize() {
         document.getElementById('colinput').classList.add('pt-1');
         document.getElementById('colinput').classList.add('colinp');
 
-        if(document.getElementById('boton-volver') != null) {
-            document.getElementById('boton-volver').style.display = 'none';
+        if($('#boton-volver').length) {
+            $('#boton-volver').css("display", "none");
         }
 
-        if(document.getElementById('select-top') != null) {
-            document.getElementById('select-top').style.display = 'none';
+        if($('#select-top').length) {
+            $('#select-top').css("display", "none");
         }
         
         document.getElementById('productos').classList.remove('mt-4');
@@ -493,12 +538,12 @@ function resize() {
         document.getElementById('colinput').classList.remove('pt-5');
         document.getElementById('colinput').classList.remove('colinp');
 
-        if(document.getElementById('boton-volver') != null) {
-            document.getElementById('boton-volver').style.display = 'block';
+        if($('#boton-volver').length) {
+            $('#boton-volver').css("display", "block");
         }
 
-        if(document.getElementById('select-top') != null) {
-            document.getElementById('select-top').style.display = 'block';
+        if($('#select-top').length) {
+            $('#select-top').css("display", "block");
         }
         
         let listaTd = document.getElementsByTagName('td');

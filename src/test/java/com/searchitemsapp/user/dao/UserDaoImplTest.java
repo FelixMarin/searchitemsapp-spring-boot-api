@@ -12,9 +12,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.searchitemsapp.exception.ConfilctFoundException;
+import com.searchitemsapp.dao.UserDao;
 import com.searchitemsapp.exception.ResourceNotFoundException;
-import com.searchitemsapp.user.dto.UserDto;
 
 @RunWith(SpringRunner.class)
 @ExtendWith(SpringExtension.class)
@@ -32,15 +31,6 @@ class UserDaoImplTest {
 	@Test
 	void testExistById() {
 		assertNotNull(userDao.existById(1l));
-	}
-
-	@Test
-	void testSave() throws ConfilctFoundException {
-		assertNotNull(userDao.save(UserDto.builder()
-				.id(999l)
-				.username("test6")
-				.password("Test6")
-				.build()));
 	}
 
 	@Test

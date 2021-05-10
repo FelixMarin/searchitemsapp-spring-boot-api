@@ -40,7 +40,7 @@ class MercadonaTest {
 				.build();
 		
 		List<String> res = mercadona.getUrls(null, urlDto);
-		assertEquals(1, res.size());
+		assertEquals(0, res.size());
 	}
 
 	@Test

@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.searchitemsapp.user.dto.UserDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

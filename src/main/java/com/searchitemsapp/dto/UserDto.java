@@ -1,4 +1,4 @@
-package com.searchitemsapp.user.dto;
+package com.searchitemsapp.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
