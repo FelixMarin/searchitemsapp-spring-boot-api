@@ -9,10 +9,6 @@ function init() {
         window.location.href = '/login';
     }
 
-    $('#inputtext').bind('keyup', function() {
-        desplazarbarra();
-      });
-
     $('#botonAceptar').bind('click', function() {
         enviar();
       });
@@ -26,10 +22,13 @@ function init() {
         if (event.keyCode === 13) {
             event.preventDefault();
             $('#botonAceptar').click();
+            $('#sugerencias').html('');
             $('#sugerencias').css("display", "none");
             $('#botonBarra').focus();
             return;
-        } 
+        } else {
+            desplazarbarra();
+        }
 
         liveSearch(this.value);
       });
@@ -75,6 +74,8 @@ function desplazarbarra() {
         if(sizescreen <= 1023) {
             document.getElementById("contenedor-input-productos").classList.add('separacion-input-productos-sm');
         }
+    } else {
+        $('#sugerencias').html('');
     }
 }
 
@@ -93,6 +94,7 @@ function enviar() {
     if(elemProducto.val() != '') {
         valProducto = encodeURIComponent(elemProducto.val());
     } else {
+        $('#sugerencias').html('');
         return;
     }
     
@@ -224,6 +226,7 @@ function traerProductos(producto, ordenar, strEmpresas) {
             xhr.setRequestHeader ("Authorization", "Bearer " + window.localStorage.getItem('sia_token'));
             $('#inputtext').prop( "disabled", true);
             $('#botonBarra').prop( "disabled", true);
+            $('#sugerencias').html('');
             $('#sugerencias').addClass('hidden');
             $('#cajamensajes').css("display","none");
             $('#productos').addClass("hidden");
@@ -260,6 +263,7 @@ function traerProductos(producto, ordenar, strEmpresas) {
 function liveSearch(keyword) {
 	
 	if(keyword === '' || keyword === undefined) {
+        $('#sugerencias').html('');
         $('#sugerencias').css("display", "none");  
 		return
 	}
@@ -279,6 +283,7 @@ function liveSearch(keyword) {
 			$('#inputtext').removeClass('loading-live-search');
 			
 			if(data === '[]') {
+                $('#sugerencias').html('');
                 $('#sugerencias').css("display", "none");  
 				return '';
 			}
@@ -308,6 +313,7 @@ function liveSearch(keyword) {
 
 function focoSerchBar(param) {
     document.getElementById('inputtext').value = param.innerText.trim();
+    $('#sugerencias').html('');
     $('#sugerencias').css("display", "none");
     let elemEmpresas = document.getElementsByClassName('imgChked');
 
@@ -459,11 +465,10 @@ function imagenLogoEmpresa(didEmpresa) {
 function aceptarSearchBar() {
 
     $('#inputtext').bind('keypress', function() {
-        if (event.keyCode === 13) {
-            event.preventDefault();
-            $( "#botonAceptar" ).click();
-            $('#sugerencias').css("display", "none");
-            $('#botonBarra').focus();
+        if (event.keyCode === 40) {
+            if($('#sugerencias').html() != '') {
+                $('#sugerencias').children()[0].focus();
+            }
           }
       });
 }
