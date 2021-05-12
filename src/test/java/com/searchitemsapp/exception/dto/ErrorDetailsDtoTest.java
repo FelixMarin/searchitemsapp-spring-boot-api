@@ -26,7 +26,7 @@ class ErrorDetailsDtoTest {
 	
 	@Test
 	void testGetTimestamp() {
-		LocalDateTime time = LocalDateTime.now();
+		var time = LocalDateTime.now();
 		errorDetails.setTimestamp(time);
 		assertEquals(time,errorDetails.getTimestamp());
 	}

@@ -50,14 +50,14 @@ class CategoryDtoTest {
 
 	@Test
 	void testEmpresas() {
-		CompanyDto lsDto = CompanyDto.builder().did(101l).build();
+		var lsDto = CompanyDto.builder().did(101l).build();
 		categoriyDto.setEmpresas(lsDto);;
 		assertEquals(101l,categoriyDto.getEmpresas().getDid());
 	}
 
 	@Test
 	void testProductos() {
-		LiveSearchDto lsDto = LiveSearchDto.builder().did(101l).build();
+		var lsDto = LiveSearchDto.builder().did(101l).build();
 		categoriyDto.setProductos(lsDto);
 		assertEquals(101l,categoriyDto.getProductos().getDid());
 	}

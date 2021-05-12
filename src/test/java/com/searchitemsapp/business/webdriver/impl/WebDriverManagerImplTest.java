@@ -38,9 +38,9 @@ class WebDriverManagerImplTest {
 	
 	@Test
 	void getDynamicHtmlContentSync() throws InterruptedException {
-		final String urlBase = "https://tienda.consum.es/consum/es/search?q=miel#!Grid";
+		final var urlBase = "https://tienda.consum.es/consum/es/search?q=miel#!Grid";
 						
-		String result = webDriverManager.getDynamicHtmlContentSync(
+		var result = webDriverManager.getDynamicHtmlContentSync(
 				webDriverManager.getWebDriver().get(),
 				urlBase, Long.valueOf(116));
 		
@@ -49,9 +49,9 @@ class WebDriverManagerImplTest {
 	
 	@Test
 	void getDynamicHtmlContentAsync() throws InterruptedException {
-		final String urlBase = "https://www.hipercor.es/supermercado/buscar/1/?term=miel&type_ahead_tab=panel_all&sort=mostSell";
+		final var urlBase = "https://www.hipercor.es/supermercado/buscar/1/?term=miel&type_ahead_tab=panel_all&sort=mostSell";
 						
-		String result = webDriverManager.getDynamicHtmlContentAsync(
+		var result = webDriverManager.getDynamicHtmlContentAsync(
 				webDriverManager.getWebDriver().get(),
 				urlBase, Long.valueOf(103));
 		

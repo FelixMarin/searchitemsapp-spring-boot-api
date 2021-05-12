@@ -7,7 +7,6 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +25,13 @@ class AlcampoTest {
 
 	@Test
 	void testGetUrls() throws MalformedURLException {
-		final String baseUri = "https://www.alcampo.es/compra-online/search?q=miel%3Aprice-asc&page=1";
+		final var baseUri = "https://www.alcampo.es/compra-online/search?q=miel%3Aprice-asc&page=1";
 		
-		CssSelectorsDto cssSelectorsDto =CssSelectorsDto.builder().didEmpresa(105l).selPaginacion("a|href").build();
-		UrlDto urlDto = UrlDto.builder().didEmpresa(105l)
+		var cssSelectorsDto =CssSelectorsDto.builder().didEmpresa(105l).selPaginacion("a|href").build();
+		var urlDto = UrlDto.builder().didEmpresa(105l)
 			.selectores(cssSelectorsDto).nomUrl(baseUri).build();
-		Document document = Document.createShell(baseUri);
-		Element element = document.getAllElements().first();
+		var document = Document.createShell(baseUri);
+		var element = document.getAllElements().first();
 		element.setBaseUri(baseUri);
 		element.getElementsByTag("body")
 			.append("<div><a class='link' href='&page=3'>1 de 6</a></div>");

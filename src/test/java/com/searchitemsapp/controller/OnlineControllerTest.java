@@ -11,12 +11,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringRunner.class)
@@ -34,15 +32,15 @@ class OnlineControllerTest {
 	@WithMockUser(username = "user10", password = "0000", roles = "USER")
 	void testIndex() throws Exception {
 		
-		HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
-		CsrfToken csrfToken = httpSessionCsrfTokenRepository.generateToken(new MockHttpServletRequest());
+		var httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
+		var csrfToken = httpSessionCsrfTokenRepository.generateToken(new MockHttpServletRequest());
 		
-		MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/main")
+		var result = mvc.perform(MockMvcRequestBuilders.get("/main")
 				.sessionAttr(TOKEN_ATTR_NAME, csrfToken)
 				.param(csrfToken.getParameterName(), csrfToken.getToken()))
 				.andExpect(status().isOk()).andReturn();
 
-		String resultado = result.getResponse().getContentAsString();
+		var resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
 
 		result = mvc.perform(MockMvcRequestBuilders.get("/login")
@@ -59,15 +57,15 @@ class OnlineControllerTest {
 	@WithMockUser(username = "admin", password = "Admin1", roles = "ADMIN")
 	void testBoard() throws Exception {
 		
-		HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
-		CsrfToken csrfToken = httpSessionCsrfTokenRepository.generateToken(new MockHttpServletRequest());
+		var httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
+		var csrfToken = httpSessionCsrfTokenRepository.generateToken(new MockHttpServletRequest());
 		
-		MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/board")
+		var result = mvc.perform(MockMvcRequestBuilders.get("/board")
 				.sessionAttr(TOKEN_ATTR_NAME, csrfToken)
 				.param(csrfToken.getParameterName(), csrfToken.getToken()))
 				.andExpect(status().isOk()).andReturn();
 
-		String resultado = result.getResponse().getContentAsString();
+		var resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
 	}
 }

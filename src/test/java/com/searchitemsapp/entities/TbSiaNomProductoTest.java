@@ -34,7 +34,7 @@ class TbSiaNomProductoTest {
 
 	@Test
 	void testGetTbSiaPais() {
-		TbSiaPais tbSiaPais = new TbSiaPais();
+		var tbSiaPais = new TbSiaPais();
 		tbSiaPais.setDid(101l);
 		tbSiaNomProducto.setTbSiaPais(tbSiaPais);
 		assertEquals(101l,tbSiaNomProducto.getTbSiaPais().getDid());

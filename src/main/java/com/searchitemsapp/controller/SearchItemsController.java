@@ -40,7 +40,7 @@ public class SearchItemsController {
 				@RequestParam(value = "product") @Validated @NonNull String product, 
 				@RequestParam(value = "pipedcompanies") @Validated @NonNull String pipedCompanies) {
 		
-		SearchItemsParamsDto parameters = SearchItemsParamsDto.builder()
+		var parameters = SearchItemsParamsDto.builder()
 				.countryId(countryId)
 				.categoryId(categoryId)
 				.sort(sort)

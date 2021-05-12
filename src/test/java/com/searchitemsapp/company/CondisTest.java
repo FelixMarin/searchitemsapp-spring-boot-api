@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.assertj.core.util.Lists;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +26,11 @@ class CondisTest {
 
 	@Test
 	void testGetUrls() throws MalformedURLException {
-		final String baseUri = "https://www.condisline.com/searching?term=miel&source=directSearch&sort=price&position=10&page=11&_=1557933255375";
-		Document document = Document.createShell(baseUri);
-		Element element = document.getAllElements().first();
-		CssSelectorsDto cssSelectorsDto = CssSelectorsDto.builder().didEmpresa(110l).selPaginacion("a|href").build();
-		UrlDto urlDto = UrlDto.builder().didEmpresa(110l)
+		final var baseUri = "https://www.condisline.com/searching?term=miel&source=directSearch&sort=price&position=10&page=11&_=1557933255375";
+		var document = Document.createShell(baseUri);
+		var element = document.getAllElements().first();
+		var cssSelectorsDto = CssSelectorsDto.builder().didEmpresa(110l).selPaginacion("a|href").build();
+		var urlDto = UrlDto.builder().didEmpresa(110l)
 			.selectores(cssSelectorsDto).nomUrl(baseUri).build();
 		element.setBaseUri(baseUri);
 		element.getElementsByTag("body")
@@ -53,18 +52,18 @@ class CondisTest {
 
 	@Test
 	void testSelectorTextExtractor() {
-		final String baseUri = "https://www.carrefour.es";
-		String cssSelector = "a|href";
+		final var baseUri = "https://www.carrefour.es";
+		var cssSelector = "a|href";
 
-		Document document = Document.createShell(baseUri);
-		Element element = document.getAllElements().first();
+		var document = Document.createShell(baseUri);
+		var element = document.getAllElements().first();
 		element.setBaseUri(baseUri);
 		element.getElementsByTag("body")
 			.append("<div><a href='test'></a></div>");
 		List<String> list = Lists.newArrayList();
 		list.add("a");
 		list.add("href");
-		String res = condis.selectorTextExtractor(document, list, cssSelector);
+		var res = condis.selectorTextExtractor(document, list, cssSelector);
 		assertNotNull(res);
 		assertEquals("test", res);
 		

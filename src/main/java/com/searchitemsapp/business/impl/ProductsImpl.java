@@ -5,7 +5,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Component;
 import com.searchitemsapp.business.Patterns;
 import com.searchitemsapp.business.Products;
 import com.searchitemsapp.business.SelectorsCss;
-import com.searchitemsapp.company.Company;
 import com.searchitemsapp.company.factory.CompaniesGroup;
 import com.searchitemsapp.dto.ProductDto;
 import com.searchitemsapp.dto.UrlDto;
@@ -37,8 +35,8 @@ public class ProductsImpl implements Products {
 			 
 		Optional<String> productName = Optional.ofNullable(productDto.getNomProducto());
 		String[] productCharArray = removeTildes(requestProducName).split(StringUtils.SPACE);
-		Pattern patternProduct = elementPatterns.createPatternProduct(productCharArray);
-		String productResult = removeTildes(productName.orElseThrow());
+		var patternProduct = elementPatterns.createPatternProduct(productCharArray);
+		var productResult = removeTildes(productName.orElseThrow());
 		
 		return patternProduct.matcher(productResult.toUpperCase()).find()?
 				Optional.of(productDto):Optional.empty();
@@ -49,7 +47,7 @@ public class ProductsImpl implements Products {
 		
 		if(accentedWord.indexOf('\u00f1') == -1) {
 			
-			String wordWithoutTildes = accentedWord.replace(Constants.ENIE_MAY.getValue(), Constants.ENIE_U_HEX.getValue());
+			var wordWithoutTildes = accentedWord.replace(Constants.ENIE_MAY.getValue(), Constants.ENIE_U_HEX.getValue());
 			wordWithoutTildes = java.text.Normalizer.normalize(wordWithoutTildes.toLowerCase(), Normalizer.Form.NFD);
 			wordWithoutTildes = wordWithoutTildes.replaceAll("[\\p{InCombiningDiacriticalMarks}]", StringUtils.EMPTY);
 			wordWithoutTildes = wordWithoutTildes.replace(Constants.ENIE_U_HEX.getValue(),  Constants.ENIE_MIN.getValue());
@@ -65,14 +63,14 @@ public class ProductsImpl implements Products {
 			@NonNull UrlDto urlDto, 
 			@NonNull String ordenacion) throws IOException {
 		
-		String image = StringUtils.isNotBlank(urlDto.getSelectores().getSelImage())?
+		var image = StringUtils.isNotBlank(urlDto.getSelectores().getSelImage())?
 				cssSelectors.elementByCssSelector(elem, urlDto.getSelectores().getSelImage(), urlDto):
 				StringUtils.EMPTY;
-		String image2 = StringUtils.isNotBlank(urlDto.getSelectores().getSelImage2())?
+		var image2 = StringUtils.isNotBlank(urlDto.getSelectores().getSelImage2())?
 				cssSelectors.elementByCssSelector(elem, urlDto.getSelectores().getSelImage2(), urlDto):
 					StringUtils.EMPTY;
 
-		ProductDto productDto = ProductDto.builder()
+		var productDto = ProductDto.builder()
 				.imagen(StringUtils.isNotBlank(image)?image:image2)
 				.nomProducto(cssSelectors.elementByCssSelector(elem, urlDto.getSelectores().getSelProducto(), urlDto))
 				.desProducto(cssSelectors.elementByCssSelector(elem, urlDto.getSelectores().getSelProducto(), urlDto))
@@ -84,8 +82,8 @@ public class ProductsImpl implements Products {
 				.ordenacion(Integer.parseInt(ordenacion))
 				.build();
 		
-		Company company = companiesGroup.getInstance(urlDto.getDidEmpresa());
-		String namesOfUrlsOfAllProducts = company.getAllUrlsToSearch(productDto);
+		var company = companiesGroup.getInstance(urlDto.getDidEmpresa());
+		var namesOfUrlsOfAllProducts = company.getAllUrlsToSearch(productDto);
 		productDto.setNomUrlAllProducts(namesOfUrlsOfAllProducts);
 			
 		return productDto;
@@ -93,7 +91,7 @@ public class ProductsImpl implements Products {
 	
 	@Override
 	public String manageProductName(final String productName) throws IOException {
-		Matcher matcher = Pattern.compile(Constants.REGEX_DOLAR_PERCENT.getValue()).matcher(productName);
+		var matcher = Pattern.compile(Constants.REGEX_DOLAR_PERCENT.getValue()).matcher(productName);
 		return matcher.find()?productName:URLEncoder.encode(productName, StandardCharsets.UTF_8.toString());
 	}
 }

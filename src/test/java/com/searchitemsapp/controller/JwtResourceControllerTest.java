@@ -16,7 +16,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringRunner.class)
@@ -31,13 +30,13 @@ class JwtResourceControllerTest {
 	@Test
 	@WithMockUser(username = "user", password = "User1", roles = "USER")
 	void testToken() throws Exception {
-		 MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/jwst/token")
+		var result = mvc.perform(MockMvcRequestBuilders.post("/jwst/token")
 				 .accept(MediaType.APPLICATION_JSON)
 				 .header("Authorization", "Basic " + Base64.getEncoder().encodeToString("user:User1".getBytes())))
 				.andExpect(status().isOk())
 				.andReturn();
 		 
-		String resultado = result.getResponse().getContentAsString();
+		var resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
 	}
 	
@@ -45,7 +44,7 @@ class JwtResourceControllerTest {
 	@WithMockUser(username = "user", password = "User1", roles = "USER")
 	void testJwst() throws Exception {
 		
-		 MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/jwst/token")
+		var result = mvc.perform(MockMvcRequestBuilders.post("/jwst/token")
 				 .accept(MediaType.APPLICATION_JSON)
 				 .header("Authorization", "Basic " + Base64.getEncoder().encodeToString("user:User1".getBytes())))
 				.andExpect(status().isOk())
@@ -57,7 +56,7 @@ class JwtResourceControllerTest {
 				.andExpect(status().isOk())
 				.andReturn();
 		 
-		String resultado2 = result.getResponse().getContentAsString();
+		var resultado2 = result.getResponse().getContentAsString();
 		assertNotNull(resultado2);
 	}	
 }

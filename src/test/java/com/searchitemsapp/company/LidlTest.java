@@ -22,9 +22,9 @@ class LidlTest {
 
 	@Test
 	void testGetUrls() throws MalformedURLException {
-		final String baseUri = "https://www.lidlonline.es/";
+		final var baseUri = "https://www.lidlonline.es/";
 		
-		UrlDto urlDto = UrlDto.builder()
+		var urlDto = UrlDto.builder()
 				.didEmpresa(102l)
 				.nomUrl(baseUri)
 				.build();

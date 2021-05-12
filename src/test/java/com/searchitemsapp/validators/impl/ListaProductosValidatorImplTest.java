@@ -28,8 +28,8 @@ class ListaProductosValidatorImplTest {
 	
 	@Test
 	void testIsParams() {
-		ProceedingJoinPoint joinPoint = mock(ProceedingJoinPoint.class);
-        MethodSignature signature = mock(MethodSignature.class);
+		var joinPoint = mock(ProceedingJoinPoint.class);
+		var signature = mock(MethodSignature.class);
         when(joinPoint.getSignature()).thenReturn(signature);
         
         String[] args = {"101","101","1","miel","103"};        

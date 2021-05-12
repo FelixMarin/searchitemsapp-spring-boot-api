@@ -53,9 +53,9 @@ public class Condis implements Company {
 			return producto;
 		}
 		
-		String productoAux = producto.toLowerCase();
+		var productoAux = producto.toLowerCase();
 		
-		for (int i = 0; i < arVocales.length; i++) {
+		for (var i = 0; i < arVocales.length; i++) {
 			productoAux = productoAux.replace(arTildes[i], 
 					arVocales[i]);
 		}
@@ -119,11 +119,11 @@ public class Condis implements Company {
 	}
 	
 	private String standarizeString(String valor) {
-		String tratedValue = valor.substring(valor.indexOf(LEFT_SLASH_CHAR)+1, valor.length());
+		var tratedValue = valor.substring(valor.indexOf(LEFT_SLASH_CHAR)+1, valor.length());
 		
 		Optional<Integer> indexCommilla = Optional.of(valor.indexOf(LEFT_SLASH_CHAR));
 		
-		Integer index = indexCommilla.filter(elem -> elem != -1).orElse(0);
+		var index = indexCommilla.filter(elem -> elem != -1).orElse(0);
 		
 		tratedValue = tratedValue.substring(0, index);
 		 

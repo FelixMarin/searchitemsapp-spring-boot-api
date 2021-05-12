@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.Query;
-
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -53,7 +51,7 @@ public class CompanyDaoImpl extends AbstractDao implements CompanyDao {
 
 		List<CompanyDto> listDto = Lists.newArrayList(); 
 		
-		Query q = getEntityManager().createQuery(environment
+		var q = getEntityManager().createQuery(environment
 				.getProperty("flow.value.empresa.select.lista.empresas.by.empresa.y.categoria"));		
 		
 		q.setParameter(environment.getProperty("flow.value.categoria.didEmpresa.key"), empresaDto.getDid());	

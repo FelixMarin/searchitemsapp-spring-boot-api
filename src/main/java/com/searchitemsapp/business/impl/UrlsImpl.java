@@ -11,7 +11,6 @@ import com.google.common.collect.Lists;
 import com.searchitemsapp.business.Products;
 import com.searchitemsapp.business.SelectorsCss;
 import com.searchitemsapp.business.Urls;
-import com.searchitemsapp.company.Company;
 import com.searchitemsapp.company.factory.CompaniesGroup;
 import com.searchitemsapp.dao.UrlDao;
 import com.searchitemsapp.dto.CategoryDto;
@@ -51,11 +50,11 @@ public class UrlsImpl implements Urls {
 				urlDto.setSelectores(selectorsCss
 						.addCssSelectors(urlDto, listAllCssSelector));
 				
-				Company company = companiesGroup.getInstance(urlDto.getDidEmpresa());
-				String refinedProductName = company.replaceCharacters(productsInParametersDto.getProduct());
+				var company = companiesGroup.getInstance(urlDto.getDidEmpresa());
+				var refinedProductName = company.replaceCharacters(productsInParametersDto.getProduct());
 				refinedProductName = products.manageProductName(refinedProductName);
 
-				String urlAux = urlDto.getNomUrl();
+				var urlAux = urlDto.getNomUrl();
 				urlAux = urlAux.replace(Constants.WILDCARD.getValue(), refinedProductName);
 				urlDto.setNomUrl(urlAux); 
 				listResultUrlDto.add(urlDto);

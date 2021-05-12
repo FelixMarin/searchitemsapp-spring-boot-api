@@ -22,11 +22,11 @@ class TimeAccessFilterTest {
 
 	@Test
 	void testDoFilterInternalHttpServletRequestHttpServletResponseFilterChain() throws ServletException, IOException {
-		TimeAccessFilter  timeAccessFilter = new  TimeAccessFilter();
+		var  timeAccessFilter = new  TimeAccessFilter();
 
-		HttpServletRequest request = mock(HttpServletRequest.class);
-		HttpServletResponse response = mock(HttpServletResponse.class);
-		FilterChain filterChain = mock(FilterChain.class);
+		var request = mock(HttpServletRequest.class);
+		var response = mock(HttpServletResponse.class);
+		var filterChain = mock(FilterChain.class);
 		when(response.getStatus()).thenReturn(200);
 		timeAccessFilter.doFilter(request, response, filterChain);
 		

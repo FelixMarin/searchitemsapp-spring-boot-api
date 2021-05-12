@@ -34,9 +34,9 @@ public class Consum implements Company {
 			throws InterruptedException  {
 		
 		webDriver.get(strUrl);
-		WebDriverWait wait = new WebDriverWait(webDriver, 50);
+		var wait = new WebDriverWait(webDriver, 50);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("onetrust-accept-btn-handler"))).click();
-		String res = webDriver.getPageSource();
+		var res = webDriver.getPageSource();
 		webDriver.close();
 		return res;
 	}

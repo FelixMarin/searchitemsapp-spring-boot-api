@@ -21,9 +21,9 @@ class SimplyTest {
 
 	@Test
 	void testGetUrls() {
-		final String baseUri = "https://www.simply.es/";
+		final var baseUri = "https://www.simply.es/";
 		
-		UrlDto urlDto = UrlDto.builder()
+		var urlDto = UrlDto.builder()
 				.didEmpresa(114l)
 				.nomUrl(baseUri)
 				.build();

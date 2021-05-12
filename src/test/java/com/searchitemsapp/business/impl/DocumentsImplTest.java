@@ -30,8 +30,8 @@ class DocumentsImplTest {
 	
 	@Test
 	void testUrlsPaginacion() throws MalformedURLException {
-		Document jsoupDoc = Document.createShell("");
-		UrlDto urlDto = UrlDto.builder().nomUrl("https://www.dia.es/compra-online/search?q=miel%3Aprice-asc&page=0&disp=").build();
+		var jsoupDoc = Document.createShell("");
+		var urlDto = UrlDto.builder().nomUrl("https://www.dia.es/compra-online/search?q=miel%3Aprice-asc&page=0&disp=").build();
 		List<String> listUrls = document.urlsPaginacion(jsoupDoc, urlDto, 101l);
 		assertTrue(listUrls.isEmpty());
 	}
@@ -40,13 +40,13 @@ class DocumentsImplTest {
 	void testGetHtmlDocument() throws IOException, URISyntaxException, InterruptedException, JSONException {
 		CssSelectorsDto selectores = CssSelectorsDto.builder().selPaginacion("0|0").build();
 		
-		UrlDto urlDto = UrlDto.builder()
+		var urlDto = UrlDto.builder()
 				.nomUrl("https://www.dia.es/compra-online/search?q=miel%3Aprice-asc&page=0&disp=")
 				.didEmpresa(105l).selectores(selectores).build();
 		List<Document> listDocuments = document.getHtmlDocument(urlDto, "miel", webDriverManager);
 		assertFalse(listDocuments.isEmpty());
 		
-		UrlDto urlDtoDyn = UrlDto.builder()
+		var urlDtoDyn = UrlDto.builder()
 				.nomUrl("https://www.hipercor.es/supermercado/buscar/1/?term=miel&type_ahead_tab=panel_all&sort=mostSell")
 				.didEmpresa(103l).selectores(selectores).build();
 		

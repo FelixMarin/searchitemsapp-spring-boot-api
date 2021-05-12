@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.Query;
-
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +33,7 @@ public class UrlDaoImpl extends AbstractDao implements UrlDao {
 			final String idsEmpresas) 
 			throws IOException {
 		
-		String strIdsEmpresas =Constants.ALL.getValue().equalsIgnoreCase(idsEmpresas)?
+		var strIdsEmpresas =Constants.ALL.getValue().equalsIgnoreCase(idsEmpresas)?
 				environment.getProperty("flow.value.all.id.empresa"):idsEmpresas;
 		
 		String[] arIdsEpresas = tokenizeString(strIdsEmpresas, Constants.COMMA.getValue());
@@ -56,7 +54,7 @@ public class UrlDaoImpl extends AbstractDao implements UrlDao {
 
 		List<UrlDto> listDto = Lists.newArrayList(); 
 		
-		Query q = getEntityManager().createNativeQuery(environment
+		var q = getEntityManager().createNativeQuery(environment
 				.getProperty("flow.value.url.select.url.by.pais.categoria"));	
 		
 		q.setParameter(environment.getProperty("flow.value.empresa.didCategoria.key"), didCategoria);

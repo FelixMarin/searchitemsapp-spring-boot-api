@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.codehaus.jettison.json.JSONException;
-import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.openqa.selenium.WebDriver;
@@ -48,7 +47,7 @@ public class DocumentsImpl implements Documents {
 					InterruptedException, JSONException {
 
     	List<Document> listDocuments = Lists.newArrayList(); 
-		Company company = companiesGroup.getInstance(urlDto.getDidEmpresa()); 
+		var company = companiesGroup.getInstance(urlDto.getDidEmpresa()); 
 		Optional<WebDriver> opWebDriver = Optional.empty();
 		Document document;
 
@@ -89,8 +88,8 @@ public class DocumentsImpl implements Documents {
 					throws InterruptedException, URISyntaxException, IOException {
 	
 		if(company.isDynamic() && opWebDriver.isPresent()) {
-			String dynamicContent = webDriverManager.getDynamicHtmlContentSync(opWebDriver.get(),externalProductURL, company.getId());
-			String externalProductoURI = new URL(externalProductURL).toURI().toString();
+			var dynamicContent = webDriverManager.getDynamicHtmlContentSync(opWebDriver.get(),externalProductURL, company.getId());
+			var externalProductoURI = new URL(externalProductURL).toURI().toString();
 			return Jsoup.parse(dynamicContent, externalProductoURI);
 		}
 		
@@ -100,7 +99,7 @@ public class DocumentsImpl implements Documents {
 	private Document getDocumentAsync(String externalProductURL, 
 			Company company, String requestProductName) throws IOException {
 		
-		Response httpResponse = company.getJsoupConnection(externalProductURL, requestProductName).execute();
+		var httpResponse = company.getJsoupConnection(externalProductURL, requestProductName).execute();
 		return company.getJsoupDocument(httpResponse, externalProductURL);
 	}
 }

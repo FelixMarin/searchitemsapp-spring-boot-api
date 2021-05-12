@@ -58,7 +58,7 @@ public class WebDriverManagerImpl implements WebDriverManager {
 	}
 	
 	public void openWindow(WebDriver elem) {
-		JavascriptExecutor jse = (JavascriptExecutor)elem;
+		var jse = (JavascriptExecutor)elem;
 		jse.executeScript("window.open('about:blank','_blank');");
 		List<String> tabs = Lists.newArrayList(elem.getWindowHandles());
 		elem.switchTo().window(tabs.get(elem.getWindowHandles().size()-1));

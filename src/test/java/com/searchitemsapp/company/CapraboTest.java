@@ -28,9 +28,9 @@ class CapraboTest {
 
 	@Test
 	void testGetUrls() throws MalformedURLException {
-		final String baseUri = "https://www.carritus.com/tienda/super/caprabo/cp/08034/buscar/{1}/1/200/pr_asc";
-		Document document = Document.createShell(baseUri);
-		UrlDto urlDto = UrlDto.builder().build();
+		final var baseUri = "https://www.carritus.com/tienda/super/caprabo/cp/08034/buscar/{1}/1/200/pr_asc";
+		var document = Document.createShell(baseUri);
+		var urlDto = UrlDto.builder().build();
 		List<String> res = caprabo.getUrls(document, urlDto);
 		assertEquals(0, res.size());
 	}

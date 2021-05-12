@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dao.UserDao;
-import com.searchitemsapp.dto.UserDto;
 import com.searchitemsapp.exception.ResourceNotFoundException;
 
 @Service
@@ -32,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) {
 		
 		try {
-			UserDto user = userDao.findByUserName(username);
+			var user = userDao.findByUserName(username);
 			List<GrantedAuthority> authorities = Lists.newArrayList();		
 			
 			user.getRoles().forEach(role -> 

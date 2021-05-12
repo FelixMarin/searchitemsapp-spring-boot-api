@@ -22,9 +22,9 @@ class EroskiTest {
 
 	@Test
 	void testGetUrls() throws MalformedURLException {
-		final String baseUri = "https://supermercado.eroski.es/";
+		final var baseUri = "https://supermercado.eroski.es/";
 		
-		UrlDto urlDto = UrlDto.builder()
+		var urlDto = UrlDto.builder()
 				.didEmpresa(116l)
 				.nomUrl(baseUri)
 				.build();

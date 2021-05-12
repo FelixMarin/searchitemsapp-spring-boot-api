@@ -14,7 +14,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringRunner.class)
@@ -30,12 +29,12 @@ class LiveSearchControllerTest {
 	@Test
 	void testLiveSearchProduct() throws Exception {
 
-		 MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/product/LE")
+		var result = mvc.perform(MockMvcRequestBuilders.get("/product/LE")
 				 .accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andReturn();
 		 
-		String resultado = result.getResponse().getContentAsString();
+		var resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
 	}
 }

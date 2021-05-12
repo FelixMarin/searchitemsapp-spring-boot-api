@@ -28,14 +28,14 @@ public class Eroski implements Company {
 	public List<String> getUrls(final Document document, final UrlDto urlDto) 
 			throws MalformedURLException {
 		
-		String urlBase = urlDto.getNomUrl();
+		var urlBase = urlDto.getNomUrl();
 	
-		int relsultLength = NumberUtils.toInt(environment.getProperty("flow.value.paginacion.url.eroski"));
+		var relsultLength = NumberUtils.toInt(environment.getProperty("flow.value.paginacion.url.eroski"));
 	
 		List<String> urls = Lists.newArrayList();
 		urls.add(urlBase);
 
-		for (int i = 1; i <= 20; i++) {
+		for (var i = 1; i <= 20; i++) {
 			urls.add(urlBase.replace(EQUALS_ZERO_AMPERSAND, Constants.EQUALS.getValue().concat(String.valueOf(i).concat(Constants.AMPERSAND.getValue()))));
 		}
 	
@@ -49,10 +49,10 @@ public class Eroski implements Company {
 	@Override
 	public String replaceCharacters(final String productName) {
 		
-		String productoTratado = productName
+		var productoTratado = productName
 				.replace(Constants.ENIE_MIN.getValue(), Constants.ENIE_EROSKI.getValue());
 		 
-		for (int i = 0; i < ARRAY_TILDES.length; i++) {
+		for (var i = 0; i < ARRAY_TILDES.length; i++) {
 			productoTratado = productoTratado
 					.replace(ARRAY_TILDES_NORMALES_MIN[i], ARRAY_TILDES[i]);
 		}

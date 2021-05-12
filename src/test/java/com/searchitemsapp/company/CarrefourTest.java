@@ -9,9 +9,7 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 import org.assertj.core.util.Lists;
-import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +29,11 @@ class CarrefourTest {
 	
 	@Test
 	void testGetUrls() throws MalformedURLException {
-		final String baseUri = "https://www.carrefour.es/supermercado/c?No=1&Ns=product.salepointActivePrice_004320%7C0%7C%7Cproduct.description%7C0&Ntt={1}&sb=true";
-		Document document = Document.createShell(baseUri);
-		Element element = document.getAllElements().first();
-		CssSelectorsDto cssSelectorsDto = CssSelectorsDto.builder().didEmpresa(105l).selPaginacion("a|href").build();
-		UrlDto urlDto = UrlDto.builder().didEmpresa(105l)
+		final var baseUri = "https://www.carrefour.es/supermercado/c?No=1&Ns=product.salepointActivePrice_004320%7C0%7C%7Cproduct.description%7C0&Ntt={1}&sb=true";
+		var document = Document.createShell(baseUri);
+		var element = document.getAllElements().first();
+		var cssSelectorsDto = CssSelectorsDto.builder().didEmpresa(105l).selPaginacion("a|href").build();
+		var urlDto = UrlDto.builder().didEmpresa(105l)
 			.selectores(cssSelectorsDto).nomUrl(baseUri).build();
 		element.setBaseUri(baseUri);
 		element.getElementsByTag("body")
@@ -51,16 +49,16 @@ class CarrefourTest {
 	
 	@Test
 	void testGetJsoupConnection() throws MalformedURLException {
-		final String baseUri = "https://www.carrefour.es/supermercado/c?No=1&Ns=product.salepointActivePrice_004320%7C0%7C%7Cproduct.description%7C0&Ntt=miel&sb=true";
-		Connection res = carrefour.getJsoupConnection(baseUri, "miel");
+		final var baseUri = "https://www.carrefour.es/supermercado/c?No=1&Ns=product.salepointActivePrice_004320%7C0%7C%7Cproduct.description%7C0&Ntt=miel&sb=true";
+		var res = carrefour.getJsoupConnection(baseUri, "miel");
 		assertNotNull(res.response());
 	}
 
 	@Test
 	void testGetJsoupDocument() throws IOException {
-		final String baseUri = "https://www.carrefour.es/supermercado/c?No=1&Ns=product.salepointActivePrice_004320%7C0%7C%7Cproduct.description%7C0&Ntt=miel&sb=true";
-		Connection res = carrefour.getJsoupConnection(baseUri, "miel");
-		Document document = carrefour.getJsoupDocument(res.execute(), baseUri);
+		final var baseUri = "https://www.carrefour.es/supermercado/c?No=1&Ns=product.salepointActivePrice_004320%7C0%7C%7Cproduct.description%7C0&Ntt=miel&sb=true";
+		var res = carrefour.getJsoupConnection(baseUri, "miel");
+		var document = carrefour.getJsoupDocument(res.execute(), baseUri);
 		assertNotNull(document);
 	}
 
@@ -71,36 +69,36 @@ class CarrefourTest {
 
 	@Test
 	void testRemoveInitialBrand() {
-		String espected = "Remove Initial Brand ";
+		var espected = "Remove Initial Brand ";
 		assertEquals(espected, carrefour.removeInitialBrand(espected));
 	}
 
 	@Test
 	void testReplaceCharacters() {
-		String espected = "Replace Characters";
+		var espected = "Replace Characters";
 		assertEquals(espected, carrefour.replaceCharacters(espected));
 	}
 
 	@Test
 	void testGetAllUrlsToSearch() {
-		ProductDto product = ProductDto.builder().nomUrlAllProducts("").build();
+		var product = ProductDto.builder().nomUrlAllProducts("").build();
 		assertEquals("", carrefour.getAllUrlsToSearch(product));
 	}
 
 	@Test
 	void testSelectorTextExtractor() throws MalformedURLException {
-		final String baseUri = "https://www.carrefour.es";
-		final String cssSelector = "a|href";
+		final var baseUri = "https://www.carrefour.es";
+		final var cssSelector = "a|href";
 
-		Document document = Document.createShell(baseUri);
-		Element element = document.getAllElements().first();
+		var document = Document.createShell(baseUri);
+		var element = document.getAllElements().first();
 		element.setBaseUri(baseUri);
 		element.getElementsByTag("body")
 			.append("<div><a href='test'></a></div>");
 		List<String> list = Lists.newArrayList();
 		list.add("a");
 		list.add("href");		
-		String res = carrefour.selectorTextExtractor(element, list, cssSelector);
+		var res = carrefour.selectorTextExtractor(element, list, cssSelector);
 		assertNotNull(res);
 		assertEquals("test", res); 
 		

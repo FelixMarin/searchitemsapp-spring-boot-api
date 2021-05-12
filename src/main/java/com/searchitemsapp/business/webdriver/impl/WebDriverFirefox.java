@@ -48,8 +48,8 @@ public class WebDriverFirefox {
 			System.setProperty(environment.getProperty("flow.value.firefox.driver"), driverPath);			
 		}
 		
-		FirefoxBinary binary = new FirefoxBinary(new File(executablePath));
-		FirefoxOptions options = new FirefoxOptions();
+		var binary = new FirefoxBinary(new File(executablePath));
+		var options = new FirefoxOptions();
 		options.setBinary(binary);
 		options.addArguments("-headless");
 		options.addArguments("enable-automation");
@@ -58,7 +58,7 @@ public class WebDriverFirefox {
 		options.addArguments("-disable-dev-shm-usage");
 		options.addArguments("-disable-browser-side-navigation");
 		options.addArguments("-disable-gpu");
-		DesiredCapabilities dc = DesiredCapabilities.firefox();
+		var dc = DesiredCapabilities.firefox();
 		dc.setCapability(FirefoxOptions.FIREFOX_OPTIONS, options.setBinary(binary));
 		options.merge(dc);
 		

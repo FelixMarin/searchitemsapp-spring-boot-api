@@ -39,7 +39,7 @@ class RolesDtoTest {
 
 	@Test
 	void testCreateAt() {
-		LocalDateTime time = LocalDateTime.now();
+		var time = LocalDateTime.now();
 		roles.setCreateAt(time);
 		assertEquals(time,roles.getCreateAt());
 	}

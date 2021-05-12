@@ -8,9 +8,7 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 import org.assertj.core.util.Lists;
-import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +30,9 @@ class MercadonaTest {
 	
 	@Test
 	void testGetUrls() throws MalformedURLException {
-		final String baseUri = "https://mercadona.es/";
+		final var baseUri = "https://mercadona.es/";
 		
-		UrlDto urlDto = UrlDto.builder()
+		var urlDto = UrlDto.builder()
 				.didEmpresa(101l)
 				.nomUrl(baseUri)
 				.build();
@@ -50,22 +48,22 @@ class MercadonaTest {
 
 	@Test
 	void testGetJsoupConnection() {
-		final String productName = "miel";
-		Connection con = mercadona.getJsoupConnection(baseUrl, productName);
+		final var productName = "miel";
+		var con = mercadona.getJsoupConnection(baseUrl, productName);
 		assertNotNull(con.response());
 	}
 
 	@Test
 	void testGetJsoupDocument() throws IOException {
-		String productName = "arroz";
-		Connection con = mercadona.getJsoupConnection(baseUrl, productName);
-		Document document = mercadona.getJsoupDocument(con.execute(), baseUrl);
+		var productName = "arroz";
+		var con = mercadona.getJsoupConnection(baseUrl, productName);
+		var document = mercadona.getJsoupDocument(con.execute(), baseUrl);
 		assertNotNull(document);
 	}
 
 	@Test
 	void testGetAllUrlsToSearch() {
-		ProductDto product = ProductDto.builder()
+		var product = ProductDto.builder()
 				.nomProducto("test product name")
 				.imagen("image test mock")
 				.build();
@@ -76,20 +74,19 @@ class MercadonaTest {
 
 	@Test
 	void testSelectorTextExtractor() {
-		final String baseUri = "https://www.mercadona.es";
-		final String cssSelector = "a";
+		final var baseUri = "https://www.mercadona.es";
+		final var cssSelector = "a";
 
-		Document document = Document.createShell(baseUri);
-		Element element = document.getAllElements().first();
+		var document = Document.createShell(baseUri);
+		var element = document.getAllElements().first();
 		element.setBaseUri(baseUri);
 		element.getElementsByTag("body")
 			.append("<div class='prices-price'><a href='test'><p>test</p></a></div>");
 		List<String> list = Lists.newArrayList();
 		list.add("a");
 		list.add("href");		
-		String res = mercadona.selectorTextExtractor(element, list, cssSelector);
+		var res = mercadona.selectorTextExtractor(element, list, cssSelector);
 		assertNotNull(res);
 		assertEquals("test", res); 
 	}
-
 }

@@ -9,7 +9,6 @@ import java.util.Optional;
 import org.apache.commons.lang3.ObjectUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -52,7 +51,7 @@ public class ProductsBuilderImpl implements ProductBuilder {
     		.filter(ObjectUtils::allNotNull)
 	    	.forEach(document -> {
 	    		
-	            Elements documentElements = patterns.selectScrapPattern(document,
+	    		var documentElements = patterns.selectScrapPattern(document,
 	            		urlDto.getSelectores().getScrapPattern(), 
 	            		urlDto.getSelectores().getScrapNoPattern()); 
 	            
@@ -61,7 +60,7 @@ public class ProductsBuilderImpl implements ProductBuilder {
 		            .forEach(element -> {
 		            	
 		            	try { 
-		            		ProductDto productDto = products.addElementsToProducts(element, urlDto, productsInParametersDto.getSort());
+		            		var productDto = products.addElementsToProducts(element, urlDto, productsInParametersDto.getSort());
 		            		
 		            		Optional<ProductDto> opt = products
 		            				.checkProduct(productsInParametersDto.getProduct(), 

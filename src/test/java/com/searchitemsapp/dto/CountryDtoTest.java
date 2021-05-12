@@ -48,14 +48,14 @@ class CountryDtoTest {
 
 	@Test
 	void testEmpresas() {
-		CompanyDto lsDto = CompanyDto.builder().did(101l).build();
+		var lsDto = CompanyDto.builder().did(101l).build();
 		country.setEmpresas(lsDto);;
 		assertEquals(101l,country.getEmpresas().getDid());
 	}
 	
 	@Test
 	void testProductos() {
-		LiveSearchDto lsDto = LiveSearchDto.builder().did(101l).build();
+		var lsDto = LiveSearchDto.builder().did(101l).build();
 		country.setProductos(lsDto);
 		assertEquals(101l,country.getProductos().getDid());
 	}

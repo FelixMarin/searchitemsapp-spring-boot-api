@@ -28,7 +28,7 @@ class UrlsImplTest {
 	void testReplaceUrlWildcard() throws IOException {
 		List<CssSelectorsDto> listAllCssSelector = Lists.newArrayList();
 		listAllCssSelector.add(CssSelectorsDto.builder().didEmpresa(105l).build());
-		SearchItemsParamsDto searchedValue = SearchItemsParamsDto.builder().product("miel").sort("1")
+		var searchedValue = SearchItemsParamsDto.builder().product("miel").sort("1")
 				.pipedEnterprises("105").countryId("101").categoryId("101").build();
 		List<UrlDto>res = urls.replaceUrlWildcard(searchedValue, listAllCssSelector);
 		assertNotNull(res);

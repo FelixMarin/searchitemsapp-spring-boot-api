@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -30,11 +29,11 @@ public class JpaConfig {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        final var em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(getDataSource());
         em.setPackagesToScan("com.searchitemsapp.entities");
 
-        final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        final var vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         em.setJpaProperties(additionalProperties());
 
@@ -43,7 +42,7 @@ public class JpaConfig {
     
 	@Bean
     public DataSource getDataSource() {
-        DataSourceBuilder<?> dataSourceBuilder = DataSourceBuilder.create();
+		var dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName(env.getProperty("hibernate.connection.driver_class"));
         dataSourceBuilder.url(env.getProperty("hibernate.connection.url"));
         dataSourceBuilder.username(env.getProperty("hibernate.connection.username"));

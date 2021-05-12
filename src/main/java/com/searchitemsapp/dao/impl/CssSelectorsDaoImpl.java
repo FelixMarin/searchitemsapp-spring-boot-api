@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.Query;
-
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +17,6 @@ import com.searchitemsapp.repository.CssSelectorsRepository;
 
 import lombok.AllArgsConstructor;
 
-@SuppressWarnings("unchecked")
 @Component
 @AllArgsConstructor
 public class CssSelectorsDaoImpl extends AbstractDao implements CssSelectorsDao {
@@ -49,7 +46,7 @@ public class CssSelectorsDaoImpl extends AbstractDao implements CssSelectorsDao 
 
 		List<CssSelectorsDto> listDto = Lists.newArrayList(); 
 
-		Query q = getEntityManager().createQuery(environment
+		var q = getEntityManager().createQuery(environment
 				.getProperty("flow.value.selectorescss.select.by.didEmpresa"), 
 				TbSiaSelectoresCss.class);
 		

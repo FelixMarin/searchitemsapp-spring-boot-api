@@ -40,7 +40,7 @@ class CssSelectorsDaoImplTest {
 
 	@Test
 	void testFindByDid() throws IOException, ResourceNotFoundException {
-		CssSelectorsDto selector = CssSelectorsDto.builder().did(101l).build();
+		var selector = CssSelectorsDto.builder().did(101l).build();
 		Optional<CssSelectorsDto> resultado = dao.findByDid(selector);
 		assertTrue(resultado.isPresent());
 		assertEquals(101l, resultado.get().getDidEmpresa());
@@ -48,7 +48,7 @@ class CssSelectorsDaoImplTest {
 
 	@Test
 	void testFindByTbSia() throws IOException {
-		CompanyDto empresaDto = CompanyDto.builder().did(101l).build();
+		var empresaDto = CompanyDto.builder().did(101l).build();
 		List<CssSelectorsDto> listDto = dao.findByTbSia(empresaDto);
 		assertFalse(listDto.isEmpty());
 	}

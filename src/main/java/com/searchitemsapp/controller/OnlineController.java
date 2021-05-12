@@ -22,7 +22,7 @@ public class OnlineController {
 	
 	@GetMapping(value = MAIN, produces = "application/html")
 	public @ResponseBody ModelAndView  index() {
-	    ModelAndView modelAndView = new ModelAndView();
+		var modelAndView = new ModelAndView();
 	    modelAndView.setViewName("main");
 	    return modelAndView;
 	}
@@ -30,14 +30,14 @@ public class OnlineController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = BOARD, produces = "application/html")
 	public @ResponseBody ModelAndView  dashBoard() {
-	    ModelAndView modelAndView = new ModelAndView();
+		var modelAndView = new ModelAndView();
 	    modelAndView.setViewName("board");
 	    return modelAndView;
 	}
 	
 	@GetMapping(value = LOGIN, produces = "application/html")
 	public @ResponseBody ModelAndView  loginPage() {
-	    ModelAndView modelAndView = new ModelAndView();
+		var modelAndView = new ModelAndView();
 	    modelAndView.setViewName("login");
 	    return modelAndView;
 	}

@@ -25,8 +25,8 @@ class PricesImplTest {
 	@Test
 	void testSortProductsByPrice() {
 		List<ProductDto> products = Lists.newArrayList();
-		ProductDto product1 = ProductDto.builder().ordenacion(1).precio("1.00|").build();
-		ProductDto product2 = ProductDto.builder().ordenacion(1).precio("2.00").build();
+		var product1 = ProductDto.builder().ordenacion(1).precio("1.00|").build();
+		var product2 = ProductDto.builder().ordenacion(1).precio("2.00").build();
 		products.add(product1);
 		products.add(product2);		
 		List<ProductDto> productsResult = price.sortProductsByPrice(products);
@@ -36,17 +36,17 @@ class PricesImplTest {
 
 	@Test
 	void testCompare() {
-		ProductDto product1 = ProductDto.builder().ordenacion(1).precio("1.00").build();
-		ProductDto product2 = ProductDto.builder().ordenacion(1).precio("0.50").build();		
+		var product1 = ProductDto.builder().ordenacion(1).precio("1.00").build();
+		var product2 = ProductDto.builder().ordenacion(1).precio("0.50").build();		
 		int res = price.compare(product1, product2);
 		assertEquals(1, res);
 	}
  
 	@Test
 	void testPriceComparator() {
-		ProductDto product1 = ProductDto.builder().ordenacion(1).precio("0.50").build();
-		ProductDto product2 = ProductDto.builder().ordenacion(1).precio("0.50").build();
-		int res = price.priceComparator(product1, product2);
+		var product1 = ProductDto.builder().ordenacion(1).precio("0.50").build();
+		var product2 = ProductDto.builder().ordenacion(1).precio("0.50").build();
+		var res = price.priceComparator(product1, product2);
 		assertEquals(0, res);
 		
 		product1 = ProductDto.builder().ordenacion(2).precio("1").precioKilo("1").build();

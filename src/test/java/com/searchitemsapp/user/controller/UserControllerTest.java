@@ -25,11 +25,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.Lists;
 import com.searchitemsapp.dto.UserDto;
@@ -48,7 +46,7 @@ class UserControllerTest {
 	
     @Autowired
     private MockMvc mvc;
-    
+    	
     @Mock
     private Principal principal;
     
@@ -60,61 +58,61 @@ class UserControllerTest {
 	void testSaveUser() throws Exception {
 		
 		List<TbSiaRoles> roles = Lists.newArrayList();
-		TbSiaRoles entity = new TbSiaRoles();
+		var entity = new TbSiaRoles();
 		entity.setId(2l);
 		entity.setRoleName("USER");
 		roles.add(entity);
-		UserDto user = UserDto.builder().id(986l)
+		var user = UserDto.builder().id(986l)
 				.username(username)
 				.password(password)
 				.roles(roles).build();
 
-	    ObjectMapper mapper = new ObjectMapper();
+		var mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-	    String requestJson=ow.writeValueAsString(user);
+	    var ow = mapper.writer().withDefaultPrettyPrinter();
+	    var requestJson=ow.writeValueAsString(user);
 	     
-	    MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/user/save")
+	    var result = mvc.perform(MockMvcRequestBuilders.post("/user/save")
 				 .contentType(APPLICATION_JSON_UTF8)
 				 .content(requestJson))
 				.andExpect(status().isOk())
 				.andReturn();
 		 
-		String resultado = result.getResponse().getContentAsString();
+		var resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
 	}
 	
 	@Test
 	void testFindAll() throws Exception {
-		 MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/user/all")
+		var result = mvc.perform(MockMvcRequestBuilders.get("/user/all")
 				 .accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andReturn();
 		 
-		String resultado = result.getResponse().getContentAsString();
+		var resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
 	}
 	
 	@Test
 	void testExistsUser() throws Exception {
 		
-		Principal user = mock(Principal.class);
+		var user = mock(Principal.class);
 		given(user.getName()).willReturn("user");
-		 MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/user/exists").principal(user))
+		var result = mvc.perform(MockMvcRequestBuilders.get("/user/exists").principal(user))
 				.andExpect(status().isOk()) 
 				.andReturn(); 
 		 
-		String resultado = result.getResponse().getContentAsString();
+		var resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
 	}
 	
 	@Test
 	void mailExists() throws Exception {
-		 MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/user/mailExists"))
+		var result = mvc.perform(MockMvcRequestBuilders.get("/user/mailExists"))
 					.andExpect(status().isOk()) 
 					.andReturn(); 
 			 
-			String resultado = result.getResponse().getContentAsString();
+		var resultado = result.getResponse().getContentAsString();
 			assertNotNull(resultado);
 	}
 
@@ -123,25 +121,25 @@ class UserControllerTest {
 	void testUpdateUser() throws Exception {
 		
 		List<TbSiaRoles> roles = Lists.newArrayList();
-		TbSiaRoles entity = new TbSiaRoles();
+		var entity = new TbSiaRoles();
 		entity.setId(3l);
 		entity.setRoleName("MANAGER");
 		roles.add(entity);
-		UserDto user = UserDto.builder().id(986l).email("mail@mail2.com")
+		var user = UserDto.builder().id(986l).email("mail@mail2.com")
 				.username(username).password(password).roles(roles).build();
 
-	    ObjectMapper mapper = new ObjectMapper();
+		var mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-	    String requestJson=ow.writeValueAsString(user);
+	    var ow = mapper.writer().withDefaultPrettyPrinter();
+	    var requestJson=ow.writeValueAsString(user);
 
-		MvcResult result = mvc.perform(MockMvcRequestBuilders.put("/user/update")
+	    var result = mvc.perform(MockMvcRequestBuilders.put("/user/update")
 				 .contentType(APPLICATION_JSON_UTF8)
 				 .content(requestJson))
 				.andExpect(status().isOk())
 				.andReturn();
 		 
-		String resultado = result.getResponse().getContentAsString();
+	    var resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
 		
 	}
@@ -150,25 +148,25 @@ class UserControllerTest {
 	@AfterClass
 	void testDeleteUser() throws Exception {
 		List<TbSiaRoles> roles = Lists.newArrayList();
-		TbSiaRoles entity = new TbSiaRoles();
+		var entity = new TbSiaRoles();
 		entity.setId(2l);
 		entity.setRoleName("USER");
 		roles.add(entity);
-		UserDto user = UserDto.builder().id(986l)
+		var user = UserDto.builder().id(986l)
 				.username(username).password(password).roles(roles).build();
 
-	    ObjectMapper mapper = new ObjectMapper();
+		var mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-	    String requestJson=ow.writeValueAsString(user);
+	    var ow = mapper.writer().withDefaultPrettyPrinter();
+	    var requestJson=ow.writeValueAsString(user);
 
-		MvcResult result = mvc.perform(MockMvcRequestBuilders.delete("/user/delete")
+	    var result = mvc.perform(MockMvcRequestBuilders.delete("/user/delete")
 				 .contentType(APPLICATION_JSON_UTF8)
 				 .content(requestJson))
 				.andExpect(status().isOk())
 				.andReturn();
 		 
-		String resultado = result.getResponse().getContentAsString();
+	    var resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
 	}
 }

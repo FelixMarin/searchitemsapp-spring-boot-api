@@ -23,7 +23,7 @@ public class TimeAccessFilter extends OncePerRequestFilter {
 
 		log.debug(">>>>> TimeAccessFilter... Open: 00:00 to 23:00");
 		
-		int hour = LocalDateTime.now().getHour();
+		var hour = LocalDateTime.now().getHour();
 		
 		if(0 >= hour && hour < 23) {
 			filterChain.doFilter(request, response);

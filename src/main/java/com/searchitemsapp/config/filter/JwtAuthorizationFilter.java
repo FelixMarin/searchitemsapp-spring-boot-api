@@ -39,14 +39,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 		throws IOException, ServletException {
 		
-		String authHeader = request.getHeader(AUTHORIZATION);
+		var authHeader = request.getHeader(AUTHORIZATION);
 		
 		if(jwtService.isBearer(authHeader)) {
 			log.debug(">>> FILTER JWT...");
 			List<GrantedAuthority> authorities = jwtService.roles(authHeader).stream()
 					.map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-			UsernamePasswordAuthenticationToken authentication =
-					new UsernamePasswordAuthenticationToken(jwtService.user(authHeader), null, authorities);
+			var authentication = new UsernamePasswordAuthenticationToken(jwtService.user(authHeader), null, authorities);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
 		

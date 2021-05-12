@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -47,7 +46,7 @@ public class SearchItemsServiceImpl implements SearchItemsService {
 	
 	public List<ProductDto> orderedByPriceProducts(SearchItemsParamsDto searchedParamsDto) {
 
-		ExecutorService executorService = Executors.newCachedThreadPool();
+		var executorService = Executors.newCachedThreadPool();
 		List<ProductDto> productsResult = Lists.newArrayList();
 
 		try {

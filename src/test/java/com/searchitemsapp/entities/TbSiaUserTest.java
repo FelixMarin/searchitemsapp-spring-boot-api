@@ -69,7 +69,7 @@ class TbSiaUserTest {
 
 	@Test
 	void testGetCreateAt() {
-		LocalDateTime time = LocalDateTime.now();
+		var time = LocalDateTime.now();
 		tbSiaUser.setCreateAt(time);
 		assertEquals(time,tbSiaUser.getCreateAt());
 	}

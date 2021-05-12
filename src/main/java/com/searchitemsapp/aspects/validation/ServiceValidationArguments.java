@@ -3,7 +3,6 @@ package com.searchitemsapp.aspects.validation;
 import java.util.Arrays;
 
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -29,7 +28,7 @@ public class ServiceValidationArguments {
     @Before("searchItems()")
     public void validateInputAgrsInService(JoinPoint jp) {
        
-    	Signature signature = jp.getSignature();
+    	var signature = jp.getSignature();
         MethodSignature mSignature = (MethodSignature) signature;
         Object[] args = jp.getArgs();        
         String[] stringArrayArgs = Arrays.copyOf(args, args.length, String[].class);

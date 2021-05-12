@@ -36,35 +36,35 @@ class BrandsDtoTest {
 
 	@Test
 	void testNomMarca() {
-		String nomMarca = "MERCADONA";
+		var nomMarca = "MERCADONA";
 		brand.setNomMarca(nomMarca);
 		assertEquals(nomMarca, brand.getNomMarca());
 	}
 
 	@Test
 	void testDidCatEmpresas() {
-		Long catEmpresa = 101l;
+		var catEmpresa = 101l;
 		brand.setDidCatEmpresas(catEmpresa);
 		assertEquals(catEmpresa, brand.getDidCatEmpresas());
 	}
 
 	@Test
 	void testNomCatEmpresas() {
-		String nomCatEmpresas = "SUP";
+		var nomCatEmpresas = "SUP";
 		brand.setNomCatEmpresas(nomCatEmpresas);
 		assertEquals(nomCatEmpresas, brand.getNomCatEmpresas());
 	}
 
 	@Test
 	void testDidPais() {
-		Long pais = 101l;
+		var pais = 101l;
 		brand.setDidPais(pais);
 		assertEquals(pais, brand.getDidPais());
 	}
 
 	@Test
 	void testNomPais() {
-		String nomCatEmpresas = "SPAIN";
+		var nomCatEmpresas = "SPAIN";
 		brand.setNomPais(nomCatEmpresas);
 		assertEquals(nomCatEmpresas, brand.getNomPais());
 	}

@@ -63,8 +63,8 @@ public class Mercadona implements Company {
 		Document responseDocument = null;
 		
 		try {
-			JSONObject jsonDocumentBody = new JSONObject(httpResponse.body()); 
-			String xmlDocumentBody = XML.toString(jsonDocumentBody);
+			var jsonDocumentBody = new JSONObject(httpResponse.body()); 
+			var xmlDocumentBody = XML.toString(jsonDocumentBody);
 			
 			if (xmlDocumentBody.isBlank()) {
 				return Document.createShell(xmlDocumentBody);
@@ -87,8 +87,8 @@ public class Mercadona implements Company {
 	
 	@Override
 	public String getAllUrlsToSearch(ProductDto productDto) {
-		String urlAll = environment.getProperty("flow.value.url.all");
-		String productoAux= productDto.getNomProducto().replace(StringUtils.SPACE, Constants.SPACE_URL.getValue());		
+		var urlAll = String.valueOf(environment.getProperty("flow.value.url.all"));
+		var productoAux= productDto.getNomProducto().replace(StringUtils.SPACE, Constants.SPACE_URL.getValue());		
 		productDto.setImagen(productDto.getImagen().replace(Constants.COMMA.getValue(), Constants.DOT.getValue()));
 		urlAll = Strings.isNotBlank(urlAll)?urlAll.concat(productoAux):productoAux;
 		return urlAll;

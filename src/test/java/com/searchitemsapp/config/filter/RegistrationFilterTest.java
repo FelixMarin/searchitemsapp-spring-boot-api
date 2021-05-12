@@ -23,11 +23,11 @@ class RegistrationFilterTest {
 
 	@Test
 	void testDoFilterInternal() throws ServletException, IOException {
-		RegistrationFilter registrationFilter = new RegistrationFilter();
+		var registrationFilter = new RegistrationFilter();
 
-		HttpServletRequest request = mock(HttpServletRequest.class);
-		HttpServletResponse response = mock(HttpServletResponse.class);
-		FilterChain filterChain = mock(FilterChain.class);
+		var request = mock(HttpServletRequest.class);
+		var response = mock(HttpServletResponse.class);
+		var filterChain = mock(FilterChain.class);
 		when(response.getStatus()).thenReturn(200);
 		registrationFilter.doFilter(request, response, filterChain);
 		

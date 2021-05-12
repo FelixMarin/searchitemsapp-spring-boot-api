@@ -40,7 +40,7 @@ class CountryDaoImplTest {
 
 	@Test
 	void testFindByDid() throws IOException, ResourceNotFoundException {
-		CountryDto country = CountryDto.builder().did(101l).build();
+		var country = CountryDto.builder().did(101l).build();
 		Optional<CountryDto> resultado = countryDao.findByDid(country);
 		assertTrue(resultado.isPresent());
 		assertEquals("SPAIN", resultado.get().getNomPais());

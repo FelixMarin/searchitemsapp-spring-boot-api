@@ -55,7 +55,7 @@ class ProductsBuilderImplTest {
 		builder.setPatterns(patterns);
 		builder.setProducts(products);
 		urlDto.setDidEmpresa(105l);
-		CssSelectorsDto cssSelector = CssSelectorsDto.builder().build();
+		var cssSelector = CssSelectorsDto.builder().build();
 		cssSelector.setSelPaginacion(".paginatorBottom li:nth-of-type(3) a|href");
 		cssSelector.setScrapPattern("div.space");
 		urlDto.setSelectores(cssSelector);

@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.assertj.core.util.Lists;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +31,11 @@ class ElCorteInglesTest {
 
 	@Test
 	void testGetUrls() throws MalformedURLException {
-		final String baseUri = "https://www.elcorteingles.es/supermercado/buscar/1/?term=miel&sort=priceAsc";
-		Document document = Document.createShell(baseUri);
-		Element element = document.getAllElements().first();
-		CssSelectorsDto cssSelectorsDto = CssSelectorsDto.builder().didEmpresa(111l).selPaginacion("a|href").build();
-		UrlDto urlDto = UrlDto.builder().didEmpresa(111l)
+		final var baseUri = "https://www.elcorteingles.es/supermercado/buscar/1/?term=miel&sort=priceAsc";
+		var document = Document.createShell(baseUri);
+		var element = document.getAllElements().first();
+		var cssSelectorsDto = CssSelectorsDto.builder().didEmpresa(111l).selPaginacion("a|href").build();
+		var urlDto = UrlDto.builder().didEmpresa(111l)
 			.selectores(cssSelectorsDto).nomUrl(baseUri).build();
 		element.setBaseUri(baseUri);
 		element.getElementsByTag("body")
@@ -52,11 +51,11 @@ class ElCorteInglesTest {
 
 	@Test
 	void testSelectorTextExtractor() {
-		final String baseUri = "https://www.elcorteingles.es";
-		final String cssSelector = "a.href";
+		final var baseUri = "https://www.elcorteingles.es";
+		final var cssSelector = "a.href";
 
-		Document document = Document.createShell(baseUri);
-		Element element = document.getAllElements().first();
+		var document = Document.createShell(baseUri);
+		var element = document.getAllElements().first();
 		element.setBaseUri(baseUri);
 		element.getElementsByTag("body")
 			.append("<div class='prices-price'><a href='test'><p>test</p></a></div>");

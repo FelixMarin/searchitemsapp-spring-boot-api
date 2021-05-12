@@ -36,14 +36,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean delete(UserDto user) throws ResourceNotFoundException {
-		UserDto userResult = userDao.findByUserName(user.getUsername());
+		var userResult = userDao.findByUserName(user.getUsername());
 		userDao.delete(userResult.getId());
 		return true;
 	}
 
 	@Override
 	public boolean update(UserDto user) throws ConfilctFoundException, ResourceNotFoundException {
-		UserDto userDto = userDao.findByUserName(user.getUsername());
+		var userDto = userDao.findByUserName(user.getUsername());
 		userDto.setUsername(user.getUsername());
 		userDto.setPassword(passwordEncoder.encode(user.getPassword()));
 		userDto.setEmail(user.getEmail());
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDto existsByUserName(String username) throws ResourceNotFoundException {
-		UserDto userOut = userDao.findByUserName(username);
+		var userOut = userDao.findByUserName(username);
 		userOut.setRoles(null);
 		return userOut;
 	}
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	public boolean mailExists(String mail) throws ResourceNotFoundException {
-		UserDto user = userDao.findByEmail(mail);		
+		var user = userDao.findByEmail(mail);		
 		return user.getEmail() != null;
 	}
 }

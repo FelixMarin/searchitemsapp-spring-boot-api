@@ -2,10 +2,7 @@ package com.searchitemsapp.business.impl;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.util.regex.Pattern;
-
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +21,14 @@ class PatternsImplTest {
 	@Test
 	void testSelectScrapPattern() {
 		String[] productsArray = {"leche", "de", "coco"};
-		Pattern pat =pattern.createPatternProduct(productsArray);
+		var pat =pattern.createPatternProduct(productsArray);
 		assertNotNull(pat);
 	}
 
 	@Test
 	void testCreatePatternProduct() {
-		Document document = Document.createShell("https://www.dia.es/compra-online/search?q={1}%3Aprice-asc&page=0&disp=");
-		Elements elements = pattern.selectScrapPattern(document, "div.space", null);
+		var document = Document.createShell("https://www.dia.es/compra-online/search?q={1}%3Aprice-asc&page=0&disp=");
+		var elements = pattern.selectScrapPattern(document, "div.space", null);
 		elements = pattern.selectScrapPattern(document, "div.space", "test");
 		assertNotNull(elements);
 	}

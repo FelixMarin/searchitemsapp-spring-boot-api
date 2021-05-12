@@ -26,18 +26,18 @@ public class Simply implements Company {
 	public List<String> getUrls(final Document document, final UrlDto urlDto) {
  
 		String urlAux;
-		int itemsToShow = 30;
-		int maxNumberOfUrls = 10;
-		int increment = 2;
+		var itemsToShow = 30;
+		var maxNumberOfUrls = 10;
+		var increment = 2;
 		
-		String urlBase = urlDto.getNomUrl();
+		var urlBase = urlDto.getNomUrl();
 		
-		int numresultados = NumberUtils.toInt(environment.getProperty("flow.value.paginacion.url.simply"));
+		var numresultados = NumberUtils.toInt(environment.getProperty("flow.value.paginacion.url.simply"));
 		
 		List<String> listaUrls = Lists.newArrayList();
 		listaUrls.add(urlBase);
 		
-		for (int i = 2; i <= maxNumberOfUrls; i++) {
+		for (var i = 2; i <= maxNumberOfUrls; i++) {
 			
 			urlAux = urlBase.replace(EQUALS_ONE_AMPERSAND, Constants.EQUALS.getValue().concat(String.valueOf(i).concat(Constants.AMPERSAND.getValue())));
 			

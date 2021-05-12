@@ -34,7 +34,7 @@ class ProductNameDaoImplTest {
 	
 	@Test
 	void testFindByDid() throws IOException, ResourceNotFoundException {
-		LiveSearchDto productName = LiveSearchDto.builder().did(101l).build();
+		var productName = LiveSearchDto.builder().did(101l).build();
 		Optional<LiveSearchDto> optional = dao.findByDid(productName);
 		assertTrue(optional.isPresent());
 		assertEquals(101l, optional.get().getDid());

@@ -37,7 +37,7 @@ public class PatternsImpl implements Patterns {
 		List<String> wordsProductList = Arrays.asList(wordsProduct);  
 		wordsProductList.forEach(singleWord -> wordsList.add(singleWord.toUpperCase()));
 		
-		StringBuilder patternBuilder = new StringBuilder(10);
+		var patternBuilder = new StringBuilder(10);
 		
 		patternBuilder.append("(");
 		

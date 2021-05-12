@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +35,8 @@ class ProductsImplTest {
 	@Test
 	void testCheckProduct() throws IOException, ResourceNotFoundException {
 		
-		String melon = "melón";
-		String sandia = "sandia";
+		var melon = "melón";
+		var sandia = "sandia";
 		
 		Optional<ProductDto> optional = product.checkProduct(sandia, 101l, 
 				ProductDto.builder().nomProducto(sandia).build(), patterns);
@@ -54,9 +53,9 @@ class ProductsImplTest {
 
 	@Test
 	void testRemoveTildes() {
-		String expected = "melon";
-		String search = "melón";
-		String actual = product.removeTildes(search);
+		var expected = "melon";
+		var search = "melón";
+		var actual = product.removeTildes(search);
 		assertEquals(actual, expected);
 		
 		expected = "españa";
@@ -68,10 +67,10 @@ class ProductsImplTest {
 	@Test
 	void testAddElementsToProducts() throws IOException {
 		
-		final String baseUri = "https://www.dia.es/compra-online/search?q=miel%3Aprice-asc&page=0&disp=";
+		final var baseUri = "https://www.dia.es/compra-online/search?q=miel%3Aprice-asc&page=0&disp=";
 		
-		Document document = Document.createShell(baseUri);
-		Element element = document.getAllElements().first();
+		var document = Document.createShell(baseUri);
+		var element = document.getAllElements().first();
 		
 		CssSelectorsDto selectoresDto = CssSelectorsDto.builder()
 				.selImage("test")

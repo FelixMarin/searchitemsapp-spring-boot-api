@@ -30,7 +30,7 @@ public interface Company {
 	
 	default Connection getJsoupConnection(String externalProductURL, String requestProductName) throws MalformedURLException {
 		
-		URL url = new URL(externalProductURL);
+		var url = new URL(externalProductURL);
 		
 		return Jsoup.connect(externalProductURL)
 				.userAgent(Constants.USER_AGENT.getValue())
@@ -59,7 +59,7 @@ public interface Company {
 			throws InterruptedException {
 		
 		webDriver.navigate().to(strUrl);
-		JavascriptExecutor js = (JavascriptExecutor) webDriver;
+		var js = (JavascriptExecutor) webDriver;
 		js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 		return webDriver.getPageSource();
 	}
@@ -67,7 +67,7 @@ public interface Company {
 	default String removeInitialBrand(String productName) {
 		String[] splitedProductName = productName.trim().split(StringUtils.SPACE);
 
-		StringBuilder stringBuilder = new StringBuilder(10);
+		var stringBuilder = new StringBuilder(10);
 
 		Arrays.asList(splitedProductName).stream()
 				.forEach(elem -> stringBuilder.append(elem).append(StringUtils.SPACE));

@@ -1,6 +1,6 @@
 package com.searchitemsapp.controller;
-import static org.mockito.BDDMockito.given;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -16,7 +16,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringRunner.class)
@@ -32,12 +31,12 @@ class SecurityControllerTest {
 	@WithMockUser(username = "user", password = "User1", roles = "USER")
 	void user() throws Exception {
 		
-		Principal user = mock(Principal.class);
+		var user = mock(Principal.class);
 		given(user.getName()).willReturn("user");
-		MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/security/user").principal(user))
+		var result = mvc.perform(MockMvcRequestBuilders.get("/security/user").principal(user))
 				.andExpect(status().isOk()).andReturn();
 		
-		String resultado = result.getResponse().getContentAsString();
+		var resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
 	}
 	
@@ -45,10 +44,10 @@ class SecurityControllerTest {
 	@WithMockUser(username = "manager", password = "Manager1", roles = "MANAGER")
 	void manager() throws Exception {
 		
-		MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/security/manager"))
+		var result = mvc.perform(MockMvcRequestBuilders.get("/security/manager"))
 				.andExpect(status().isOk()).andReturn();
 		
-		String resultado = result.getResponse().getContentAsString();
+		var resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
 	}
 	
@@ -56,32 +55,22 @@ class SecurityControllerTest {
 	@WithMockUser(username = "admin", password = "Admin1", roles = "ADMIN")
 	void admin() throws Exception {
 		
-		MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/security/admin"))
+		var result = mvc.perform(MockMvcRequestBuilders.get("/security/admin"))
 				.andExpect(status().isOk()).andReturn();
 		
-		String resultado = result.getResponse().getContentAsString();
+		var resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
-	}
-	
-	@Test
-	@WithMockUser(username = "admin", password = "Admin1", roles = "ADMIN")
-	void timeAccess() throws Exception {
 		
-		MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/security/timeAccess"))
+		result = mvc.perform(MockMvcRequestBuilders.get("/security/timeAccess"))
 				.andExpect(status().isOk()).andReturn();
 		
-		String resultado = result.getResponse().getContentAsString();
+		resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
-	}
-	
-	@Test
-	@WithMockUser(username = "admin", password = "Admin1", roles = "ADMIN")
-	void registrationfilter() throws Exception {
 		
-		MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/security/registrationfilter"))
+		result = mvc.perform(MockMvcRequestBuilders.get("/security/registrationfilter"))
 				.andExpect(status().isOk()).andReturn();
 		
-		String resultado = result.getResponse().getContentAsString();
+		resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
 	}
 }

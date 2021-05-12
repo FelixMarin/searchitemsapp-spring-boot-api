@@ -15,13 +15,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -48,10 +46,10 @@ class SearchItemsControllerTest {
 	@Test
 	void statusCodeOkTest() throws Exception {
 		
-		HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
-		CsrfToken csrfToken = httpSessionCsrfTokenRepository.generateToken(new MockHttpServletRequest());
+		var httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
+		var csrfToken = httpSessionCsrfTokenRepository.generateToken(new MockHttpServletRequest());
 		
-		 MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/search")
+		var result = mvc.perform(MockMvcRequestBuilders.get("/search")
 				.sessionAttr(TOKEN_ATTR_NAME, csrfToken)				
 				 .accept(MediaType.APPLICATION_JSON)
 				 .param(csrfToken.getParameterName(), csrfToken.getToken())
@@ -63,7 +61,7 @@ class SearchItemsControllerTest {
 				.andExpect(status().isOk())
 				.andReturn();
 		 
-		String resultado = result.getResponse().getContentAsString();
+		var resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
 		
 		 result = mvc.perform(MockMvcRequestBuilders.get("/search")

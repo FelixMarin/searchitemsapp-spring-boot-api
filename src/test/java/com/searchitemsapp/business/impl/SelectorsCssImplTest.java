@@ -40,9 +40,9 @@ class SelectorsCssImplTest {
 
 	@Test
 	void testValidateSelector() {
-		final String baseUri = "https://www.dia.es";
+		final var baseUri = "https://www.dia.es";
 		
-		Document document = Document.createShell(baseUri);
+		var document = Document.createShell(baseUri);
 		Element element = document.getAllElements().first();
 		element.setBaseUri(baseUri);
 		element.getElementsByTag("body")
@@ -57,8 +57,8 @@ class SelectorsCssImplTest {
 	void testValidateSelector1() {
 		final String baseUri = "https://www.dia.es";
 		
-		Document document = Document.createShell(baseUri);
-		Element element = document.getAllElements().first();
+		var document = Document.createShell(baseUri);
+		var element = document.getAllElements().first();
 		element.setBaseUri(baseUri);
 		element.getElementsByTag("body")
 			.append("<div class='accesoPopupPeso26163'></div>");
@@ -70,10 +70,10 @@ class SelectorsCssImplTest {
 	
 	@Test
 	void testValidateSelector2() {
-		final String baseUri = "https://www.dia.es";
+		final var baseUri = "https://www.dia.es";
 		
-		Document document = Document.createShell(baseUri);
-		Element element = document.getAllElements().first();
+		var document = Document.createShell(baseUri);
+		var element = document.getAllElements().first();
 		
 		element.setBaseUri(baseUri);
 		
@@ -84,11 +84,11 @@ class SelectorsCssImplTest {
 
 	@Test
 	void testAddCssSelectors() {
-		String baseUri = "https://www.dia.es";
-		UrlDto urlDto = UrlDto.builder().didEmpresa(105l).nomUrl(baseUri).build();
+		var baseUri = "https://www.dia.es";
+		var urlDto = UrlDto.builder().didEmpresa(105l).nomUrl(baseUri).build();
 		List<CssSelectorsDto> lista = Lists.newArrayList();
 		lista.add(CssSelectorsDto.builder().didEmpresa(105l).build());
-		CssSelectorsDto dto = selectorsCss.addCssSelectors(urlDto, lista);
+		var dto = selectorsCss.addCssSelectors(urlDto, lista);
 		assertNotNull(dto);
 		
 		 baseUri = "//www.dia.es";
@@ -98,17 +98,17 @@ class SelectorsCssImplTest {
 
 	@Test
 	void testElementByCssSelector() throws MalformedURLException {
-		final String baseUri = "https://www.dia.es";
+		final var baseUri = "https://www.dia.es";
 		
-		Document document = Document.createShell(baseUri);
-		Element element = document.getAllElements().first();
+		var document = Document.createShell(baseUri);
+		var element = document.getAllElements().first();
 		element.setBaseUri(baseUri);
 		element.getElementsByTag("body")
 			.append("<div class='load-more-products'><p>test</p></div>");
 		
-		UrlDto urlDto = UrlDto.builder().didEmpresa(105l).nomUrl(baseUri).build();
+		var urlDto = UrlDto.builder().didEmpresa(105l).nomUrl(baseUri).build();
 		
-		String res = selectorsCss.elementByCssSelector(element, "div.load-more-products", urlDto);
+		var res = selectorsCss.elementByCssSelector(element, "div.load-more-products", urlDto);
 		
 		assertEquals("test", res);
 		

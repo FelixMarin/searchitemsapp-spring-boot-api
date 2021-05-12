@@ -25,7 +25,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 	
 	@Override
 	public UserDto findByUserName(@NonNull String username) throws ResourceNotFoundException {
-		TbSiaUser entity= repository.findByUsername(username)
+		var entity= repository.findByUsername(username)
 				.orElseThrow(() -> new ResourceNotFoundException("Doesn't exist: " + username));
 			  	     
 		return UserDto.builder().username(entity.getUsername())
@@ -50,7 +50,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 		List<TbSiaRoles> roles = Lists.newArrayList();
 		roles.add(rolesRepository.getOne(2l));
 		user.setRoles(roles);
-		TbSiaUser entity = getModelMapper().map(user, TbSiaUser.class); 
+		var entity = getModelMapper().map(user, TbSiaUser.class); 
 		
 		repository.saveAndFlush(entity);
 		
@@ -92,7 +92,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 
 	@Override
 	public UserDto findByUsernameAndPassword(@NonNull String username, @NonNull String password) throws ResourceNotFoundException {		
-		TbSiaUser entity = repository.findByUsernameAndPassword(username, password)
+		var entity = repository.findByUsernameAndPassword(username, password)
 				.orElseThrow(() -> new ResourceNotFoundException("Doesn't exist: " + username));
 		return UserDto.builder().username(entity.getUsername())
 				.password(entity.getPassword())

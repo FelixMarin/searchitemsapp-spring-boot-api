@@ -23,7 +23,7 @@ public class PricesImpl implements Prices {
 	public List<ProductDto> sortProductsByPrice(List<ProductDto> productDtoList) {
 		productDtoList.sort(this);
 		
-     	for (int i = 0; i < productDtoList.size(); i++) {
+     	for (var i = 0; i < productDtoList.size(); i++) {
      		productDtoList.get(i).setIdentificador(i+1);
 		}
 		
@@ -38,11 +38,11 @@ public class PricesImpl implements Prices {
 	@Override
 	public int priceComparator(final ProductDto primaryPrice, final ProductDto secondaryPrice) {
 		
-		int comparationResult= 0;
+		var comparationResult= 0;
 	
 		if(primaryPrice.getOrdenacion() == 1) {
 			
-			String price = Optional.ofNullable(primaryPrice.getPrecio())
+			var price = Optional.ofNullable(primaryPrice.getPrecio())
 					.orElse(Constants.DEFAULT_PRICE.getValue());
 			
 			primaryPrice.setPrecio(price);
@@ -54,7 +54,7 @@ public class PricesImpl implements Prices {
 			
 		} else if(primaryPrice.getOrdenacion() == 2) {
 	
-			String priceUnit = Optional.ofNullable(primaryPrice.getPrecioKilo())
+			var priceUnit = Optional.ofNullable(primaryPrice.getPrecioKilo())
 					.filter(Strings::isNotBlank)
 					.orElse(Constants.DEFAULT_PRICE.getValue());
 			
@@ -75,7 +75,7 @@ public class PricesImpl implements Prices {
 		
 		Optional<String> priceResult = Optional.ofNullable(convertToDecimal(price));
 		
-		String priceAux = priceResult
+		var priceAux = priceResult
 				.orElse(convertToInteger(price)).trim();
 		
 		return price.isBlank() || priceAux.isBlank()?
@@ -89,13 +89,13 @@ public class PricesImpl implements Prices {
 			return Constants.DEFAULT_PRICE.getValue();
 		}
 	     
-		String priceAux = checkIfHasPipeLine(price);
+		var priceAux = checkIfHasPipeLine(price);
 		
-		Matcher matcherDecimal = Pattern.compile(
+		var matcherDecimal = Pattern.compile(
 			  Constants.DECIMAL_NUMBER_REGEX.getValue(), 
 			  Pattern.MULTILINE).matcher(priceAux);
 
-		String subPrice = StringUtils.EMPTY;
+		var subPrice = StringUtils.EMPTY;
 		
 		if (matcherDecimal.find()) {
 			subPrice = Optional.ofNullable(matcherDecimal.group(0))
@@ -112,23 +112,23 @@ public class PricesImpl implements Prices {
 	}
 	
 	private String checkIfHasPipeLine(String price) {
-		String priceAux = price.replace(Constants.DOT.getValue(), Constants.COMMA.getValue());
-		boolean hasPipe = priceAux.contains(Constants.PIPE.getValue());
-		int iniIndex = priceAux.indexOf(Constants.PIPE.getValue())-1;
-		String subPriceAux = iniIndex<1?priceAux:priceAux.substring(iniIndex, priceAux.length());
+		var priceAux = price.replace(Constants.DOT.getValue(), Constants.COMMA.getValue());
+		var hasPipe = priceAux.contains(Constants.PIPE.getValue());
+		var iniIndex = priceAux.indexOf(Constants.PIPE.getValue())-1;
+		var subPriceAux = iniIndex<1?priceAux:priceAux.substring(iniIndex, priceAux.length());
 		return hasPipe?subPriceAux:priceAux;
 	}
 
 	private  String convertToInteger(final String price) {
 		
-		Matcher matcherInteger = Pattern.compile(Constants.DECIMAL_NUMBER_REGEX.getValue(), 
+		var matcherInteger = Pattern.compile(Constants.DECIMAL_NUMBER_REGEX.getValue(), 
 				Pattern.MULTILINE).matcher(price);
 		
 	  if(matcherInteger.find()) {
 		  return Constants.DECIMALS_EXTENSION.getValue();
 	  }
 		
-	  String priceAux = price.replace(Constants.DOT.getValue(), StringUtils.EMPTY);
+	  var priceAux = price.replace(Constants.DOT.getValue(), StringUtils.EMPTY);
 		
 	  matcherInteger = Pattern.compile(Constants.DECIMAL_NUMBER_REGEX.getValue(), 
 			  Pattern.MULTILINE).matcher(priceAux);
@@ -149,7 +149,7 @@ public class PricesImpl implements Prices {
 		Optional<String> primaryUnitPrice = Optional.ofNullable(primaryProduct.getPrecioKilo());
 		Optional<String> secondaryUnitPrice = Optional.ofNullable(secondaryProduct.getPrecioKilo());
 		
-		String precioKilo = primaryUnitPrice.orElse(primaryProduct.getPrecio());
+		var precioKilo = primaryUnitPrice.orElse(primaryProduct.getPrecio());
 		precioKilo = convertToDecimal(precioKilo);
 		precioKilo = precioKilo.concat(Constants.KILOGRAM_EXTENSION.getValue());
 		primaryProduct.setPrecioKilo(precioKilo);

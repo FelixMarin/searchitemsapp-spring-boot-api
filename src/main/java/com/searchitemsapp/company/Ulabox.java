@@ -2,7 +2,6 @@ package com.searchitemsapp.company;
 
 import java.net.MalformedURLException;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,21 +30,21 @@ public class Ulabox implements Company {
 	public List<String> getUrls(final Document document, 
 			final UrlDto urlDto) throws MalformedURLException {
 	
-		String urlBase = urlDto.getNomUrl();
+		var urlBase = urlDto.getNomUrl();
 	
 		List<String> urls = Lists.newArrayList();
 		urls.add(urlBase);
 
-		String paginationSelector = urlDto.getSelectores().getSelPaginacion();		
-		String pagination = document.select(paginationSelector).text();
+		var paginationSelector = urlDto.getSelectores().getSelPaginacion();		
+		var pagination = document.select(paginationSelector).text();
 
-		int resultLength = NumberUtils.toInt(environment.getProperty("flow.value.paginacion.url.ulabox"));
+		var resultLength = NumberUtils.toInt(environment.getProperty("flow.value.paginacion.url.ulabox"));
 
 		if(!StringUtils.isAllEmpty(pagination)) {
 	
 			if(pagination.contains(Constants.TREE_DOTS.getValue())) {
 				
-				Matcher m = Pattern.compile(Constants.NUMERIC_REGEX.getValue()).matcher(pagination);
+				var m = Pattern.compile(Constants.NUMERIC_REGEX.getValue()).matcher(pagination);
 				
 				if(m.find()) {
 					pagination=m.group(1);
@@ -57,7 +56,7 @@ public class Ulabox implements Company {
 
 			int intPaginacion = NumberUtils.toInt(pagination.trim());
 
-			for (int i = 2; i <= intPaginacion; i++) {
+			for (var i = 2; i <= intPaginacion; i++) {
 				urls.add(urlBase.concat("&p=") + i);
 			}	
 

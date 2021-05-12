@@ -49,14 +49,14 @@ class TbSiaCategoriasEmpresaTest {
 
 	@Test
 	void testAddTbSiaEmpresa() {
-		TbSiaEmpresa tbSiaEmpresa = new TbSiaEmpresa();
+		var tbSiaEmpresa = new TbSiaEmpresa();
 		tbSiaCategoriasEmpresa.addTbSiaEmpresa(tbSiaEmpresa);
 		assertEquals(tbSiaEmpresa,tbSiaCategoriasEmpresa.getTbSiaEmpresas().get(0));
 	}
 
 	@Test
 	void testRemoveTbSiaEmpresa() {
-		TbSiaEmpresa tbSiaEmpresa = new TbSiaEmpresa();
+		var tbSiaEmpresa = new TbSiaEmpresa();
 		tbSiaCategoriasEmpresa.addTbSiaEmpresa(tbSiaEmpresa);
 		tbSiaCategoriasEmpresa.removeTbSiaEmpresa(tbSiaEmpresa);
 		assertEquals(0,tbSiaCategoriasEmpresa.getTbSiaEmpresas().size());

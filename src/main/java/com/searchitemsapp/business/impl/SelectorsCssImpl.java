@@ -50,7 +50,7 @@ public class SelectorsCssImpl implements SelectorsCss {
 			companiesIdSepearatedByCommas = companyId; 
 		}
 		
-		StringTokenizer tokenizer = new StringTokenizer(companiesIdSepearatedByCommas, Constants.COMMA.getValue()); 			
+		var tokenizer = new StringTokenizer(companiesIdSepearatedByCommas, Constants.COMMA.getValue()); 			
 		List<Long> companiesIds = Lists.newArrayList();
 		
 		while (tokenizer.hasMoreElements()) {
@@ -96,7 +96,7 @@ public class SelectorsCssImpl implements SelectorsCss {
 			@NonNull String cssSelector, @NonNull UrlDto urlDto) throws MalformedURLException {
 				
 		List<String> cssSelectorList = Lists.newArrayList();		
-		StringTokenizer st = new StringTokenizer(cssSelector, Constants.PIPE.getValue());  
+		var st = new StringTokenizer(cssSelector, Constants.PIPE.getValue());  
 		
 		while (st.hasMoreTokens()) {  
 			cssSelectorList.add(st.nextToken());
@@ -104,7 +104,7 @@ public class SelectorsCssImpl implements SelectorsCss {
 		
 		Company company = companiesGroup.getInstance(urlDto.getDidEmpresa());
 		
-		String textExtracted = company.selectorTextExtractor(documentElement, cssSelectorList, cssSelector);
+		var textExtracted = company.selectorTextExtractor(documentElement, cssSelectorList, cssSelector);
 		
 		return cleanProductTextExtractedFromCssSelector(textExtracted, urlDto.getNomUrl());
 	}
@@ -112,8 +112,8 @@ public class SelectorsCssImpl implements SelectorsCss {
 	private String cleanProductTextExtractedFromCssSelector(@NonNull final String elementValue, 
 			String mainUrl) throws MalformedURLException {
 		
-		String tratedUrl = elementValue.replaceAll(REGEX, StringUtils.EMPTY);
-		String filteredResult = addProtocolToUrl(tratedUrl, mainUrl);
+		var tratedUrl = elementValue.replaceAll(REGEX, StringUtils.EMPTY);
+		var filteredResult = addProtocolToUrl(tratedUrl, mainUrl);
 		
 		filteredResult = filteredResult.replace("\\(", StringUtils.EMPTY);
 		filteredResult = filteredResult.replace("\\)", StringUtils.EMPTY);		
@@ -132,7 +132,7 @@ public class SelectorsCssImpl implements SelectorsCss {
 			return HTTPS.concat(tratedUrl);
 		} else if(tratedUrl.trim().startsWith(Constants.SLASH.getValue())) {
 			URL url = new URL(mainUrl);
-			String companyUrl = url.getProtocol()
+			var companyUrl = url.getProtocol()
 					.concat(Constants.PROTOCOL_ACCESSOR.getValue())
 					.concat(url.getHost());
 			return companyUrl.concat(tratedUrl); 

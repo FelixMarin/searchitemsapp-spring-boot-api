@@ -40,9 +40,9 @@ class ConsumTest {
 
 	@Test
 	void testGetUrls() throws MalformedURLException {
-		final String baseUri = "https://tienda.consum.es/";
+		final var baseUri = "https://tienda.consum.es/";
 				
-		UrlDto urlDto = UrlDto.builder() 
+		var urlDto = UrlDto.builder() 
 				.didEmpresa(116l)
 				.nomUrl(baseUri)
 				.build();
@@ -53,8 +53,8 @@ class ConsumTest {
 
 	@Test
 	void testGetHtmlContent() throws InterruptedException {
-		final String baseUri = "https://tienda.consum.es/consum/es/search?q=miel#!Grid";
-		String content = consum.getHtmlContent(webDriverManagerImpl.getWebDriver().get(), baseUri);
+		final var baseUri = "https://tienda.consum.es/consum/es/search?q=miel#!Grid";
+		var content = consum.getHtmlContent(webDriverManagerImpl.getWebDriver().get(), baseUri);
 		assertNotNull(content);
 	}
 

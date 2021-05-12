@@ -36,8 +36,8 @@ class UrlDaoImplTest {
 
 	@Test
 	void testObtenerUrlsPorIdEmpresa() throws IOException {
-		CountryDto paisDto = CountryDto.builder().did(101l).build();
-		CategoryDto categoriaDto = CategoryDto.builder().did(101l).build();
+		var paisDto = CountryDto.builder().did(101l).build();
+		var categoriaDto = CategoryDto.builder().did(101l).build();
 		List<UrlDto> urls = dao.obtenerUrlsPorIdEmpresa(paisDto, categoriaDto, "101");
 		assertNotNull(urls);
 		assertFalse(urls.isEmpty());
@@ -53,8 +53,8 @@ class UrlDaoImplTest {
 	
 	@Test
 	void testObtenerUrlsPorIdEmpresaException() throws IOException {
-		CountryDto paisDto = CountryDto.builder().did(101l).build();
-		CategoryDto categoriaDto = CategoryDto.builder().did(101l).build();
+		var paisDto = CountryDto.builder().did(101l).build();
+		var categoriaDto = CategoryDto.builder().did(101l).build();
 
 	    assertThrows(NullPointerException.class, () -> {
 	    	dao.obtenerUrlsPorIdEmpresa(paisDto, categoriaDto, null);
@@ -63,7 +63,7 @@ class UrlDaoImplTest {
 
 	@Test
 	void testFindByDid() throws IOException, ResourceNotFoundException {
-		UrlDto url = UrlDto.builder().did(101l).build();
+		var url = UrlDto.builder().did(101l).build();
 		Optional<UrlDto> optional = dao.findByDid(url);
 		assertTrue(optional.isPresent());
 		assertEquals(101l, optional.get().getDid());

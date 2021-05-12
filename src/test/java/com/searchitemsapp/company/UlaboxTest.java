@@ -6,7 +6,6 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +24,11 @@ class UlaboxTest {
 
 	@Test
 	void testGetUrls() throws MalformedURLException {
-		final String baseUri = "https://www.ulabox.com/";
-		Document document = Document.createShell(baseUri);
-		Element element = document.getAllElements().first();
-		CssSelectorsDto cssSelectorsDto = CssSelectorsDto.builder().didEmpresa(106l).selPaginacion("a.link").build();
-		UrlDto urlDto = UrlDto.builder().didEmpresa(106l)
+		final var baseUri = "https://www.ulabox.com/";
+		var document = Document.createShell(baseUri);
+		var element = document.getAllElements().first();
+		var cssSelectorsDto = CssSelectorsDto.builder().didEmpresa(106l).selPaginacion("a.link").build();
+		var urlDto = UrlDto.builder().didEmpresa(106l)
 			.selectores(cssSelectorsDto).nomUrl(baseUri).build();
 		element.setBaseUri(baseUri);
 		element.getElementsByTag("body")

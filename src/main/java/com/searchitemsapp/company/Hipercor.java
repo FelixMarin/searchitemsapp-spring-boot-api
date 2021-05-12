@@ -27,7 +27,7 @@ public class Hipercor implements Company {
 	public List<String> getUrls(final Document document, 
 			final UrlDto urlDto) throws MalformedURLException {
 		
-		String urlBase = urlDto.getNomUrl();		
+		var urlBase = urlDto.getNomUrl();		
 		List<String> urls = Lists.newArrayList();
 		urls.add(urlBase);		
 		return urls;
@@ -38,9 +38,9 @@ public class Hipercor implements Company {
 			throws InterruptedException  {
 		
 		webDriver.get(strUrl);
-		WebDriverWait wait = new WebDriverWait(webDriver, 50);
+		var wait = new WebDriverWait(webDriver, 50);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("cookies-agree-all"))).click();
-		String res = webDriver.getPageSource();
+		var res = webDriver.getPageSource();
 		webDriver.close();
 		return res;
 	}
