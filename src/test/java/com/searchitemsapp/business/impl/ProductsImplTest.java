@@ -90,6 +90,11 @@ class ProductsImplTest {
 		
 		ProductDto producto = product.addElementsToProducts(element, urlDto, "1");
 		assertNotNull(producto);
+		
+		selectoresDto.setSelImage(null);
+		selectoresDto.setSelImage2("test");
+		producto = product.addElementsToProducts(element, urlDto, "1");
+		
 	}
 
 	@Test

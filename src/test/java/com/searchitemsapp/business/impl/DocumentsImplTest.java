@@ -45,5 +45,12 @@ class DocumentsImplTest {
 				.didEmpresa(105l).selectores(selectores).build();
 		List<Document> listDocuments = document.getHtmlDocument(urlDto, "miel", webDriverManager);
 		assertFalse(listDocuments.isEmpty());
+		
+		UrlDto urlDtoDyn = UrlDto.builder()
+				.nomUrl("https://www.hipercor.es/supermercado/buscar/1/?term=miel&type_ahead_tab=panel_all&sort=mostSell")
+				.didEmpresa(103l).selectores(selectores).build();
+		
+		List<Document> listDocumentsDyn = document.getHtmlDocument(urlDtoDyn, "miel", webDriverManager);
+		assertFalse(listDocumentsDyn.isEmpty());
 	}
 }

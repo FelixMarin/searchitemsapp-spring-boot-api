@@ -26,6 +26,7 @@ public class WebDriverFirefox {
 	
 	private Optional<WebDriver> webDriver;
 	private Optional<File> firefoxExecutable;
+	private final boolean isWindows = System.getProperty("os.name").startsWith("Windows");
 	
 	public WebDriverFirefox(Environment environment) {
 		this.environment = environment;
@@ -36,9 +37,8 @@ public class WebDriverFirefox {
 		
 		String driverPath;
 		String executablePath;
-		String os = System.getProperty("os.name");
 		
-		if(os.startsWith("Windows")) {		
+		if(isWindows) {		
 			driverPath  = environment.getProperty("flow.value.firefox.driver.path");
 			executablePath = environment.getProperty("folw.value.firefox.ejecutable.path");
 			System.setProperty(environment.getProperty("flow.value.firefox.driver"), driverPath);
@@ -82,11 +82,11 @@ public class WebDriverFirefox {
 	
 	@PreDestroy
 	public void shutdownWebDriver() {
-		webDriver.ifPresent(elem -> elem.quit());
+		webDriver.ifPresent(WebDriver::quit);
 	}
 	
 	public void close() {
-		webDriver.ifPresent(elem -> elem.close());
+		webDriver.ifPresent(WebDriver::close);
 	}
 	
 	public boolean isPresent() {
@@ -95,7 +95,13 @@ public class WebDriverFirefox {
 	
 	@PostConstruct
 	public void checkFirefox() {
-		String executablePath = environment.getProperty("folw.value.firefox.ejecutable.path");
+		String executablePath;
+		if(isWindows) {	
+			executablePath = environment.getProperty("folw.value.firefox.ejecutable.path");
+		} else {
+			executablePath = environment.getProperty("folw.value.firefox.ejecutable.linux.path");
+		}
+		
 		firefoxExecutable = Optional.ofNullable(new File(executablePath));
 	}
 

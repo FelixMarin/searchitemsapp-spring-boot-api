@@ -1,4 +1,4 @@
-package com.searchitemsapp.business.impl;
+package com.searchitemsapp.business.webdriver.impl;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.NoSuchSessionException;
-import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -67,10 +66,9 @@ class WebDriverManagerImplTest {
 	@Test
 	void shutdownWebDriver() {		
 		webDriverManager.shutdownWebDriver();
-		WebDriver wd = webDriverManager.getWebDriver().get();
 		
 		assertThrows(NoSuchSessionException.class, () -> {
-			wd.getWindowHandle();
+			webDriverManager.closeDriver();
 		});
 		
 	}

@@ -3,7 +3,7 @@ package com.searchitemsapp.dto;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
@@ -16,10 +16,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 class BrandsDtoTest {
 	
-	private BrandsDto brand;
+	private static BrandsDto brand;
 
-	@BeforeEach
-	void testBuilder() {
+	@BeforeAll
+	static void testBuilder() {
 		brand = new BrandsDto();
 		brand = new BrandsDto(101l,"MERCADONA",101l,"SUP", 101l,"SPAIN");
 		brand.hashCode();
