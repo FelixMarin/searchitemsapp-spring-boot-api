@@ -17,7 +17,7 @@ class CompaniesGroupImplTest {
 	
 	@Autowired
 	private CompaniesGroup group;
-	private Long empresas[]= {101l,103l,104l,105l,106l,107l,108l,109l,110l,111l,112l,114l,116l};
+	private Long empresas[]= {101l,103l,104l,105l,106l,107l,108l,109l,110l,111l,114l,116l};
 	
 
 	@Test
@@ -34,6 +34,5 @@ class CompaniesGroupImplTest {
 		assertNotNull(group.getInstance(empresas[9]));
 		assertNotNull(group.getInstance(empresas[10]));
 		assertNotNull(group.getInstance(empresas[11]));
-		assertNotNull(group.getInstance(empresas[12]));
 	}
 }

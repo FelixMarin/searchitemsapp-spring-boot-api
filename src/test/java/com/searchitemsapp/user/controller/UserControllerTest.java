@@ -107,6 +107,16 @@ class UserControllerTest {
 		String resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
 	}
+	
+	@Test
+	void mailExists() throws Exception {
+		 MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/user/mailExists"))
+					.andExpect(status().isOk()) 
+					.andReturn(); 
+			 
+			String resultado = result.getResponse().getContentAsString();
+			assertNotNull(resultado);
+	}
 
 	@Test
 	

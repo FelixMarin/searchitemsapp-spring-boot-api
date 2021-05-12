@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-@WithMockUser(username = "user10", password = "0000", roles = "USER")
 class OnlineControllerTest {
 
 	@Autowired
@@ -32,6 +31,7 @@ class OnlineControllerTest {
 	private String TOKEN_ATTR_NAME = "org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository.CSRF_TOKEN";
 	
 	@Test
+	@WithMockUser(username = "user10", password = "0000", roles = "USER")
 	void testIndex() throws Exception {
 		
 		HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
@@ -53,5 +53,21 @@ class OnlineControllerTest {
 		resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
 
+	}
+	
+	@Test
+	@WithMockUser(username = "admin", password = "Admin1", roles = "ADMIN")
+	void testBoard() throws Exception {
+		
+		HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
+		CsrfToken csrfToken = httpSessionCsrfTokenRepository.generateToken(new MockHttpServletRequest());
+		
+		MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/board")
+				.sessionAttr(TOKEN_ATTR_NAME, csrfToken)
+				.param(csrfToken.getParameterName(), csrfToken.getToken()))
+				.andExpect(status().isOk()).andReturn();
+
+		String resultado = result.getResponse().getContentAsString();
+		assertNotNull(resultado);
 	}
 }

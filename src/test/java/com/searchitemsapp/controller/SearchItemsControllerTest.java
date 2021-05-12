@@ -65,5 +65,33 @@ class SearchItemsControllerTest {
 		 
 		String resultado = result.getResponse().getContentAsString();
 		assertNotNull(resultado);
+		
+		 result = mvc.perform(MockMvcRequestBuilders.get("/search")
+					.sessionAttr(TOKEN_ATTR_NAME, csrfToken)				
+					 .accept(MediaType.APPLICATION_JSON)
+					 .param(csrfToken.getParameterName(), csrfToken.getToken())
+					 .param("country", "101")
+					 .param("category", "101")
+					 .param("sort", "1")
+				 	.param("product", "miel"))
+					.andExpect(status().is(400))
+					.andReturn();
+			 
+			resultado = result.getResponse().getContentAsString();
+			assertNotNull(resultado);
+			
+			 result = mvc.perform(MockMvcRequestBuilders.get("/search")
+						.sessionAttr(TOKEN_ATTR_NAME, csrfToken)				
+						 .accept(MediaType.APPLICATION_JSON)
+						 .param(csrfToken.getParameterName(), csrfToken.getToken())
+						 .param("country", "101")
+						 .param("category", "101")
+						 .param("sort", "1")
+						 .param("pipedcompanies", "101"))
+						.andExpect(status().is(400))
+						.andReturn();
+				 
+				resultado = result.getResponse().getContentAsString();
+				assertNotNull(resultado);
 	}
 }
