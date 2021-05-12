@@ -1,3 +1,11 @@
 language: java
 sudo: false
-script: mvn clean verify
+addons:
+  sonarcloud:
+    organization: "felixmarin"
+    token:
+      secure: "plFPQKjC01ys1jjGGuK4cDmnSdF5qAkaanzoWjFlJrl2WzXLEwAS/6p/miyct8Y7WxFqCBo2ozawid2oxirEOMjfseClylvY4WW2Y6Rxwyn4LZSxxO8y6UYhi3s9rprBh5jh+4v9mDnk/zXW2clkAlgfSIPU9LZVYPIquPw5nEhPCgeKWoc78gWHb/lhVu6h/t/P9et+7eoYwESiI768UL/PK6cOXfC0ilPHVsmTvNndVRPRXZwz6xKeHOdtSExul6HHKvCBocK8xSsgPz7iRUykM/vTWV54EQY+tORN0fXvAlIS3daC8TMRyZF9XothbHXWzQg3pEyR84ZxZ7vRrjQXTs94gQ0VE/dRidLZ8wTESIp3UQykDzt7OnHqI/3obQQA+lZjXFnrRG9vQA1J3wAtk08J0Tp5lcFPldz/R+OoSzP2RRklNaciOBJpsUM/nwgr0bE/GCBPqaUSP+guRWTZ8rBQbbL2E0g21Yvb/urwZD7nxZfPbewgt3wx6VpMnBGR68vQO3QXIQCBDx8IZ5HpQI1xfTxLTnHldOvEc2bxzZVoGlVKmbguv0vinJ4JudOxbQMLaduPnw/foESRc7nXvlOj9aba0SKcJKlYNUQ1xK7IhKsh4eAq3/EtVmlHJIpetwcvQIKmChuSmsTbrZNCmy5hg80sS+vyuUhwdJc=" # encrypted value of your token
+
+script:
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=FelixMarin_searchitemsapp-spring-boot-api
