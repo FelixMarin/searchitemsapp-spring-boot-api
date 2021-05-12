@@ -1,4 +1,10 @@
 
+[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=com.lapots.breed.judge:judge-rule-engine&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.lapots.breed.judge:judge-rule-engine)
+
+[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=com.lapots.breed.judge:judge-rule-engine&metric=bugs)](https://sonarcloud.io/dashboard?id=com.lapots.breed.judge:judge-rule-engine)
+
+
+
 # Comparador de precios de supermercados online.
 
 La aplicación consiste en un servicio web con arquitectura Restful, desarrollado en java Empresarial. Lo que hace la aplicación es retorna una lista de productos de supermercado del mismo tipo. Esta lista viene ordenada por precio o por precio kilo según se indique en los parámetros de entrada indicados en la solicitud. La solicitud se realiza mediante el método GET a través del protocolo http lo que significa que los parámetros de la petición van en la propia URL. En la URL se indican parámetros como el nombre del producto y los identificadores de los supermercados con los que se va a realizar la comparativa.
