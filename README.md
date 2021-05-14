@@ -1,4 +1,4 @@
-[https://travis-ci.org/FelixMarin/searchitemsapp-spring-boot-api.svg?branch=master](https://travis-ci.org/FelixMarin/searchitemsapp-spring-boot-api.svg?branch=master)
+[![Build Status](https://travis-ci.org/FelixMarin/searchitemsapp-spring-boot-api.png?branch=master)](https://travis-ci.org/FelixMarin/searchitemsapp-spring-boot-api)
 
 # Comparador de precios de supermercados online.
 
