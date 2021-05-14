@@ -48,7 +48,7 @@ public abstract class AbstractDao {
 	
 	protected String[] tokenizeString(final String cadena, final String token) {
 		
-		StringTokenizer tokenizer = new StringTokenizer(cadena, token); 		
+		var tokenizer = new StringTokenizer(cadena, token); 		
 		List<String> listaAux = Lists.newArrayList();
 		
 		while (tokenizer.hasMoreElements()) {

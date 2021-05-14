@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.nodes.Document;
@@ -46,8 +47,8 @@ public class Condis implements Company {
 	@Override
 	public String replaceCharacters(String producto) {
 		
-		String[] arVocales = {"a","e","i","o","u"};
-		String[] arTildes = {"á","é","í","ó","ú"};
+		var arVocales = ArrayUtils.toArray("a","e","i","o","u");
+		var arTildes = ArrayUtils.toArray("á","é","í","ó","ú");
 		
 		if(StringUtils.isAllEmpty(producto)) {
 			return producto;
@@ -62,7 +63,7 @@ public class Condis implements Company {
 		
 		productoAux = productoAux.replace(Constants.ENIE_MIN.getValue(),
 				Constants.ENIE_URL_D.getValue());
-		
+		 
 		return productoAux;
 	}
 	

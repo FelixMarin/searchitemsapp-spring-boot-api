@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.searchitemsapp.business.SelectorsCss;
-import com.searchitemsapp.company.Company;
 import com.searchitemsapp.company.factory.CompaniesGroup;
 import com.searchitemsapp.dao.CssSelectorsDao;
 import com.searchitemsapp.dto.CompanyDto;
@@ -102,7 +101,7 @@ public class SelectorsCssImpl implements SelectorsCss {
 			cssSelectorList.add(st.nextToken());
 		}
 		
-		Company company = companiesGroup.getInstance(urlDto.getDidEmpresa());
+		var company = companiesGroup.getInstance(urlDto.getDidEmpresa());
 		
 		var textExtracted = company.selectorTextExtractor(documentElement, cssSelectorList, cssSelector);
 		
@@ -131,7 +130,7 @@ public class SelectorsCssImpl implements SelectorsCss {
 		if(tratedUrl.trim().startsWith(Constants.DOUBLE_SLASH.getValue())) {
 			return HTTPS.concat(tratedUrl);
 		} else if(tratedUrl.trim().startsWith(Constants.SLASH.getValue())) {
-			URL url = new URL(mainUrl);
+			var url = new URL(mainUrl);
 			var companyUrl = url.getProtocol()
 					.concat(Constants.PROTOCOL_ACCESSOR.getValue())
 					.concat(url.getHost());

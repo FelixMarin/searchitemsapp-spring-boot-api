@@ -2,7 +2,6 @@ package com.searchitemsapp.business.impl;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
@@ -137,7 +136,7 @@ public class PricesImpl implements Prices {
 	  priceResult.ifPresent(elem -> elem = elem.concat(Constants.DECIMALS_EXTENSION.getValue()));
 	  
 	  priceResult.filter(StringUtils::isAllEmpty).ifPresent(elem -> {
-	    	Matcher matcher = Pattern.compile("\\d+", Pattern.MULTILINE).matcher(priceAux);
+	    	var matcher = Pattern.compile("\\d+", Pattern.MULTILINE).matcher(priceAux);
 	    	elem = matcher.find()?matcher.group().concat(Constants.DECIMALS_EXTENSION.getValue()):elem;
 	    });
 		

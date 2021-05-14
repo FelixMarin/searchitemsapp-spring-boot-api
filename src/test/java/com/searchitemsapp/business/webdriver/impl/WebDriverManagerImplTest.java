@@ -37,7 +37,7 @@ class WebDriverManagerImplTest {
 	}
 	
 	@Test
-	void getDynamicHtmlContentSync() throws InterruptedException {
+	void testGetDynamicHtmlContentSync() throws InterruptedException {
 		final var urlBase = "https://tienda.consum.es/consum/es/search?q=miel#!Grid";
 						
 		var result = webDriverManager.getDynamicHtmlContentSync(
@@ -48,7 +48,7 @@ class WebDriverManagerImplTest {
 	}
 	
 	@Test
-	void getDynamicHtmlContentAsync() throws InterruptedException {
+	void testGetDynamicHtmlContentAsync() throws InterruptedException {
 		final var urlBase = "https://www.hipercor.es/supermercado/buscar/1/?term=miel&type_ahead_tab=panel_all&sort=mostSell";
 						
 		var result = webDriverManager.getDynamicHtmlContentAsync(
@@ -59,12 +59,12 @@ class WebDriverManagerImplTest {
 	}
 	
 	@Test
-	void isPresent() {
+	void testIsPresent() {
 		assertTrue(webDriverManager.isPresent());
 	}
 	
 	@Test
-	void shutdownWebDriver() {		
+	void testShutdownWebDriver() {		
 		webDriverManager.shutdownWebDriver();
 		
 		assertThrows(NoSuchSessionException.class, () -> {
@@ -74,7 +74,13 @@ class WebDriverManagerImplTest {
 	}
 	
 	@Test
-	 void openWindow() {
+	void testCloseDriver() {
+		webDriverManager.closeDriver();
+		assertNotNull(webDriverManager.getWebDriver().get().getClass());
+	}
+	
+	@Test
+	 void testOpenWindow() {
 		webDriverManager.openWindow(webDriverManager.getWebDriver().get());
 		List<String> multipleTabs = Lists.newArrayList(webDriverManager.getWebDriver().get().getWindowHandles());
 		assertEquals(2, multipleTabs.size());		

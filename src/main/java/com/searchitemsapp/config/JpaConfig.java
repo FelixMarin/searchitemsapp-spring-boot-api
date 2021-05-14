@@ -51,7 +51,7 @@ public class JpaConfig {
     }
 	
 	private Properties additionalProperties() {
-		Properties properties = new Properties();
+		var properties = new Properties();
 		properties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
 		properties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
 		properties.setProperty("hibernate.current_session_context_class", env.getProperty("hibernate.current_session_context_class"));

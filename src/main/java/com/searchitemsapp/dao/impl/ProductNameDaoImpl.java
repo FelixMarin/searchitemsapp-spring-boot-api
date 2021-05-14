@@ -53,7 +53,7 @@ public class ProductNameDaoImpl extends AbstractDao  implements ProductNameDao {
 		
 		nativeQuery.ifPresent(predicate -> {
 			predicate = predicate.replace("#", product);
-			Query q = getEntityManager().createNativeQuery(predicate, TbSiaNomProducto.class);
+			var q = getEntityManager().createNativeQuery(predicate, TbSiaNomProducto.class);
 			List<TbSiaNomProducto> liEntities = (q.getResultList());
 			
 			liEntities.forEach(entity -> liveSearchList

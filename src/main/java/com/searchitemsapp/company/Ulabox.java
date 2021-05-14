@@ -54,7 +54,7 @@ public class Ulabox implements Company {
 				pagination = pagination.substring(pagination.length()-1, pagination.length());
 			}
 
-			int intPaginacion = NumberUtils.toInt(pagination.trim());
+			var intPaginacion = NumberUtils.toInt(pagination.trim());
 
 			for (var i = 2; i <= intPaginacion; i++) {
 				urls.add(urlBase.concat("&p=") + i);
