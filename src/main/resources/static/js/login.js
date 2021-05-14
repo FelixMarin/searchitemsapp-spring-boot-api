@@ -6,7 +6,7 @@ jQuery(document).ready(function ($) {
     tab.removeClass("active");
     $(this).addClass("active");
 
-    tab_content = $(this).attr("href");
+    let tab_content = $(this).attr("href");
     $('div[id$="tab-content"]').removeClass("active");
     $(tab_content).addClass("active");
   });
