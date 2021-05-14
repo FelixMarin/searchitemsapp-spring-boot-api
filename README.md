@@ -1,3 +1,5 @@
+[](https://travis-ci.org/FelixMarin/searchitemsapp-spring-boot-api.svg?branch=master)
+
 # Comparador de precios de supermercados online.
 
 La aplicación consiste en un servicio web con arquitectura Restful, desarrollado en java Empresarial. Lo que hace la aplicación es retorna una lista de productos de supermercado del mismo tipo. Esta lista viene ordenada por precio o por precio kilo según se indique en los parámetros de entrada indicados en la solicitud. La solicitud se realiza mediante el método GET a través del protocolo http lo que significa que los parámetros de la petición van en la propia URL. En la URL se indican parámetros como el nombre del producto y los identificadores de los supermercados con los que se va a realizar la comparativa.
