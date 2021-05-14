@@ -3,7 +3,10 @@
 
 # Comparador de precios de supermercados online.
 
-La aplicación consiste en un servicio web con arquitectura Restful, desarrollado en java Empresarial. Lo que hace la aplicación es retorna una lista de productos de supermercado del mismo tipo. Esta lista viene ordenada por precio o por precio kilo según se indique en los parámetros de entrada indicados en la solicitud. La solicitud se realiza mediante el método GET a través del protocolo http lo que significa que los parámetros de la petición van en la propia URL. En la URL se indican parámetros como el nombre del producto y los identificadores de los supermercados con los que se va a realizar la comparativa.
+Price Rank es una aplicación de tipo buscador/comparador de productos, pero enfocado en productos vendidos en supermercados online. La principal característica de la aplicación es que la búsqueda de productos se realiza en tiempo real. Es decir, los productos se extraen directamente de la fuente, que en este caso, son las plataformas de los supermercados online. Al tener como fuente de datos las propias plataformas, la información siempre está actualizada.
+En primer lugar, para poder hacer uso de la aplicación, los usuarios deberán de darse de alta en la pantalla de login. Una vez dado de alta, Aparecerá una ventana con características similares a la de un buscador, a través de la cual se podrá introducir un producto, seleccionar los supermercados y finalmente obtener el resultado. El resultado consiste en una lista de productos del mismo tipo ordenados por precio o precio kilo. 
+La extracción de datos de la fuente, se realiza mediante el proceso del raspado de datos o Web Scraping. Se trata de un proceso por el cual el sistema navega sistemáticamente a través de internet explorando webs de las que se extraen los datos. 
+
 
 ## Herramientas
 
