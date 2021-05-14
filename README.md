@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/FelixMarin/searchitemsapp-spring-boot-api.png?branch=master)](https://travis-ci.org/FelixMarin/searchitemsapp-spring-boot-api)  [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=FelixMarin_searchitemsapp-spring-boot-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=FelixMarin_searchitemsapp-spring-boot-api)  [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=FelixMarin_searchitemsapp-spring-boot-api&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=FelixMarin_searchitemsapp-spring-boot-api)  [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=FelixMarin_searchitemsapp-spring-boot-api&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=FelixMarin_searchitemsapp-spring-boot-api)  [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=FelixMarin_searchitemsapp-spring-boot-api&metric=security_rating)](https://sonarcloud.io/dashboard?id=FelixMarin_searchitemsapp-spring-boot-api)  [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=FelixMarin_searchitemsapp-spring-boot-api&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=FelixMarin_searchitemsapp-spring-boot-api)
 
+[Price Rank](https://github.com/FelixMarin/searchitemsapp-spring-boot-api/blob/develop/src/main/resources/static/img/logo/pricerank.png)
+
 
 # Comparador de precios de supermercados online.
 
