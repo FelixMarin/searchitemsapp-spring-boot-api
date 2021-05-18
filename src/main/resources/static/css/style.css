@@ -21,6 +21,10 @@
     -webkit-animation-fill-mode: forwards;
 }
 
+ul {
+    list-style-type: none;
+}
+
 .ident-primero {
     background-color: #ff7400;
     font-size: small;

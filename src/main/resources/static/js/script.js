@@ -1,8 +1,7 @@
-window.document.onload = init();
-window.addEventListener("resize", resize);
-window.document.onresize = resize();
+$(window).resize(resize());
+$(window).on('resize', resize());
 
-function init() {
+jQuery(document).ready(function ($) {
 
     if(window.localStorage.getItem('sia_token')  == null) {
         alert('Please, insert a valid login.')
@@ -17,10 +16,10 @@ function init() {
         enviar();
       });
 
-    $('#inputtext').bind('keyup', function() {
+    $('#inputtext').bind('keyup', function(e) {
         
-        if (event.keyCode === 13) {
-            event.preventDefault();
+        if (e.keyCode === 13) {
+            e.preventDefault();
             $('#botonAceptar').click();
             $('#sugerencias').html('');
             $('#sugerencias').css("display", "none");
@@ -31,10 +30,6 @@ function init() {
         }
 
         liveSearch(this.value);
-      });
-
-      $(window).resize(function() {
-        $( "#log" ).append( "<div>Handler for .resize() called.</div>" );
       });
     
     $('#logout').click(function() {
@@ -49,14 +44,14 @@ function init() {
     $("img.imglogo").imgCheckbox();
     
     return this;
-}
+});
 
-function desplazarbarra() {
+const desplazarbarra = function() {
     let input = $('#inputtext');
 
     if(input.value != '') { 
         $('#logo').css("display", "none");  
-        document.getElementById("input-container").classList.add('desplazar');
+       document.getElementById("input-container").classList.add('desplazar');
         document.getElementById('colinput').className = "col-12";
         document.getElementById("tablalogos").classList.remove('hidden');
         document.getElementById("tablalogos").classList.add('show');
@@ -79,7 +74,8 @@ function desplazarbarra() {
     }
 }
 
-function enviar() {
+
+const enviar = function() {
     $('#cajamensajes').css("display", "none");
     let elemProducto = $('#inputtext');
     let elemEmpresas = $('.imgChked');
@@ -101,6 +97,7 @@ function enviar() {
     if(elemEmpresas.length != 0) {
 
         $('#logout').css("display", "none");
+
         for (let item of elemEmpresas) {
             let didEmpresa = item.firstChild.alt;
             let sizescreen = window.screen.availWidth;
@@ -203,8 +200,7 @@ function enviar() {
     traerProductos(valProducto, valOrdenar, valEmpresas);
 }
 
-function traerProductos(producto, ordenar, strEmpresas) {	
-
+const traerProductos = function(producto, ordenar, strEmpresas) {
 
     let d = new Date();
     let bufferProductos = window.localStorage.getItem(producto + '|' + ordenar + '|' + strEmpresas + '|' + d.getDate() + '|' + window.localStorage.getItem('sia_token'));
@@ -260,9 +256,11 @@ function traerProductos(producto, ordenar, strEmpresas) {
     });
 }
 
-function liveSearch(keyword) {
+const liveSearch = function(keyword) {
+
+    let posicion = 0;
 	
-	if(keyword === '' || keyword === undefined) {
+	if(keyword === '' || keyword === undefined || keyword.indexOf("  ") >= 0) {
         $('#sugerencias').html('');
         $('#sugerencias').css("display", "none");  
 		return
@@ -290,13 +288,19 @@ function liveSearch(keyword) {
 			
 			let datosJSON = jQuery.parseJSON(data);
 			
+            let ul = document.createElement('ul');
+
 			datosJSON.forEach(elem => {
-				let div = document.createElement('div');
-				div.classList.add('col-12');
-				div.classList.add('divsugerencia');
-				div.setAttribute('onclick','focoSerchBar(this);return false;');
-				div.innerText = elem.nomProducto;
-				$('#sugerencias').append(div);
+                
+				let li = document.createElement('li');
+				li.classList.add('col-12');
+				li.classList.add('divsugerencia');
+                li.setAttribute('tabindex','-1');
+                li.setAttribute('id','ls-' + posicion++);
+				li.setAttribute('onclick','focoSerchBar(this);return false;');
+				li.innerText = elem.nomProducto;
+                ul.appendChild(li);
+				$('#sugerencias').append(ul);
 			});
                          
             $('#sugerencias').css("display", "block"); 
@@ -311,8 +315,8 @@ function liveSearch(keyword) {
         });
 }
 
-function focoSerchBar(param) {
-    document.getElementById('inputtext').value = param.innerText.trim();
+const focoSerchBar = function(param) {
+    $('#inputtext').val(param.innerText.trim());
     $('#sugerencias').html('');
     $('#sugerencias').css("display", "none");
     let elemEmpresas = document.getElementsByClassName('imgChked');
@@ -322,7 +326,7 @@ function focoSerchBar(param) {
     }
 }
 
-function componerCartas(data) {
+const componerCartas = function(data) {
     let estructuraHTML = '';
     let contador = 0;
     
@@ -376,7 +380,7 @@ function componerCartas(data) {
     }
 }
 
-function colorIdentificador(identificador) {
+const colorIdentificador = function(identificador) {
 	
     let span = document.createElement('span');
 	
@@ -400,7 +404,7 @@ function colorIdentificador(identificador) {
 	return span.outerHTML;
 }
 
-function imagenLogoEmpresa(didEmpresa) {
+const imagenLogoEmpresa = function(didEmpresa) {
 
     let img = document.createElement('img');
     img.classList.add('w-50', 'pt-2', 'pl-2', 'pb-2', 'climg', 'sm-img');
@@ -460,17 +464,6 @@ function imagenLogoEmpresa(didEmpresa) {
             break;
     }
     return img.outerHTML;
-}
-
-function aceptarSearchBar() {
-
-    $('#inputtext').bind('keypress', function() {
-        if (event.keyCode === 40) {
-            if($('#sugerencias').html() != '') {
-                $('#sugerencias').children()[0].focus();
-            }
-          }
-      });
 }
 
 function resize() {
