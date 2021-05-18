@@ -48,28 +48,30 @@ jQuery(document).ready(function ($) {
     return this;
 });
 
+const setNewClass = function(selector, atributo) {
+    $(selector).removeAttr('class');
+    $(selector).attr('class', '');
+    $(selector)[0].className = atributo;
+}
+
 const desplazarbarra = function() {
     let input = $('#inputtext');
 
     if(input.value != '') { 
         $('#logo').css("display", "none");  
-       document.getElementById("input-container").classList.add('desplazar');
-        document.getElementById('colinput').className = "col-12";
-        document.getElementById("tablalogos").classList.remove('hidden');
-        document.getElementById("tablalogos").classList.add('show');
-        document.getElementById("radiogroup").classList.remove('hidden');
-        document.getElementById("radiogroup").classList.add('show');
-        document.getElementById("label-ordenar-por").classList.remove('hidden');
-        document.getElementById("label-ordenar-por").classList.add('show');
-        document.getElementById("button-aceptar").classList.remove('hidden');
-        document.getElementById("button-aceptar").classList.add('show');
-        document.getElementById("separdor-footer").classList.remove('hidden');
-        document.getElementById("separdor-footer").classList.add('show');
+
+        setNewClass('#colinput', 'col-12');
+        $('#input-container').addClass('desplazar');
+        $("#tablalogos").removeClass('hidden').addClass('show');
+        $("#radiogroup").removeClass('hidden').addClass('show');
+        $("#label-ordenar-por").removeClass('hidden').addClass('show');
+        $("#button-aceptar").removeClass('hidden').addClass('show');
+        $("#separdor-footer").removeClass('hidden').addClass('show');
 
         let sizescreen = window.screen.availWidth;
 
         if(sizescreen <= 1023) {
-            document.getElementById("contenedor-input-productos").classList.add('separacion-input-productos-sm');
+            $('#contenedor-input-productos').addClass('separacion-input-productos-sm');
         }
     } else {
         $('#sugerencias').html('');
@@ -86,8 +88,8 @@ const enviar = function() {
     let valProducto = '';
     let valEmpresas = '';
 
-    document.getElementById('productos').innerHTML ='';
-    document.getElementById('caja-logos-checked').innerHTML ='';
+    $('#productos').html('');
+    $('#caja-logos-checked').html('');
 
     if(elemProducto.val() != '') {
         valProducto = encodeURIComponent(elemProducto.val());
@@ -104,17 +106,20 @@ const enviar = function() {
             let didEmpresa = item.firstChild.alt;
             let sizescreen = window.screen.availWidth;
             let imgLogo;
+
             if(sizescreen > 1023) {
                 imgLogo = imagenLogoEmpresa(parseInt(didEmpresa)).replace('w-50','w-100');
             } else {
                 imgLogo = imagenLogoEmpresa(parseInt(didEmpresa)).replace('w-50','');
             }
+
             let logoEmpresa = document.createRange().createContextualFragment(imgLogo);
             logoEmpresa.children[0].classList.add('cardinal');
             logoEmpresa.children[0].classList.remove('climg');
             logoEmpresa.children[0].classList.remove('pt-2');
             logoEmpresa.children[0].classList.remove('pl-2');
             logoEmpresa.children[0].classList.remove('pb-2');
+
             let div = document.createElement("div");
             div.classList.add('mt-3');
             div.classList.add('border');
@@ -124,7 +129,7 @@ const enviar = function() {
             div.classList.add('col-xs-3');
             div.classList.add('mobile-size');
             div.appendChild(logoEmpresa);
-            document.getElementById('caja-logos-checked').appendChild(div);
+            $('#caja-logos-checked').append(div);
             valEmpresas += didEmpresa + ',';
         }
 
@@ -134,6 +139,7 @@ const enviar = function() {
         div1.classList.add('offset-lg-' + (12 - elemEmpresas.length-3));
 
         let selectGroup = document.createElement("select");
+
         selectGroup.addEventListener('change',function() {
             let opcion = this.options[this.selectedIndex].value;
             if(opcion == 1) {               
@@ -320,8 +326,8 @@ const liveSearch = function(keyword) {
 const focoSerchBar = function(param) {
     $('#inputtext').val(param.innerText.trim());
     $('#sugerencias').html('');
-    $('#sugerencias').css("display", "none");
-    let elemEmpresas = document.getElementsByClassName('imgChked');
+    $('#sugerencias').css('display', 'none');
+    let elemEmpresas = $('.imgChked');
 
     if(elemEmpresas != undefined && elemEmpresas.length != 0) {
         enviar();
@@ -333,7 +339,7 @@ const componerCartas = function(data) {
     let contador = 0;
     
     if(data.includes("[]")) { 
-        document.getElementById("cajamensajes").classList.remove("hidden"); 
+        $('#cajamensajes').removeClass('hidden');
         $('#cajamensajes').css('display','block');
         return;
     } else {  
@@ -342,7 +348,7 @@ const componerCartas = function(data) {
 
     try {
         let datosJSON = jQuery.parseJSON(data);
-        let contenedor = document.getElementById('productos');
+        let contenedor = $('#productos');
         let row;
         
         datosJSON.forEach(element => {           
@@ -351,7 +357,7 @@ const componerCartas = function(data) {
                 row = document.createElement("div");
                 row.classList.add("row");
                 row.classList.add("pb-3");
-                contenedor.appendChild(row);
+                contenedor.append(row);
             }
 
             estructuraHTML = '<div class="col-md-6 col-lg-2 col-sm-12 mb-3 crd">';
@@ -472,11 +478,10 @@ function resize() {
     let ancho = window.outerWidth;
 
     if(ancho <= 1023) {
-        document.getElementById('rowempresas').classList.remove('ml-2');
-        document.getElementById('radiogroupid').classList.remove('ml-2');
-        document.getElementById('radiogroup').classList.remove('offset-1');
-        document.getElementById('colinput').classList.add('pt-1');
-        document.getElementById('colinput').classList.add('colinp');
+        $('#rowempresas').removeClass('ml-2');
+        $('#colinput').addClass('pt-1 colinp');
+        $('#radiogroupid').removeClass('ml-2');
+        $('#radiogroup').removeClass('offset-1');
 
         if($('#boton-volver').length) {
             $('#boton-volver').css("display", "none");
@@ -486,12 +491,10 @@ function resize() {
             $('#select-top').css("display", "none");
         }
         
-        document.getElementById('productos').classList.remove('mt-4');
-        document.getElementById('productos').classList.add('pt-4');
-        document.getElementById('productos').classList.add('pl-5');
-        document.getElementById('productos').classList.add('pr-5');
+        $('#productos').removeClass('mt-4');
+        $('#productos').addClass('pt-4 pl-5 pr-5');
 
-        let listaTd = document.getElementsByTagName('td');
+        let listaTd = $('td');
 
         for (let index = 0; index < listaTd.length; index++) {
             listaTd[index].classList.remove('p-3');
@@ -499,14 +502,14 @@ function resize() {
             
         }
 
-        let cajaLogoCheckedBorder = document.getElementsByClassName('border');
+        let cajaLogoCheckedBorder = $('.border');
 
         for (let index = 0; index < cajaLogoCheckedBorder.length; index++) {
             cajaLogoCheckedBorder[index].classList.remove('col-1');
             cajaLogoCheckedBorder[index].classList.add('col-2');
         }
 
-        let logoProducto = document.getElementsByClassName('climg');
+        let logoProducto = $('.climg');
 
         for (let index = 0; index < logoProducto.length; index++) {
             logoProducto[index].classList.remove('w-50');
@@ -522,7 +525,7 @@ function resize() {
             logochecked[index].classList.add('w-25');
         }
 
-        let cardinal = document.getElementsByClassName('cardinal');
+        let cardinal = $('.cardinal');
 
         for (let index = 0; index < cardinal.length; index++) {
             cardinal[index].classList.remove('w-50');
@@ -532,11 +535,10 @@ function resize() {
         }
 
     } else {
-        document.getElementById('rowempresas').classList.add('ml-2');
-        document.getElementById('radiogroupid').classList.add('ml-2');
-        document.getElementById('radiogroup').classList.add('offset-1');
-        document.getElementById('colinput').classList.remove('pt-5');
-        document.getElementById('colinput').classList.remove('colinp');
+        $('#rowempresas').addClass('ml-2');
+        $('#radiogroupid').addClass('ml-2');
+        $('#radiogroup').addClass('offset-1');
+        $('#colinput').removeClass('pt-5 colinp')
 
         if($('#boton-volver').length) {
             $('#boton-volver').css("display", "block");
@@ -546,21 +548,21 @@ function resize() {
             $('#select-top').css("display", "block");
         }
         
-        let listaTd = document.getElementsByTagName('td');
+        let listaTd = $('td');
 
         for (let index = 0; index < listaTd.length; index++) {
             listaTd[index].classList.remove('p-1');
             listaTd[index].classList.add('p-3');            
         }
 
-        let cajaLogoCheckedBorder = document.getElementsByClassName('border');
+        let cajaLogoCheckedBorder = $('.border');
 
         for (let index = 0; index < cajaLogoCheckedBorder.length; index++) {
             cajaLogoCheckedBorder[index].classList.remove('col-2');
             cajaLogoCheckedBorder[index].classList.add('col-1');
         }
 
-        let logoProducto = document.getElementsByClassName('climg');
+        let logoProducto = $('.climg');
 
         for (let index = 0; index < logoProducto.length; index++) {
             logoProducto[index].classList.remove('w-25');
@@ -577,7 +579,7 @@ function resize() {
         }
     }
 
-    let element = document.getElementsByClassName('cardinal');
+    let element = $('.cardinal');
 
     for (let index = 0; index < element.length; index++) {
     	element[index].classList.remove('w-50');
