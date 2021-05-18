@@ -1,5 +1,7 @@
 $(window).resize(resize());
-$(window).on('resize', resize());
+$(window).on('resize', function() {
+    resize();
+});
 
 jQuery(document).ready(function ($) {
 
