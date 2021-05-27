@@ -49,13 +49,14 @@ public class PricesImpl implements Prices {
 			comparationResult = doubleConverter(primaryPrice.getPrecio())
 					.compareTo(doubleConverter(secondaryPrice.getPrecio()));
 
+			putSamePrice(primaryPrice, secondaryPrice);
 			cleanPrices(primaryPrice,secondaryPrice);
 			
 		} else if(primaryPrice.getOrdenacion() == 2) {
 	
 			var priceUnit = Optional.ofNullable(primaryPrice.getPrecioKilo())
 					.filter(Strings::isNotBlank)
-					.orElse(Constants.DEFAULT_PRICE.getValue());
+					.orElse(primaryPrice.getPrecio());
 			
 			primaryPrice.setPrecioKilo(priceUnit);
 	
@@ -145,8 +146,11 @@ public class PricesImpl implements Prices {
 	
 	private  void putSamePrice(final ProductDto primaryProduct, final ProductDto secondaryProduct) {
 		
-		Optional<String> primaryUnitPrice = Optional.ofNullable(primaryProduct.getPrecioKilo());
-		Optional<String> secondaryUnitPrice = Optional.ofNullable(secondaryProduct.getPrecioKilo());
+		Optional<String> primaryUnitPrice = Optional.ofNullable(primaryProduct.getPrecioKilo())
+				.filter(StringUtils::isNoneBlank);
+		
+		Optional<String> secondaryUnitPrice = Optional.ofNullable(secondaryProduct.getPrecioKilo())
+				.filter(StringUtils::isNoneBlank);
 		
 		var precioKilo = primaryUnitPrice.orElse(primaryProduct.getPrecio());
 		precioKilo = convertToDecimal(precioKilo);

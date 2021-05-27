@@ -60,4 +60,9 @@ public class ElCorteIngles implements Company {
 		
 		return listaUrls;
 	}
+	
+	@Override
+	public boolean isDynamic() {
+		return true;
+	}
 }

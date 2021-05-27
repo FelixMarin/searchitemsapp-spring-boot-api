@@ -38,7 +38,8 @@ class MercadonaTest {
 				.build();
 		
 		List<String> res = mercadona.getUrls(null, urlDto);
-		assertEquals(0, res.size());
+		assertNotNull(res);
+		assertEquals(1, res.size());
 	}
 
 	@Test

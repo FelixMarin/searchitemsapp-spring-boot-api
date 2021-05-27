@@ -1,10 +1,8 @@
 package com.searchitemsapp.business.impl;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -27,14 +25,6 @@ class DocumentsImplTest {
 	
 	@Autowired
 	WebDriverManager webDriverManager;
-	
-	@Test
-	void testUrlsPaginacion() throws MalformedURLException {
-		var jsoupDoc = Document.createShell("");
-		var urlDto = UrlDto.builder().nomUrl("https://www.dia.es/compra-online/search?q=miel%3Aprice-asc&page=0&disp=").build();
-		List<String> listUrls = document.urlsPaginacion(jsoupDoc, urlDto, 101l);
-		assertTrue(listUrls.isEmpty());
-	}
 	
 	@Test
 	void testGetHtmlDocument() throws IOException, URISyntaxException, InterruptedException, JSONException {

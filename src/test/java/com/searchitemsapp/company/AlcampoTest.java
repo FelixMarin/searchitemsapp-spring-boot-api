@@ -42,6 +42,7 @@ class AlcampoTest {
 		element.getElementsByTag("div").remove();
 		res = alcampo.getUrls(document, urlDto);
 		assertNotNull(res);
+		assertEquals(4, res.size());
 	}
 
 	@Test 

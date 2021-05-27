@@ -1,6 +1,7 @@
 package com.searchitemsapp.company;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -39,6 +40,7 @@ class HipercorTest {
 		element.getElementsByTag("body")
 			.append("<div><a class='link' href='test'>1 de 6</a></div>");
 		List<String> res = hipercor.getUrls(document, urlDto);
+		assertNotNull(res);
 		assertEquals(1, res.size());
 	}
 

@@ -20,6 +20,11 @@ public class ServiceValidationArguments {
 	
 	private ListaProductosValidator validator;
 
+	 /**
+     * Valida los parámetros de entrada en la solicitud.
+     *
+     * @param joinPoint join point for advice
+     */
     @Pointcut("execution (* com.searchitemsapp.controller.SearchItemsController.searchItems(..))")
     public void searchItems() {
     	//pointCut

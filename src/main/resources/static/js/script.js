@@ -34,7 +34,7 @@ jQuery(document).ready(function ($) {
         liveSearch(this.value);
       });
     
-    $('#logout').click(function() {
+    $('#logout').bind('click',function() {
         localStorage.clear();
         window.location.href="/login";
       });      

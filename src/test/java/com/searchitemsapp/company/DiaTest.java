@@ -1,6 +1,7 @@
 package com.searchitemsapp.company;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -34,6 +35,7 @@ class DiaTest {
 		element.getElementsByTag("body")
 			.append("<div><a class='link' href='test'>1 de 6</a></div>");
 		List<String> res = dia.getUrls(document, urlDto);
+		assertNotNull(res);
 		assertEquals(2, res.size());
 	}
 

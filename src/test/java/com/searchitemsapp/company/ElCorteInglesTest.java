@@ -41,6 +41,7 @@ class ElCorteInglesTest {
 		element.getElementsByTag("body")
 			.append("<div><a class='link' href='test'>1 de 6</a></div>");
 		List<String> res = eci.getUrls(document, urlDto);
+		assertNotNull(res);
 		assertEquals(1, res.size());
 	}
 

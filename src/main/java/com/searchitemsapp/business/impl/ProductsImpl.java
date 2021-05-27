@@ -82,6 +82,9 @@ public class ProductsImpl implements Products {
 				.ordenacion(Integer.parseInt(ordenacion))
 				.build();
 		
+		productDto.setImagen(productDto.getImagen().replace("40x40", Constants.IMAGE_SIZE.getValue()));
+		productDto.setImagen(productDto.getImagen().replace("325x325", Constants.IMAGE_SIZE.getValue()));
+		
 		var company = companiesGroup.getInstance(urlDto.getDidEmpresa());
 		var namesOfUrlsOfAllProducts = company.getAllUrlsToSearch(productDto);
 		productDto.setNomUrlAllProducts(namesOfUrlsOfAllProducts);

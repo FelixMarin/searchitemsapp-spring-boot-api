@@ -1,6 +1,7 @@
 package com.searchitemsapp.company;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -34,6 +35,7 @@ class UlaboxTest {
 		element.getElementsByTag("body")
 			.append("<div><a class='link' href='test'>1 de 6</a></div>");
 		List<String> res = ulabox.getUrls(document, urlDto);
+		assertNotNull(res);
 		assertEquals(5, res.size());
 		
 		document = Document.createShell(baseUri);
@@ -42,6 +44,7 @@ class UlaboxTest {
 		element.getElementsByTag("body")
 		.append("<div><a class='link' href='test'>1…6</a></div>");
 		res = ulabox.getUrls(document, urlDto);
+		assertNotNull(res);
 		assertEquals(1, res.size());
 	}
 

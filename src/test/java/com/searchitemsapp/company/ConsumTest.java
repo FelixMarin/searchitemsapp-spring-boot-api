@@ -48,7 +48,7 @@ class ConsumTest {
 				.build();
 		
 		List<String> res = consum.getUrls(null, urlDto);
-		assertEquals(0, res.size());
+		assertEquals(1, res.size());
 	}
 
 	@Test

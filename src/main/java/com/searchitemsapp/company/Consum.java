@@ -26,7 +26,9 @@ public class Consum implements Company {
 	@Override
 	public List<String> getUrls(Document document, UrlDto urlDto)
 			throws MalformedURLException {
-			return Lists.newArrayList();
+			List<String> url = Lists.newArrayList();
+			url.add(urlDto.getNomUrl());
+			return url;
 	}
 
 	@Override

@@ -26,6 +26,7 @@ public enum Constants {
 	ENIE_MIN(ValueConstants.ENIE_MIN),
 	ENIE_MAY(ValueConstants.ENIE_MAY),
 	PIPE(ValueConstants.PIPE),
+	IMAGE_SIZE(ValueConstants.IMAGE_SIZE),
 	DOT(ValueConstants.DOT),
 	SLASH(ValueConstants.SLASH),
 	DOUBLE_SLASH(ValueConstants.DOUBLE_SLASH),
@@ -142,6 +143,8 @@ public enum Constants {
     	public static final String ACCEPT_ENCODING = "Accept-Encoding";
     	
     	private static final String APPLICATION_JSON = "application/json";
+    	
+    	private static final String IMAGE_SIZE = "600x600";
 
     }
 }

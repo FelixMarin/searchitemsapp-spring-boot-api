@@ -1,6 +1,7 @@
 package com.searchitemsapp.company;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ class SimplyTest {
 				.build();
 		
 		List<String> res = simply.getUrls(null, urlDto);
+		assertNotNull(res);
 		assertEquals(1, res.size());
 	}
 

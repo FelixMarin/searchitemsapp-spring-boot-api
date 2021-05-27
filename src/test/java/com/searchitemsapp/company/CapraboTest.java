@@ -32,6 +32,6 @@ class CapraboTest {
 		var document = Document.createShell(baseUri);
 		var urlDto = UrlDto.builder().build();
 		List<String> res = caprabo.getUrls(document, urlDto);
-		assertEquals(0, res.size());
+		assertEquals(1, res.size());
 	}
 }

@@ -30,6 +30,7 @@ class EroskiTest {
 				.build();
 		
 		List<String> res = eroski.getUrls(null, urlDto);
+		assertNotNull(res);
 		assertEquals(1, res.size());
 	}
 

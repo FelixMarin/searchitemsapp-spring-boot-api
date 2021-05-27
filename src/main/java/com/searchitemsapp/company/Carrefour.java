@@ -44,8 +44,6 @@ public class Carrefour implements Company {
 		
 		var elements = document.select(selectors.get(0));
 		
-		listaUrls.add(urlBase);
-		
 		var url = new URL(urlBase);
 		var strUrlEmpresa = url.getProtocol()
 				.concat(Constants.PROTOCOL_ACCESSOR.getValue()).concat(url.getHost());

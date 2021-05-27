@@ -55,9 +55,9 @@ class PricesImplTest {
 		assertEquals(0, res);
 		
 		product1 = ProductDto.builder().ordenacion(2).precio("1,00").build();
-		product2 = ProductDto.builder().ordenacion(2).precio("1,00").build();
+		product2 = ProductDto.builder().ordenacion(2).precio("1,00").precioKilo("1,00").build();
 		res = price.priceComparator(product1, product2);
-		assertEquals(1, res);
+		assertEquals(0, res);
 		
 		product1 = ProductDto.builder().ordenacion(1).precio(",").build();
 		product2 = ProductDto.builder().ordenacion(1).precio(",").build();

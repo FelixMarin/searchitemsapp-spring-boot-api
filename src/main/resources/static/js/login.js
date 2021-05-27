@@ -18,7 +18,7 @@ $('#user_pass_login').on('keypress',function(e) {
   }
 });
 
-$( "#signup-id").click(function( event ) {
+$( "#signup-id").on("click",function(event) {
   
   event.preventDefault();
 
@@ -47,7 +47,7 @@ $( "#signup-id").click(function( event ) {
   
 });
 
-$( "#login-id").click(function( event ) {
+$( "#login-id").on("click", function(event) {
   event.preventDefault();
 
   if(mailExists()) {
