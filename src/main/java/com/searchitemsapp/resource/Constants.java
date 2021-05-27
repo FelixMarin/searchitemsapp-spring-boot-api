@@ -59,7 +59,7 @@ public enum Constants {
     private static class ValueConstants {
         
     	public static final String REGEX_SPECIAL_CHARACTERS = "[\\'|\\?|\\*|\\<|\\>|\\[|\\]|\\{|\\}|"
-    			+ "\\.|\\/|\\\\|\\(|\\)|\\$|\\%|\\&|\\=|\\¿|\\@|\\\"|\\!|\\º|"
+    			+ "\\.|\\/|\\\\|\\(|\\)|\\$|\\&|\\=|\\¿|\\@|\\\"|\\!|\\º|"
     			+ "\\ª|\\||\\#|\\_|\\+|\\-|\\·|\\¡||\\;|]";
     	
     	public static final String REGEX_WORDS = 

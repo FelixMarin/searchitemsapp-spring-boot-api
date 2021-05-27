@@ -40,5 +40,22 @@ class TbSiaNomProductoTest {
 		assertEquals(101l,tbSiaNomProducto.getTbSiaPais().getDid());
 		
 	}
+	
+	@Test 
+	void tesToString() {
+		assertNotNull(tbSiaNomProducto.toString());
+		assertNotEquals("", tbSiaNomProducto.toString());
+	}
+	
+	@Test
+	void testHashCode() {
+		assertNotEquals("", tbSiaNomProducto.hashCode());
+	}
+	
+	@Test
+	void testCanEquals() {
+		var isEquals = tbSiaNomProducto.equals(new TbSiaNomProducto());
+		assertFalse(isEquals);
+	}
 
 }

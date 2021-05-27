@@ -1,6 +1,9 @@
 package com.searchitemsapp.exception.dto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 
@@ -47,6 +50,24 @@ class ErrorDetailsDtoTest {
 	void testGetStatus() {
 		errorDetails.setStatus(200);
 		assertEquals(200,errorDetails.getStatus());
+	}
+	
+	@Test 
+	void tesToString() {
+		assertNotNull(errorDetails.toString());
+		assertNotEquals("", errorDetails.toString());
+	}
+	
+	@Test
+	void testHashCode() {
+		assertNotEquals("", errorDetails.hashCode());
+	}
+	
+	@Test
+	void testCanEquals() {
+		assertTrue(errorDetails.canEqual(ErrorDetailsDto.builder().build()));
+		var isEquals = errorDetails.equals(ErrorDetailsDto.builder().build());
+		assertTrue(isEquals);
 	}
 
 }

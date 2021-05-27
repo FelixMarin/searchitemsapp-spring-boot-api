@@ -59,5 +59,23 @@ class CountryDtoTest {
 		country.setProductos(lsDto);
 		assertEquals(101l,country.getProductos().getDid());
 	}
+	
+	@Test 
+	void tesToString() {
+		assertNotNull(country.toString());
+		assertNotEquals("", country.toString());
+	}
+	
+	@Test
+	void testHashCode() {
+		assertNotEquals("", country.hashCode());
+	}
+	
+	@Test
+	void testCanEquals() {
+		assertTrue(country.canEqual(CountryDto.builder().build()));
+		var isEquals = country.equals(CountryDto.builder().build());
+		assertFalse(isEquals);
+	}
 
 }

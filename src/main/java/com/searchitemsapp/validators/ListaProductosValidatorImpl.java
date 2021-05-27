@@ -10,7 +10,10 @@ import org.springframework.stereotype.Component;
 
 import com.searchitemsapp.resource.Constants;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class ListaProductosValidatorImpl implements ListaProductosValidator {
 	
 	public void isParams(String[] args,  MethodSignature mSignature) {
@@ -19,9 +22,8 @@ public class ListaProductosValidatorImpl implements ListaProductosValidator {
 			
 			Arrays.asList(args).stream().forEach(value -> {
 				
-				if(value.length() < 1 || value.length() > 47 ||
-						StringUtils.isBlank(value)) {
-					throw new IllegalArgumentException(Arrays.toString(mSignature.getParameterNames()));
+				if(StringUtils.isBlank(value) || value.length() < 1 || value.length() > 47) {
+					log.error(Arrays.toString(mSignature.getParameterNames()) + " valor de entrada: " + value );
 				}
 				
 				value = Pattern.compile(Constants.REGEX_SPECIAL_CHARACTERS.getValue())
@@ -31,7 +33,7 @@ public class ListaProductosValidatorImpl implements ListaProductosValidator {
 						.matcher(value.toLowerCase()).find()?StringUtils.EMPTY:value;
 				
 				if(StringUtils.isBlank(value)) {
-					throw new IllegalArgumentException(Arrays.toString(mSignature.getParameterNames()));
+					log.error(Arrays.toString(mSignature.getParameterNames()) + " valor de entrada: " + value );
 				}
 			});
 		}

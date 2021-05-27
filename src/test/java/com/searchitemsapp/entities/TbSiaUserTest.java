@@ -1,6 +1,10 @@
 package com.searchitemsapp.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -79,6 +83,24 @@ class TbSiaUserTest {
 		List<TbSiaRoles> roles = Lists.newArrayList();
 		tbSiaUser.setRoles(roles);
 		assertEquals(0, tbSiaUser.getRoles().size());
+	}
+	
+	@Test 
+	void tesToString() {
+		assertNotNull(tbSiaUser.toString());
+		assertNotEquals("", tbSiaUser.toString());
+	}
+	
+	@Test
+	void testHashCode() {
+		assertNotEquals("", tbSiaUser.hashCode());
+	}
+	
+	@Test
+	void testCanEquals() {
+		assertTrue(tbSiaUser.canEqual(new TbSiaUser()));
+		var isEquals = tbSiaUser.equals(new TbSiaUser());
+		assertFalse(isEquals);
 	}
 
 }

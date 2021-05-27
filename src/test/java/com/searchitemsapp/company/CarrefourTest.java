@@ -40,7 +40,7 @@ class CarrefourTest {
 			.append("<div><a class='link' href='&page=3'>1 de 6</a></div>");
 		List<String> res = carrefour.getUrls(document, urlDto);
 		assertNotNull(res);
-		assertEquals(2, res.size());
+		assertEquals(1, res.size());
 	}
 
 	@Test

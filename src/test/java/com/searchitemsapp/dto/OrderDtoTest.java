@@ -1,6 +1,10 @@
 package com.searchitemsapp.dto;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -32,6 +36,24 @@ class OrderDtoTest {
 	void testProducto() {
 		order.setProducto("test");
 		assertEquals("test",order.getProducto());
+	}
+	
+	@Test 
+	void tesToString() {
+		assertNotNull(order.toString());
+		assertNotEquals("", order.toString());
+	}
+	
+	@Test
+	void testHashCode() {
+		assertNotEquals("", order.hashCode());
+	}
+	
+	@Test
+	void testCanEquals() {
+		assertTrue(order.canEqual(OrderDto.builder().build()));
+		var isEquals = order.equals(OrderDto.builder().build());
+		assertFalse(isEquals);
 	}
 
 }

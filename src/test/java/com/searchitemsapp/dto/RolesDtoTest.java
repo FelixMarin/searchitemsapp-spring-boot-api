@@ -1,6 +1,10 @@
 package com.searchitemsapp.dto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 
@@ -48,6 +52,24 @@ class RolesDtoTest {
 	void testUsers() {
 		roles.setUsers(Lists.newArrayList());
 		assertEquals(0,roles.getUsers().size());
+	}
+	
+	@Test 
+	void tesToString() {
+		assertNotNull(roles.toString());
+		assertNotEquals("", roles.toString());
+	}
+	
+	@Test
+	void testHashCode() {
+		assertNotEquals("", roles.hashCode());
+	}
+	
+	@Test
+	void testCanEquals() {
+		assertTrue(roles.canEqual(RolesDto.builder().build()));
+		var isEquals = roles.equals(RolesDto.builder().build());
+		assertFalse(isEquals);
 	}
 
 }

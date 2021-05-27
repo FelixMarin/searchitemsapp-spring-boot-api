@@ -2,6 +2,9 @@ package com.searchitemsapp.dto;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -67,5 +70,23 @@ class BrandsDtoTest {
 		var nomCatEmpresas = "SPAIN";
 		brand.setNomPais(nomCatEmpresas);
 		assertEquals(nomCatEmpresas, brand.getNomPais());
+	}
+	
+	@Test 
+	void tesToString() {
+		assertNotNull(brand.toString());
+		assertNotEquals("", brand.toString());
+	}
+	
+	@Test
+	void testHashCode() {
+		assertNotEquals("", brand.hashCode());
+	}
+	
+	@Test
+	void testCanEquals() {
+		assertTrue(brand.canEqual(BrandsDto.builder().build()));
+		var isEquals = brand.equals(BrandsDto.builder().build());
+		assertFalse(isEquals);
 	}
 }

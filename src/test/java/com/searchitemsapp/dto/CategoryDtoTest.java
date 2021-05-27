@@ -2,6 +2,9 @@ package com.searchitemsapp.dto;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -60,6 +63,24 @@ class CategoryDtoTest {
 		var lsDto = LiveSearchDto.builder().did(101l).build();
 		categoriyDto.setProductos(lsDto);
 		assertEquals(101l,categoriyDto.getProductos().getDid());
+	}
+	
+	@Test 
+	void tesToString() {
+		assertNotNull(categoriyDto.toString());
+		assertNotEquals("", categoriyDto.toString());
+	}
+	
+	@Test
+	void testHashCode() {
+		assertNotEquals("", categoriyDto.hashCode());
+	}
+	
+	@Test
+	void testCanEquals() {
+		assertTrue(categoriyDto.canEqual(CategoryDto.builder().build()));
+		var isEquals = categoriyDto.equals(CategoryDto.builder().build());
+		assertFalse(isEquals);
 	}
 
 }
