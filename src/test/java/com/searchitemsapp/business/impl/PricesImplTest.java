@@ -6,9 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.google.common.collect.Lists;
@@ -16,6 +18,7 @@ import com.searchitemsapp.business.Prices;
 import com.searchitemsapp.dto.ProductDto;
 
 @RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 class PricesImplTest {
 	
@@ -76,6 +79,11 @@ class PricesImplTest {
 		
 		product1 = ProductDto.builder().ordenacion(1).precio("A").build();
 		product2 = ProductDto.builder().ordenacion(1).precio("B").build();
+		res = price.priceComparator(product1, product2);
+		assertEquals(0.0, res);
+		
+		product1 = ProductDto.builder().ordenacion(1).precio("").build();
+		product2 = ProductDto.builder().ordenacion(1).precio("").build();
 		res = price.priceComparator(product1, product2);
 		assertEquals(0.0, res);
 	}

@@ -4,7 +4,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 class SearchItemsParamsDtoTest {
 
 	private static SearchItemsParamsDto searchItemsParamsDto;
@@ -29,7 +35,7 @@ class SearchItemsParamsDtoTest {
 	void testCanEquals() {
 		assertTrue(searchItemsParamsDto.canEqual(SearchItemsParamsDto.builder().build()));
 		var isEquals = searchItemsParamsDto.equals(SearchItemsParamsDto.builder().build());
-		assertFalse(isEquals);
+		assertTrue(isEquals);
 	}
 
 }

@@ -11,9 +11,11 @@ import java.util.Optional;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.google.common.collect.Lists;
@@ -22,6 +24,7 @@ import com.searchitemsapp.dto.CssSelectorsDto;
 import com.searchitemsapp.dto.UrlDto;
 
 @RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 class SelectorsCssImplTest {
 	
