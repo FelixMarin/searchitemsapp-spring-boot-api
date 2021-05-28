@@ -6,15 +6,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.Method;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.junit.Rule;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
@@ -32,18 +29,32 @@ class LoggingAspectTest {
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-    @Mock
-    private ProceedingJoinPoint proceedingJoinPoint;
-
     private static LoggingAspect sampleAspect = new LoggingAspect();
 
     @Test
     void logAroundTest() throws Throwable {
-    	sampleAspect.logAround(proceedingJoinPoint);
-    	verify(proceedingJoinPoint, times(1)).proceed();
-    	verify(proceedingJoinPoint, never()).proceed(null);   	
+		var joinPoint = mock(ProceedingJoinPoint.class);
+		var signature = mock(MethodSignature.class);
+		when(joinPoint.getSignature()).thenReturn(signature);
+    	sampleAspect.logAround(joinPoint);
+    	verify(joinPoint, times(1)).proceed();
+    	verify(joinPoint, never()).proceed(null);   	
 	}
-       
+    
+    @Test
+    void logAfterThrowing() throws Throwable {
+    	var trowable = new Throwable();
+		var joinPoint = mock(ProceedingJoinPoint.class);
+		var signature = mock(MethodSignature.class);
+		when(joinPoint.getSignature()).thenReturn(signature);
+		sampleAspect.logAfterThrowing(joinPoint, trowable);
+		verify(joinPoint, never()).proceed(null); 
+		
+		trowable.initCause(new Throwable("mensaje"));
+		sampleAspect.logAfterThrowing(joinPoint, trowable);
+		verify(joinPoint, never()).proceed(null); 
+    }
+    
     @BeforeAll
     static void pointcutTest() {
     	sampleAspect.springBeanPointcut();

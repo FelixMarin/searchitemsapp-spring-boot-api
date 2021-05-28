@@ -37,6 +37,11 @@ public class ServiceValidationArguments {
         MethodSignature mSignature = (MethodSignature) signature;
         Object[] args = jp.getArgs();        
         String[] stringArrayArgs = Arrays.copyOf(args, args.length, String[].class);
-        validator.isParams(stringArrayArgs, mSignature);
+        var resultado = validator.isParams(stringArrayArgs, mSignature);
+        
+        if(!resultado) {
+        	throw new IllegalArgumentException("Parámetros no validos");
+        }
+        
     }
 }
