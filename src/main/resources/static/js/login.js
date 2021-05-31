@@ -41,7 +41,7 @@ $( "#signup-id").on("click",function(event) {
 			window.location.href="/main";
     },
     error: function(xhr) {      
-      alert('El usuario no existe');
+      alert('Usuario o contraseña no validos');
     }
 });
   
@@ -51,7 +51,7 @@ $( "#login-id").on("click", function(event) {
   event.preventDefault();
 
   if(mailExists()) {
-    alert('El usuario ya existe');
+    alert('Usuario o contraseña no validos');
     return;
   }
 

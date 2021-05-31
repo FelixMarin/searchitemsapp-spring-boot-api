@@ -19,6 +19,7 @@ public class OnlineController {
 	public static final String MAIN = "/main";
 	public static final String BOARD = "/board";
 	public static final String LOGIN = "/login";
+	public static final String TERMS = "/terminos";
 	
 	@GetMapping(value = MAIN, produces = "application/html")
 	public @ResponseBody ModelAndView  index() {
@@ -39,6 +40,13 @@ public class OnlineController {
 	public @ResponseBody ModelAndView  loginPage() {
 		var modelAndView = new ModelAndView();
 	    modelAndView.setViewName("login");
+	    return modelAndView;
+	}
+	
+	@GetMapping(value = TERMS, produces = "application/html")
+	public @ResponseBody ModelAndView  terminosPage() {
+		var modelAndView = new ModelAndView();
+	    modelAndView.setViewName("terminos");
 	    return modelAndView;
 	}
 }
