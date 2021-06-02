@@ -264,9 +264,16 @@ const traerProductos = function(producto, ordenar, strEmpresas) {
                 window.localStorage.setItem('data',data);
             }
             
-        }).fail(function () {
-            alert('Producto no válido');
-            window.location.href = '/main';
+        }).fail(function (event) {
+            console.log(event);
+            if(event.status === 401 ||
+                event.status === 403) {
+                alert('La sesión ha finalizado. Inicie sesión de nuevo.');
+                window.location.href = '/login';
+            } else {
+                alert('Producto no válido');
+                window.location.href = '/main';
+            }
     });
 }
 
@@ -328,8 +335,7 @@ const liveSearch = function(keyword) {
    
         }).fail(function (event) {
             console.log(event);
-            if(window.localStorage.getItem('sia_token')  == null || 
-                event.responseText.includes('TokenExpiredException')) {
+            if(event.status === 401) {
                 alert('La sesión ha finalizado. Inicie sesión de nuevo.');
                 window.location.href = '/login';
             } else {
