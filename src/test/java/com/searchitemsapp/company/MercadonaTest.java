@@ -1,5 +1,6 @@
 package com.searchitemsapp.company;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -63,6 +64,15 @@ class MercadonaTest {
 		var con = mercadona.getJsoupConnection(baseUrl, productName);
 		var document = mercadona.getJsoupDocument(con.execute(), baseUrl);
 		assertNotNull(document);
+		
+		productName = "";
+		document = mercadona.getJsoupDocument(con.execute(), baseUrl);
+		assertNotNull(document);
+		
+		productName = "*";
+		con = mercadona.getJsoupConnection("http://www.posttestserver.com/", productName);
+		document = mercadona.getJsoupDocument(con.execute(), "https://test.page");
+		assertNull(document);
 	}
 
 	@Test

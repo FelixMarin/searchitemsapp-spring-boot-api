@@ -2,6 +2,7 @@ package com.searchitemsapp.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -67,6 +68,6 @@ public class UserServiceImpl implements UserService {
 	
 	public boolean mailExists(String mail) throws ResourceNotFoundException {
 		var user = userDao.findByEmail(mail);		
-		return user.getEmail() != null;
+		return  StringUtils.isNotBlank(user.getEmail());
 	}
 }

@@ -6,7 +6,8 @@ $(window).on('resize', function() {
 jQuery(document).ready(function ($) {
 
     if(window.localStorage.getItem('sia_token')  == null) {
-        alert('Please, insert a valid login.')
+        alert('Please, insert a valid login.');
+        window.localStorage.clear();
         window.location.href = '/login';
     }
 
@@ -211,7 +212,11 @@ const enviar = function() {
 const traerProductos = function(producto, ordenar, strEmpresas) {
 
     let d = new Date();
-    let bufferProductos = window.localStorage.getItem(producto + '|' + ordenar + '|' + strEmpresas + '|' + d.getDate() + '|' + window.localStorage.getItem('sia_token'));
+    let bufferProductos = window.localStorage.getItem(producto + 
+        '|' + ordenar + 
+        '|' + strEmpresas + 
+        '|' + d.getDate() + 
+        '|' + window.localStorage.getItem('sia_token'));
 
     if(bufferProductos != undefined && bufferProductos != null) {
         $('#ruleta').addClass('hidden');
@@ -244,6 +249,7 @@ const traerProductos = function(producto, ordenar, strEmpresas) {
             $('#ruleta').addClass('show');
         }
         }).done(function (data) {        
+            $('#inputtext').removeClass("error");
             $('#ruleta').addClass('hidden');
             $('#productos').removeClass("hidden");
             $('#productos').addClass("show");
@@ -258,9 +264,9 @@ const traerProductos = function(producto, ordenar, strEmpresas) {
                 window.localStorage.setItem('data',data);
             }
             
-        }).fail(function (xhr, textStatus, errorThrown) {
-            console.log(errorThrown+'\n'+status+'\n'+xhr.statusText);
-            window.location.href = '/login'; 
+        }).fail(function () {
+            alert('Producto no válido');
+            window.location.href = '/main';
     });
 }
 
@@ -270,6 +276,7 @@ const liveSearch = function(keyword) {
 	
 	if(keyword === '' || keyword === undefined || keyword.indexOf("  ") >= 0) {
         $('#sugerencias').html('');
+        $('#inputtext').removeClass("error");
         $('#sugerencias').css("display", "none");  
 		return
 	}
@@ -289,10 +296,12 @@ const liveSearch = function(keyword) {
 			$('#inputtext').removeClass('loading-live-search');
 			
 			if(data === '[]') {
-                $('#sugerencias').html('');
+                $('#sugerencias').html('');                
                 $('#sugerencias').css("display", "none");  
 				return '';
 			}
+
+            $('#inputtext').removeClass("error");
 			
 			let datosJSON = jQuery.parseJSON(data);
 			
@@ -317,9 +326,15 @@ const liveSearch = function(keyword) {
                 this.setAttribute("onclick","focoSerchBar(this);return false;");
             });
    
-        }).fail(function (xhr, textStatus, errorThrown) {
-            console.log(errorThrown+'\n'+status+'\n'+xhr.statusText);
-            window.location.href = '/login'; 
+        }).fail(function (event) {
+            console.log(event);
+            if(window.localStorage.getItem('sia_token')  == null || 
+                event.responseText.includes('TokenExpiredException')) {
+                alert('La sesión ha finalizado. Inicie sesión de nuevo.');
+                window.location.href = '/login';
+            } else {
+                $('#inputtext').addClass("error");
+            }
         });
 }
 
@@ -366,9 +381,16 @@ const componerCartas = function(data) {
             estructuraHTML += imagenLogoEmpresa(parseInt(element.didEmpresa));
             estructuraHTML += colorIdentificador(element.identificador);
             estructuraHTML += '</h4>'
-            estructuraHTML += '<a href="' + element.nomUrl + '" target="_blank" rel="noopener noreferrer">';
-            estructuraHTML += '<img class="imgprod" loading="lazy" src="' + element.imagen + '" alt=" Producto" />';
-            estructuraHTML += '</a>';
+
+            if(element.didEmpresa == 101) {
+                estructuraHTML += '<img class="imgprod" loading="lazy" src="' + element.imagen + '" alt=" Producto" title="No se puede acceder a los productos de Mercadona" />';
+            } else {
+                estructuraHTML += '<a href="' + element.nomUrl + '" target="_blank" rel="noopener noreferrer">';
+                estructuraHTML += '<img class="imgprod" loading="lazy" src="' + element.imagen + '" alt=" Producto" />';
+                estructuraHTML += '</a>';               
+            }
+
+            
             estructuraHTML += '<h5 class="card-title p-2">' + element.nomProducto + '</h5>';
             estructuraHTML += '<p class="text pl-2">Precio ' + element.precio + '<br />P.Kilo  ' + element.precioKilo + '</p>';     
             estructuraHTML += '</div></div>';

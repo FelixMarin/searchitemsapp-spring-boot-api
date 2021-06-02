@@ -1,11 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<title>Go home</title>
+	<meta charset="UTF-8">
+	<title>Error</title>
+	<meta name="description" content="sia">
+	<meta name="author" content="Felix Marin Ramirez">
+	<link rel="icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" media="screen">
 </head>
+
 <body>
-	<h1>Something went wrong!</h1>
-	<h2>Our Engineers are on it</h2>
-	<a href="/login">Go Home</a>
+	<!--  As we are using Thymeleaf, you might consider using
+	      ${#httpServletRequest.requestURL}. But that returns the path
+	      to this error page.  Hence we explicitly add the url to the
+	      Model in some of the example code. -->
+
+	<div class="container">
+		<div class="row pb-5 pt-5">
+			<div class="col">
+				<p class="h1">Support Friendly Error Page</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<p th:if="${url}">
+					<strong>Page:</strong> <span th:text="${url}">Page URL</span>
+				</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<p th:if="${timestamp}" id='created'>
+					<strong>Occurred:</strong> <span th:text="${timestamp}">Timestamp</span>
+				</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<p th:if="${status}">
+					<strong>Response Status:</strong> <span th:text="${status}">status-code</span> <span
+						th:if="${error}" th:text="'('+${error}+')'">error ...</span>
+				</p>
+			</div>					
+		</div>
+		<div class="row">
+			<div class="col">
+				<p>Application has encountered an error. Please contact support on mailsupport@sia.com</p>
+			</div>
+		</div>
+	</div>
+
+	<!--
+      // Hidden Exception Details  - this is not a recommendation, but here is
+      // how you could hide an exception in the page using Thymeleaf
+      -->
+	<div th:utext="'&lt;!--'" th:remove="tag"></div>
+	<div th:utext="'Failed URL: ' +  ${url}" th:remove="tag">${url}</div>
+	<div th:utext="'Exception: ' + ${exception.message}" th:remove="tag">${exception.message}</div>
+	<ul th:remove="tag">
+		<li th:each="ste : ${exception.stackTrace}" th:remove="tag"><span th:utext="${ste}"
+				th:remove="tag">${ste}</span></li>
+	</ul>
+	<div th:utext="'--&gt;'" th:remove="tag"></div>
+
+
+	<div th:substituteby="footer :: copy"></div>
+	<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+	<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
+
 </html>

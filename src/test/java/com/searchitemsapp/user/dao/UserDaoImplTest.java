@@ -1,5 +1,6 @@
 package com.searchitemsapp.user.dao;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -22,7 +23,7 @@ class UserDaoImplTest {
 	
 	@Autowired
 	private UserDao userDao;
-
+	
 	@Test
 	void testFindByUserName() throws ResourceNotFoundException {
 		assertNotNull(userDao.findByUserName("user"));
@@ -47,9 +48,10 @@ class UserDaoImplTest {
 
 	@Test
 	void testFindByUsernameAndPassword() throws ResourceNotFoundException {
-		assertThrows(ResourceNotFoundException.class, () -> {
-			userDao.findByUsernameAndPassword("user", "User1");
-		});
+		var user = userDao.findByUsernameAndPassword("user", "7qrSWwJyUdMNVTiQlabhiOrPs3HBX4dZYET1WIxBNRPS0SV4utG5G");
+		assertNotNull(user.getUsername());
+		user = userDao.findByUsernameAndPassword("test", "test");
+		assertNull(user.getUsername());
 	}
 
 }

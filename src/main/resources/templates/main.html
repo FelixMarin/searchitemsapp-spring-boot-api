@@ -1,24 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Food Rank</title>
-<meta name="description" content="sia">
-<meta name="author" content="Felix Marin Ramirez">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<!-- Bootstrap CSS -->
-<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" media="screen">
-<!-- animated.css -->
-<link rel="stylesheet" th:href="@{/css/animate.css}">
-
-<link rel="stylesheet" th:href="@{/css/style.css}">
-<link rel="stylesheet" th:href="@{/css/radiobuttons.css}">
-<link rel="stylesheet" th:href="@{/css/loading.css}">
-<link rel="stylesheet" th:href="@{/css/cards.css}">
-
+	<meta charset="UTF-8">
+	<title>Food Rank</title>
+	<meta name="description" content="sia">
+	<meta name="author" content="Felix Marin Ramirez">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" media="screen">
+	<link rel="stylesheet" th:href="@{/css/animate.css}">
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+	<link rel="stylesheet" th:href="@{/css/radiobuttons.css}">
+	<link rel="stylesheet" th:href="@{/css/loading.css}">
+	<link rel="stylesheet" th:href="@{/css/cards.css}">
 </head>
 <body id="body">
 	<div class="container-fluid position-absolute">
@@ -134,7 +130,6 @@
 		</div>
 		<div id="productos" class="container mt-4"></div>
 	</div>
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
 	<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 	<script th:src="@{/js/jquery.imgcheckbox.js}"></script>

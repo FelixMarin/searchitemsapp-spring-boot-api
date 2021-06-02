@@ -1,8 +1,8 @@
 package com.searchitemsapp.user.service.impl;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
@@ -36,13 +37,21 @@ class UserServiceImplTest {
 	@Autowired
 	private UserService service;
 	
-    private final String username = "test60";
-    private final String  password = "Test60";
-    private final String email = "test60@mail.com";
-    private final Long id = 996l;
+    private static final String username = "test60";
+    private static final String  password = "Test60";
+    private static final String email = "test60@mail.com";
+    private static final Long id = 996l;
     
-	List<TbSiaRoles> roles = Lists.newArrayList();
-	TbSiaRoles entity = new TbSiaRoles();
+	private static final List<TbSiaRoles> roles = Lists.newArrayList();
+	private static final TbSiaRoles entity = new TbSiaRoles();
+	
+	@BeforeAll()
+	static void setUpEntity() {
+		entity.setId(id);
+		entity.setRoleName("USER");
+		roles.add(entity);
+	}
+	
 	UserDto user = UserDto.builder().id(id)
 			.username(username)
 			.password(password)
@@ -51,38 +60,23 @@ class UserServiceImplTest {
 
 	@Test
 	@BeforeClass
-	void testSave() throws ConfilctFoundException {
-		entity.setId(id);
-		entity.setRoleName("USER");
-		roles.add(entity);
+	void testSave() throws ConfilctFoundException {		
 		assertTrue(service.save(user));
 	}
 
 	@Test
 	@AfterClass
 	void testDelete() throws ResourceNotFoundException, ConfilctFoundException {
-		entity.setId(id);
-		entity.setRoleName("USER");
-		roles.add(entity);
 		service.save(user);
 		service.delete(user);
 		
-		assertThrows(ResourceNotFoundException.class, () -> {
-			service.existsByUserName(username);
-		});
+		assertNotNull(service.existsByUserName(username));
 		
 	}
 
 	@Test
-	void testUpdate() throws ConfilctFoundException {
-		entity.setId(id);
-		entity.setRoleName("USER");
-		roles.add(entity);
-		
-		assertThrows(ResourceNotFoundException.class, () -> {
-			service.update(user);
-		});
-		
+	void testUpdate() throws ConfilctFoundException, ResourceNotFoundException {
+		assertTrue(service.update(user));
 	}
 
 	@Test
@@ -93,6 +87,12 @@ class UserServiceImplTest {
 	@Test
 	void testFindAll() {
 		assertNotNull(service.findAll());
+	}
+	
+	@Test
+	void testMailExists() throws ResourceNotFoundException {
+		assertTrue(service.mailExists("user@mail.com"));
+		assertFalse(service.mailExists(""));
 	}
 
 }

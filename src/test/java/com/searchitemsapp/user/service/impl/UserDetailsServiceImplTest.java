@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -23,9 +22,10 @@ class UserDetailsServiceImplTest {
 
 	@Test
 	void testLoadUserByUsername() {
-		assertNotNull(service.loadUserByUsername("user"));
+		var user = service.loadUserByUsername("user");
+		assertNotNull(user.getUsername());		
 		
-		assertThrows(UsernameNotFoundException.class, () -> {
+		assertThrows(IllegalArgumentException.class, () -> {
 			service.loadUserByUsername("");
 		});
 	}
