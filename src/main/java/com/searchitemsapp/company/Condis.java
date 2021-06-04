@@ -27,7 +27,7 @@ public class Condis implements Company {
 	private static final String SCRIPT = "script";
 	private static final char LEFT_SLASH_CHAR = '\'';
 	private static final String SPECIALS_CHARS_STRING = "\r\n|\r|\n";
-	private static final String PATTERN = "'([\\d+(\\.\\d{1,2})]*)'";
+	private static final String PATTERN = "'([(\\.\\d{1,2})]*)'";
 	
 	private Environment environment;
 	
