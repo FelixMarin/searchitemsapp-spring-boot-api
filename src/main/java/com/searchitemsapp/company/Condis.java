@@ -27,6 +27,7 @@ public class Condis implements Company {
 	private static final String SCRIPT = "script";
 	private static final char LEFT_SLASH_CHAR = '\'';
 	private static final String SPECIALS_CHARS_STRING = "\r\n|\r|\n";
+	private static final String PATTERN = "'([\\d+(\\.\\d{1,2})]*)'";
 	
 	private Environment environment;
 	
@@ -90,7 +91,7 @@ public class Condis implements Company {
 		if(resultado.split(SPECIALS_CHARS_STRING).length > 1) {
 			resultado = resultado.split(SPECIALS_CHARS_STRING)[1].trim();
 			
-			var matcher = Pattern.compile("'([\\d+(\\.\\d{1,2})]*)'").matcher(resultado);
+			var matcher = Pattern.compile(PATTERN).matcher(resultado);
 			
 			if(matcher.find()) {
 				resultado = matcher.group(1);
