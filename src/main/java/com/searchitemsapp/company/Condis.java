@@ -3,7 +3,6 @@ package com.searchitemsapp.company;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -85,19 +84,16 @@ public class Condis implements Company {
 	
 	private String stractor(Element documentElement, String cssSelector) {
 
-		String resultado;
-		Matcher matcher;
-	  
-		resultado = documentElement.select(cssSelector).html()
+		var resultado = documentElement.select(cssSelector).html()
 				.replace(Constants.DOT.getValue(), Constants.COMMA.getValue());
 		
 		if(resultado.split(SPECIALS_CHARS_STRING).length > 1) {
 			resultado = resultado.split(SPECIALS_CHARS_STRING)[1].trim();
 			
-			matcher = Pattern.compile("\\d*[,][0-9]*").matcher(resultado);
+			var matcher = Pattern.compile("'([\\d+(\\.\\d{1,2})]*)'").matcher(resultado);
 			
 			if(matcher.find()) {
-				resultado = matcher.group(0);
+				resultado = matcher.group(1);
 			}
 		
 		} else {

@@ -1,0 +1,14 @@
+Para ejecutar los test en local hay que tener instalado maven, PostgresSQL y SonarQube. 
+SonarQube debe estar debidamente configurado. Para ello, hay que configurar los ficheros properties y conf situados en C:\sonarqube-8.4.2.36762\conf
+	
+	sonar.properties
+	wrapper.conf
+
+En PostgreSQL hay que crear un usario sonar con contraseña sonar y una base de datos llamada sonarqube.
+
+Ruta SonarQube configurado: https://www.mediafire.com/file/2mds7b18i5sja4o/sonarqube-configurado.zip/file
+
+
+Para ejecutar los tests e importarlos a SonarQube, abrir un CMD en la carpeta del proyecto:
+
+mvn clean verify install sonar:sonar -Dsonar.scm.provider=git -Dsonar.coverage.jacoco.xmlReportPaths=report1.xml,report2.xml -Dsonar.login=admin -Dsonar.password=admin

@@ -75,9 +75,27 @@ class CondisTest {
 		list.add("script");
 		cssSelector = "div";
 		element.getElementsByTag("body")
-		.append("<div>" + "test".concat(", ").concat(" 9 ").concat("\r\n") + System.lineSeparator() + "</div>");
+		.append("<div id='test'>" + "formatNumber('1,09', 'list_price_780231');\\n  formatNumber('1', 'sale_price_780231');" + "</div>");
 		res = condis.selectorTextExtractor(element, list, cssSelector);
-		assertEquals("0,00", res);
+		assertEquals("1,09", res);
+		
+		list = Lists.newArrayList();
+		list.add("script");
+		cssSelector = "div";
+		element.children().select("#test").remove();
+		element.getElementsByTag("body")
+		.append("<div id='test'>" + "formatNumber('1', 'sale_price_780231');" + "</div>");
+		res = condis.selectorTextExtractor(element, list, cssSelector);
+		assertEquals("1", res);
+		
+		list = Lists.newArrayList();
+		list.add("script");
+		cssSelector = "div";
+		element.children().select("#test").remove();
+		element.getElementsByTag("body")
+		.append("<div id='test'>" + "formatNumber('1,', 'sale_price_780231');" + "</div>");
+		res = condis.selectorTextExtractor(element, list, cssSelector);
+		assertEquals("1,00", res);
 		
 		document = Document.createShell(baseUri);
 		element = document.getAllElements().first();
