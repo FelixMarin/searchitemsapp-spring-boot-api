@@ -33,7 +33,7 @@ public class ListaProductosValidatorImpl implements ListaProductosValidator {
 			
 			var inValue = Optional.ofNullable(value)
 					.filter(StringUtils::isNotBlank)
-					.filter(elem -> elem.length() > 0 && elem.length() < 47)
+					.filter(elem -> elem.length() > 0 && elem.length() < 68)
 					.filter(elem -> !Pattern.compile(Constants.REGEX_SPECIAL_CHARACTERS.getValue()).matcher(elem).find())
 					.filter(elem -> !Pattern.compile(Constants.REGEX_WORDS.getValue()).matcher(elem.toLowerCase()).find())
 					.orElse(StringUtils.EMPTY);
