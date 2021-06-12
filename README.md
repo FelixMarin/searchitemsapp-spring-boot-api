@@ -98,7 +98,7 @@ java -jar sia-0.0.1-SNAPSHOT.jar
 - **Formato de la URL con la que se realizará la solicitud al servicio:**
 
 ```console
-http://[url]:[port]/searchitemsapp/search?country=[id_país]&category=[id_categoría]&sort=[ordenar]&product=[producto]&pipedcompanies=[id_empresa]
+http://[url]:[port]/search?country=[id_país]&category=[id_categoría]&sort=[ordenar]&product=[producto]&pipedcompanies=[id_empresa]
 ```
 
 - **Lista de parámetros de la solicitud:**
